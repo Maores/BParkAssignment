@@ -58,6 +58,7 @@ public class ClientConsole implements ChatIF {
 	 */
 	public void accept() {
 		// DBController db = new DBController();
+		//Rafi is the King
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
