@@ -60,8 +60,13 @@ public class EchoServer extends AbstractServer {
 				String orderNumber = parts[1];
 				String parkingSpace = parts[2];
 				String orderDate = parts[3];
-				db.updateDB(parkingSpace, orderDate, orderNumber);
-				client.sendToClient("Update successful for order number " + orderNumber);
+				if(db.checkDB(orderNumber)) {
+					db.updateDB(parkingSpace, orderDate, orderNumber);
+					client.sendToClient("Update successful for order number " + orderNumber);
+				}
+				else {
+					client.sendToClient("Invalid order number Try again...");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -27,6 +27,9 @@ public class ChatClient extends AbstractClient
    */
   ChatIF clientUI; 
 
+  private String lastServerResponse = "";
+
+ 
   
   //Constructors ****************************************************
   
@@ -54,9 +57,18 @@ public class ChatClient extends AbstractClient
    *
    * @param msg The message from the server.
    */
-  public void handleMessageFromServer(Object msg) 
-  {
-    clientUI.display(msg.toString());
+//  public void handleMessageFromServer(Object msg) 
+//  {
+//    clientUI.display(msg.toString());
+//  }
+  @Override
+  public void handleMessageFromServer(Object msg) {
+      lastServerResponse = msg.toString(); // לשמור את התגובה
+      clientUI.display(lastServerResponse); // להציג גם
+  }
+
+  public String getLastServerResponse() {
+      return lastServerResponse;
   }
 
   /**

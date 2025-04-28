@@ -58,17 +58,17 @@ public class ClientConsole implements ChatIF {
 	 */
 	public void accept() {
 		// DBController db = new DBController();
-		//Rafi is the King
+		// Rafi is the King
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
-			// db.connectToDB();
 			System.out.println("--Welcome to the BPark System Menu!--");
 			System.out.println(" (1) View DB Parking information");
 			System.out.println(" (2) Update Parking Space && Order Date");
 			System.out.print("Choose an option: ");
-			
+			System.out.println();
 			while (true) {
+				
 				// PBpark menu
 				message = fromConsole.readLine();
 
@@ -78,32 +78,26 @@ public class ClientConsole implements ChatIF {
 				}
 
 				else if (message.equals("2")) {
-					System.out.print("Enter order number: ");
-					String orderNumber = fromConsole.readLine();
+					while (true) {
+						System.out.print("Enter order number: ");
+						String orderNumber = fromConsole.readLine();
 
-					System.out.print("Enter new parking space: ");
-					String parkingSpace = fromConsole.readLine();
+						System.out.print("Enter new parking space: ");
+						String parkingSpace = fromConsole.readLine();
 
-					System.out.print("Enter new order date (YYYY-MM-DD): ");
-					String orderDate = fromConsole.readLine();
+						System.out.print("Enter new order date (YYYY-MM-DD): ");
+						String orderDate = fromConsole.readLine();
 
-					String updateMessage = "UPDATE_ORDER " + orderNumber + " " + parkingSpace + " " + orderDate;
-					client.handleMessageFromClientUI(updateMessage);
+						String updateMessage = "UPDATE_ORDER " + orderNumber + " " + parkingSpace + " " + orderDate;
+						client.handleMessageFromClientUI(updateMessage);
+						while (client.getLastServerResponse().equals("")) {
+				            Thread.sleep(50); // המתנה קטנה, לא עמוסה
+				        }
+						if (!client.getLastServerResponse().equals("Invalid order number Try again...")) {
+							break;
+						}
+					}
 				}
-
-				/*
-				 * else if (message.equals("2")) { //User information to update String[] info =
-				 * new String[3]; System.out.print("Enter a order number to update: ");
-				 * 
-				 * String temp = fromConsole.readLine(); while(!db.checkDB(temp)) {
-				 * System.out.print("Order number is not found!\nEnter a valid order number: ");
-				 * temp = fromConsole.readLine(); } info[0] = temp;
-				 * System.out.print("Enter parking space: "); info[1] = fromConsole.readLine();
-				 * System.out.print("Enter order date(YYYY-MM-DD): "); info[2] =
-				 * fromConsole.readLine();
-				 * 
-				 * db.updateDB(info[1], info[2], info[0]); }
-				 */
 
 			}
 		} catch (Exception ex) {
@@ -119,7 +113,7 @@ public class ClientConsole implements ChatIF {
 	 * @param message The string to be displayed.
 	 */
 	public void display(String message) {
-		System.out.println("> " + message);
+		System.out.println(message); // Rafi - Delete "> "
 	}
 
 	/*
