@@ -68,7 +68,7 @@ public class ClientConsole implements ChatIF {
 			System.out.print("Choose an option: ");
 			System.out.println();
 			while (true) {
-				
+
 				// PBpark menu
 				message = fromConsole.readLine();
 
@@ -91,16 +91,18 @@ public class ClientConsole implements ChatIF {
 						String updateMessage = "UPDATE_ORDER " + orderNumber + " " + parkingSpace + " " + orderDate;
 						client.handleMessageFromClientUI(updateMessage);
 						while (client.getLastServerResponse().equals("")) {
-				            Thread.sleep(50); // המתנה קטנה, לא עמוסה
-				        }
+							Thread.sleep(50); // המתנה קטנה, לא עמוסה
+						}
 						if (!client.getLastServerResponse().equals("Invalid order number Try again...")) {
 							break;
 						}
 					}
 				}
-
 			}
-		} catch (Exception ex) {
+
+		} catch (
+
+		Exception ex) {
 			System.out.println("Unexpected error while reading from console!");
 		}
 		// db.close();// closing the DB
@@ -142,6 +144,7 @@ public class ClientConsole implements ChatIF {
 		}
 		ClientConsole chat = new ClientConsole(host, DEFAULT_PORT);
 		chat.accept(); // Wait for console data
+
 	}
 }
 //End of ConsoleChat class
