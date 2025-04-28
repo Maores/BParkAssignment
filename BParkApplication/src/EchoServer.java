@@ -34,6 +34,7 @@ public class EchoServer extends AbstractServer {
 	 */
 	public EchoServer(int port) {
 		super(port);
+		
 	}
 
 	// Instance methods ************************************************
@@ -45,17 +46,18 @@ public class EchoServer extends AbstractServer {
 	 * @param client The connection from which the message originated.
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
-		String message = msg.toString();
-		System.out.println("Message received: " + msg + " from " + client);
+		String message = msg.toString();	
+		boolean flag = false;
+		//System.out.println("Message received: " + msg + " from " + client);	
 		DBController db = new DBController();
-		db.connectToDB();
-
 		try {
 			// Handling "View database"
 			if (message.equals("VIEW_DATABASE")) {
+				db.connectToDB();
 				String data = db.getDatabaseAsString();
 				client.sendToClient(data);
 			} else if (message.startsWith("UPDATE_ORDER")) {
+				db.connectToDB();
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
 				String parkingSpace = parts[2];
@@ -68,13 +70,17 @@ public class EchoServer extends AbstractServer {
 					client.sendToClient("Invalid order number Try again...");
 				}
 			}
+			else {
+				flag=true;
+				System.out.println("Host: " + message +"\nIP: " + client + "\nStatus: connected");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			db.close();
+			if(!flag) {
+				db.close();
+			}
 		}
-
-		//this.sendToAllClients(msg);
 	}
 
 	/**
@@ -83,6 +89,8 @@ public class EchoServer extends AbstractServer {
 	 */
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
+
+		
 	}
 
 	/**

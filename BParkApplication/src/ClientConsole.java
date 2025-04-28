@@ -44,6 +44,7 @@ public class ClientConsole implements ChatIF {
 	public ClientConsole(String host, int port) {
 		try {
 			client = new ChatClient(host, port, this);
+			client.sendToServer(host);
 		} catch (IOException exception) {
 			System.out.println("Error: Can't setup connection!" + " Terminating client.");
 			System.exit(1);
@@ -65,18 +66,17 @@ public class ClientConsole implements ChatIF {
 			System.out.println("--Welcome to the BPark System Menu!--");
 			System.out.println(" (1) View DB Parking information");
 			System.out.println(" (2) Update Parking Space && Order Date");
+			System.out.println(" (3) Exit");
 			System.out.print("Choose an option: ");
-			System.out.println();
+			
 			while (true) {
-
-				// PBpark menu
+				
+				// BPark menu
 				message = fromConsole.readLine();
-
+				System.out.println();
 				if (message.equals("1")) {
-					// db.printDatabase();
 					client.handleMessageFromClientUI("VIEW_DATABASE");
 				}
-
 				else if (message.equals("2")) {
 					while (true) {
 						System.out.print("Enter order number: ");
@@ -90,22 +90,27 @@ public class ClientConsole implements ChatIF {
 
 						String updateMessage = "UPDATE_ORDER " + orderNumber + " " + parkingSpace + " " + orderDate;
 						client.handleMessageFromClientUI(updateMessage);
-						while (client.getLastServerResponse().equals("")) {
-							Thread.sleep(50); // המתנה קטנה, לא עמוסה
-						}
+						Thread.sleep(100); 
 						if (!client.getLastServerResponse().equals("Invalid order number Try again...")) {
 							break;
 						}
 					}
 				}
+				else if(message.equals("3")) {
+					client.closeConnection();
+					break;
+				}
+				Thread.sleep(900); 
+				System.out.println("MENU:");
+				System.out.println("(1) View DB Parking information");
+				System.out.println("(2) Update Parking Space && Order Date");
+				System.out.println("(3) Exit");
+				System.out.print("Choose an option: ");
 			}
 
-		} catch (
-
-		Exception ex) {
+		} catch (Exception ex) {
 			System.out.println("Unexpected error while reading from console!");
 		}
-		// db.close();// closing the DB
 	}
 
 	/**

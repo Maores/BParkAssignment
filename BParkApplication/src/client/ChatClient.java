@@ -63,8 +63,8 @@ public class ChatClient extends AbstractClient
 //  }
   @Override
   public void handleMessageFromServer(Object msg) {
-      lastServerResponse = msg.toString(); // לשמור את התגובה
-      clientUI.display(lastServerResponse); // להציג גם
+      lastServerResponse = msg.toString(); 
+      clientUI.display(lastServerResponse); 
   }
 
   public String getLastServerResponse() {
