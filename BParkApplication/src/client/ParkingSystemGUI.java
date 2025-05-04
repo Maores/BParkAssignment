@@ -42,16 +42,19 @@ public class ParkingSystemGUI extends Application {
 
 		Label title = new Label("Smart Parking System");
 		title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2a2a2a;");
-
+		
 		idField = new TextField();
 		idField.setPromptText("Enter Order Number");
-
+		VBox orderNumber = new VBox(new Label("Order Number:"),idField);
+		
 		dateField = new TextField();
 		dateField.setPromptText("Enter Order Date (YYYY-MM-DD)");
-
+		VBox orderDate = new VBox(new Label("Order Date:"),dateField);
+		
 		spotField = new TextField();
 		spotField.setPromptText("Enter Parking Spot Number");
-
+		VBox orderSpot = new VBox(new Label("Parking Space:"),spotField);
+		
 		Button viewBtn = new Button("View DB");
 		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
 		viewBtn.setOnAction(e -> guiClient.sendMessage("VIEW_DATABASE"));
@@ -84,10 +87,10 @@ public class ParkingSystemGUI extends Application {
 		VBox root = new VBox(10);
 		root.setPadding(new Insets(20));
 		root.setAlignment(Pos.TOP_CENTER);
-		VBox fields = new VBox(10, idField, dateField, spotField, buttons);
+		VBox fields = new VBox(10, orderNumber, orderDate, orderSpot, buttons);
 		root.getChildren().addAll(title, fields, dbDisplay, table);
 
-		primaryStage.setScene(new Scene(root, 420, 500));
+		primaryStage.setScene(new Scene(root, 675, 500));
 		primaryStage.show();
 	}
 
