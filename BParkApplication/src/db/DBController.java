@@ -63,7 +63,7 @@ public class DBController {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql username
-					"Ra8420346" // MySql password
+					"Aa123456" // MySql password
 			);
 
 			System.out.println("Database connection successful.");
