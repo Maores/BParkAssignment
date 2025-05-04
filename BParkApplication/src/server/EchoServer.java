@@ -1,11 +1,11 @@
 // This file contains material supporting section 3.7 of the textbook:
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
+package server;
 
-import java.io.*;
-import java.util.ArrayList;
-
-import ocsf.server.*;
+import db.DBController;
+import ocsf.server.AbstractServer;
+import ocsf.server.ConnectionToClient;
 
 /**
  * This class overrides some of the methods in the abstract superclass in order
