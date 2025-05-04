@@ -1,6 +1,11 @@
-import java.io.PrintStream;
-import java.sql.*;
-import java.util.ArrayList;
+package db;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBController {
 	private Connection conn;
