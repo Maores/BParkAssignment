@@ -3,10 +3,11 @@
 // license found at www.lloseng.com 
 package client;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import common.*;
+import common.ChatIF;
 
 /**
  * This class constructs the UI for a chat client. It implements the chat

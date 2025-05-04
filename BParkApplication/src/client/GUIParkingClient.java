@@ -12,6 +12,7 @@ public class GUIParkingClient implements ChatIF {
         this.gui = gui;
         try {
             client = new ChatClient(host, port, this);
+            client.sendToServer(host);
         } catch (Exception e) {
             display("Error: Can't setup connection! Terminating client.");
             System.exit(1);
@@ -29,7 +30,6 @@ public class GUIParkingClient implements ChatIF {
     public String getLastServerResponse() {
         return client.getLastServerResponse();
     }
-
     public void quit() {
         client.quit();
     }
