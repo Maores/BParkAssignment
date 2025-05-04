@@ -1,3 +1,4 @@
+import java.io.PrintStream;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -22,15 +23,17 @@ public class DBController {
 			// Print column names
 			for (int i = 1; i <= 6; i++) {
 				//System.out.print(rsmd.getColumnName(i) + "\t");
-				str.append(rsmd.getColumnName(i) + "\t");
+				String s = new String();
+				s = String.format("%-20s", rsmd.getColumnName(i));
+				str.append(s);
 			}
 			str.append("\n");
 			
 			// print rows
 			while (rs.next()) {
 				for (int i = 1; i <= 6; i++) {
-					String columnValue = rs.getString(i);
-					str.append(columnValue + "\t");
+					String columnValue = String.format("%-20s",rs.getString(i));
+					str.append(columnValue);
 					
 				}
 				str.append("\n");
@@ -46,13 +49,6 @@ public class DBController {
 
 	}
 
-	public void parsingTheData(ArrayList<String> data) {
-		System.out.println("Parsing ArrayList<String>:");
-		System.out.println("Username: " + data.get(0));
-		System.out.println("ID: " + data.get(1));
-		System.out.println("Department: " + data.get(2));
-		System.out.println("Phone: " + data.get(3));
-	}
 
 	/**
 	 * Creating a connection to the database.
@@ -61,9 +57,8 @@ public class DBController {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
-					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql
-																											// username
-					"Aa123456" // MySql password
+					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql username
+					"Ra8420346" // MySql password
 			);
 
 			System.out.println("Database connection successful.");
@@ -98,7 +93,7 @@ public class DBController {
 	        }
 	        
 	    } catch (Exception e) {
-	        e.printStackTrace();
+	    	
 	        return false;
 	    }
 	}
@@ -122,6 +117,7 @@ public class DBController {
 	        ps.executeUpdate();
 	        System.out.println("Database updated successfully.");
 	    } catch (Exception e) {
+	    	System.out.println("Database updated Failed.");
 	        e.printStackTrace();
 	    }
 	
