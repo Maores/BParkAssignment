@@ -89,7 +89,7 @@ public class ParkingSystemGUI extends Application {
 		root.setAlignment(Pos.TOP_CENTER);
 		VBox fields = new VBox(10, orderNumber, orderDate, orderSpot, buttons);
 		root.getChildren().addAll(title, fields, dbDisplay, table);
-
+		primaryStage.setResizable(false);
 		primaryStage.setScene(new Scene(root, 675, 500));
 		primaryStage.show();
 	}
