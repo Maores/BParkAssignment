@@ -11,49 +11,10 @@ import java.sql.Statement;
 public class DBController {
 	private Connection conn;
 
-	/**
-	 * Establish a connection to the MySQL database.
-	 */
 
 	/*
-	 * 
+	 * Get data base result as string
 	 */
-//	public String getDatabaseAsString() {
-//
-//		StringBuilder str = new StringBuilder();
-//		try {
-//			Statement stmt = conn.createStatement();
-//			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order;");
-//			ResultSetMetaData rsmd = rs.getMetaData();
-//
-//			// Print column names
-//			for (int i = 1; i <= 6; i++) {
-//				// System.out.print(rsmd.getColumnName(i) + "\t");
-//				String s = new String();
-//				s = String.format("%-20s", rsmd.getColumnName(i));
-//				str.append(s);
-//			}
-//			str.append("\n");
-//
-//			// print rows
-//			while (rs.next()) {
-//				for (int i = 1; i <= 6; i++) {
-//					String columnValue = String.format("%-20s", rs.getString(i));
-//					str.append(columnValue);
-//
-//				}
-//				str.append("\n");
-//			}
-//
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		// returns the string
-//		return str.toString();
-//
-//	}
 
 	public String getDatabaseAsString() {
 
@@ -65,7 +26,6 @@ public class DBController {
 
 			// Print column names
 			for (int i = 1; i <= 6; i++) {
-				// System.out.print(rsmd.getColumnName(i) + "\t");
 				String s = new String();
 				s = String.format("%s ", rsmd.getColumnName(i));
 				str.append(s);
@@ -81,7 +41,6 @@ public class DBController {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -93,19 +52,19 @@ public class DBController {
 	/**
 	 * Creating a connection to the database.
 	 */
-	public void connectToDB() {
+	public String connectToDB() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
-					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql
-																											// username
+					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql																											// username
 					"Ra8420346" // MySql password
 			);
 
 			System.out.println("Database connection successful.");
+			return "Database connection successful.";
 		} catch (Exception e) {
 			System.out.println("Failed to connect to database:");
-			e.printStackTrace();
+			return e.getMessage();
 		}
 	}
 
@@ -124,11 +83,9 @@ public class DBController {
 
 			if (rs.next()) {
 				// The order_number exists
-				System.out.println("Order number " + id + " exists in the database.");
 				return true;
 			} else {
 				// No result found -> the order_number does not exist
-				System.out.println("Order number " + id + " does not exist in the database.");
 				return false;
 			}
 
@@ -141,11 +98,7 @@ public class DBController {
 	/**
 	 * Update the database.
 	 */
-	public void updateDB(String parking_space, String order_date, String id) {
-		// String sql = "UPDATE table_order "
-		// + "SET parking_space= '"+parking_space+"', order_date= '"+order_date+"' WHERE
-		// order_number='"+id+"';" ;
-
+	public String updateDB(String parking_space, String order_date, String id) {
 		String sql = "UPDATE `table_order` SET parking_space = ?, order_date = ? WHERE order_number = ?;";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -155,9 +108,11 @@ public class DBController {
 
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
+			return "true";
 		} catch (Exception e) {
 			System.out.println("Database updated Failed.");
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return e.getMessage();
 		}
 
 	}

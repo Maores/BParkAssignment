@@ -3,6 +3,8 @@
 // license found at www.lloseng.com 
 package server;
 
+import java.io.IOException;
+
 import db.DBController;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -48,34 +50,51 @@ public class EchoServer extends AbstractServer {
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		String message = msg.toString();	
 		boolean flag = false;
+		String log;
 		//System.out.println("Message received: " + msg + " from " + client);	
 		DBController db = new DBController();
 		try {
 			// Handling "View database"
 			if (message.equals("VIEW_DATABASE")) {
-				db.connectToDB();
-				String data = db.getDatabaseAsString();
-				client.sendToClient(data);
-			} else if (message.startsWith("UPDATE_ORDER")) {
-				db.connectToDB();
-				String[] parts = message.split(" ");
-				String orderNumber = parts[1];
-				String parkingSpace = parts[2];
-				String orderDate = parts[3];
-				if(db.checkDB(orderNumber)) {
-					db.updateDB(parkingSpace, orderDate, orderNumber);
-					client.sendToClient("Update successful for order number " + orderNumber);
+				if((log =db.connectToDB()).startsWith("Database")) {
+					client.sendToClient(log);
+					String data = db.getDatabaseAsString();
+					client.sendToClient(data);
 				}
 				else {
-					client.sendToClient("Invalid order number Try again...");
+					client.sendToClient(log);
 				}
+			} else if (message.startsWith("UPDATE_ORDER")) {
+				if((log =db.connectToDB()).startsWith("Database")) {
+					String[] parts = message.split(" ");
+					String orderNumber = parts[1];
+					String parkingSpace = parts[2];
+					String orderDate = parts[3];
+					if(db.checkDB(orderNumber)) {
+						if((log = db.updateDB(parkingSpace, orderDate, orderNumber))=="true") {
+							client.sendToClient("Update successful for order number " + orderNumber);
+						}
+						else {
+							client.sendToClient(log.substring(0,log.length()-9)+".");
+						}
+					}
+					else {
+						client.sendToClient("Invalid order number Try again...");
+					}
+				}
+				else {
+					client.sendToClient(log);
+				}
+				
 			}
 			else {
 				flag=true;
 				System.out.println("Host: " + message +"\nIP: " + client + "\nStatus: connected");
 			}
 		} catch (Exception e) {
+			
 			e.printStackTrace();
+			
 		} finally {
 			if(!flag) {
 				db.close();

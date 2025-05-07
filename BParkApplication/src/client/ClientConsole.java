@@ -59,17 +59,10 @@ public class ClientConsole implements ChatIF {
 	 * it to the client's message handler.
 	 */
 	public void accept() {
-		// DBController db = new DBController();
-		// Rafi is the King
+
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
-			System.out.println("--Welcome to the BPark System Menu!--");
-			System.out.println(" (1) View DB Parking information");
-			System.out.println(" (2) Update Parking Space && Order Date");
-			System.out.println(" (3) Exit");
-			System.out.print("Choose an option: ");
-			
 			while (true) {
 				
 				// BPark menu
@@ -91,7 +84,7 @@ public class ClientConsole implements ChatIF {
 
 						String updateMessage = "UPDATE_ORDER " + orderNumber + " " + parkingSpace + " " + orderDate;
 						client.handleMessageFromClientUI(updateMessage);
-						Thread.sleep(100); 
+						//Thread.sleep(100); 
 						if (!client.getLastServerResponse().equals("Invalid order number Try again...")) {
 							break;
 						}
@@ -101,12 +94,7 @@ public class ClientConsole implements ChatIF {
 					client.closeConnection();
 					break;
 				}
-				Thread.sleep(900); 
-				System.out.println("MENU:");
-				System.out.println("(1) View DB Parking information");
-				System.out.println("(2) Update Parking Space && Order Date");
-				System.out.println("(3) Exit");
-				System.out.print("Choose an option: ");
+				//Thread.sleep(900); 
 			}
 
 		} catch (Exception ex) {
