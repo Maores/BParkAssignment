@@ -6,6 +6,7 @@ package server;
 import java.io.IOException;
 
 import db.DBController;
+import gui.serverGuiController;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -26,7 +27,7 @@ public class EchoServer extends AbstractServer {
 	 * The default port to listen on.
 	 */
 	final public static int DEFAULT_PORT = 5555;
-
+	private serverGuiController guiController;
 	// Constructors ****************************************************
 
 	/**
@@ -34,8 +35,9 @@ public class EchoServer extends AbstractServer {
 	 *
 	 * @param port The port number to connect on.
 	 */
-	public EchoServer(int port) {
+	public EchoServer(int port, serverGuiController guiController) {
 		super(port);
+		this.guiController = guiController;
 		
 	}
 
@@ -48,6 +50,9 @@ public class EchoServer extends AbstractServer {
 	 * @param client The connection from which the message originated.
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
+		if (guiController != null) {
+		    guiController.appendMessage("Message received: " + msg.toString());
+		}
 		String message = msg.toString();	
 		boolean flag = false;
 		String log;
@@ -108,8 +113,9 @@ public class EchoServer extends AbstractServer {
 	 */
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
-
-		
+		if (guiController != null) {
+	        guiController.appendMessage("Server listening for connections on port " + getPort());
+	    }
 	}
 
 	/**
@@ -118,6 +124,9 @@ public class EchoServer extends AbstractServer {
 	 */
 	protected void serverStopped() {
 		System.out.println("Server has stopped listening for connections.");
+		if (guiController != null) {
+	        guiController.appendMessage("Server has stopped listening for connections.");
+	    }
 	}
 
 	// Class methods ***************************************************
@@ -129,22 +138,22 @@ public class EchoServer extends AbstractServer {
 	 * @param args[0] The port number to listen on. Defaults to 5555 if no argument
 	 *                is entered.
 	 */
-	public static void main(String[] args) {
-		int port = 0; // Port to listen on
-
-		try {
-			port = Integer.parseInt(args[0]); // Get port from command line
-		} catch (Throwable t) {
-			port = DEFAULT_PORT; // Set port to 5555
-		}
-
-		EchoServer sv = new EchoServer(port);
-
-		try {
-			sv.listen(); // Start listening for connections
-		} catch (Exception ex) {
-			System.out.println("ERROR - Could not listen for clients!");
-		}
-	}
+//	public static void main(String[] args) {
+//		int port = 0; // Port to listen on
+//
+//		try {
+//			port = Integer.parseInt(args[0]); // Get port from command line
+//		} catch (Throwable t) {
+//			port = DEFAULT_PORT; // Set port to 5555
+//		}
+//
+//		EchoServer sv = new EchoServer(port);
+//
+//		try {
+//			sv.listen(); // Start listening for connections
+//		} catch (Exception ex) {
+//			System.out.println("ERROR - Could not listen for clients!");
+//		}
+//	}
 }
 //End of EchoServer class

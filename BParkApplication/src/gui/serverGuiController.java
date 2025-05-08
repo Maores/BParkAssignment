@@ -2,27 +2,31 @@ package gui;
 
 import java.io.IOException;
 
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import server.EchoServer;
 
-public class serverGuiController {
+public class serverGuiController extends Application{
 
 	@FXML
 	private Button btnLstn;
 
 	@FXML
 	private TextField txtPort;
-	@FXML
-	private TextField txtArea;
 	
-	private String console;
+	@FXML
+	private TextArea txtArea;
+	
+	private static String console="";
 	@FXML
 	void listen(ActionEvent event) {
 		String p;
@@ -32,12 +36,43 @@ public class serverGuiController {
 			System.out.println("You must enter a port number");
 
 		} else {
-			serverUI.runServer(p);
-			console += "\n"+"Server listening for connections on port " + p;
-			txtArea.setText(console);
+			runServer(p);
 		}
 	}
+	public  void runServer(String p)
+	{
+		int port = 0; //Port to listen on
 
+        try
+        {
+        		port = Integer.parseInt(p); //Set port to 5555
+          
+        }
+        catch(Throwable t)
+        {
+        		System.out.println("ERROR - Could not connect!");
+        }
+    	
+        EchoServer sv = new EchoServer(port,this);
+        
+        try 
+        {
+          sv.listen(); //Start listening for connections
+
+        } 
+        catch (Exception ex) 
+        {
+          System.out.println("ERROR - Could not listen for clients!");
+
+        }
+        	
+		
+	}
+	public void message(String msg) {
+		String str = txtArea.getText() +"\n" +msg;
+		System.out.println("pass");
+		txtArea.setText(str);
+	}
 	private String getport() {
 		return txtPort.getText();
 	}
@@ -50,5 +85,17 @@ public class serverGuiController {
 		primaryStage.show();	
 
 	}
-
+	
+	public void Initializable() {
+		console = txtArea.getText();
+	}
+	public static void main( String args[] ) throws Exception
+	   {   
+		 launch(args);
+	  }
+	public void appendMessage(String msg) {
+		javafx.application.Platform.runLater(() -> {
+	        txtArea.appendText(msg + "\n");
+	    });
+	} 
 }
