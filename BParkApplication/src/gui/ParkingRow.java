@@ -1,4 +1,4 @@
-package client;
+package gui;
 
 import javafx.beans.property.SimpleStringProperty;
 

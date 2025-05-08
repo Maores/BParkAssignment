@@ -1,6 +1,7 @@
 
-package client;
+package gui;
 
+import client.ChatClient;
 import common.ChatIF;
 
 public class GUIParkingClient implements ChatIF {
