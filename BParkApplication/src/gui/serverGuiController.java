@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,9 +23,7 @@ public class serverGuiController extends Application{
 	private TextField txtPort;
 	
 	@FXML
-	private TextArea txtArea;
-	
-	private static String console="";
+	private TextArea txtArea;	;
 	@FXML
 	void listen(ActionEvent event) {
 		String p;
@@ -51,6 +48,7 @@ public class serverGuiController extends Application{
         catch(Throwable t)
         {
         		System.out.println("ERROR - Could not connect!");
+        		txtArea.appendText("ERROR - Could not connect!\n");
         }
     	
         EchoServer sv = new EchoServer(port,this);
@@ -63,15 +61,10 @@ public class serverGuiController extends Application{
         catch (Exception ex) 
         {
           System.out.println("ERROR - Could not listen for clients!");
-
+          txtArea.appendText("ERROR - Could not listen for clients!\n");
         }
         	
 		
-	}
-	public void message(String msg) {
-		String str = txtArea.getText() +"\n" +msg;
-		System.out.println("pass");
-		txtArea.setText(str);
 	}
 	private String getport() {
 		return txtPort.getText();
@@ -84,10 +77,6 @@ public class serverGuiController extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();	
 
-	}
-	
-	public void Initializable() {
-		console = txtArea.getText();
 	}
 	public static void main( String args[] ) throws Exception
 	   {   

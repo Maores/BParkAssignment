@@ -8,10 +8,15 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import gui.serverGuiController;
+
 public class DBController {
 	private Connection conn;
+	private serverGuiController guiCon;
 
-
+	public DBController(serverGuiController guiCon) {
+		this.guiCon = guiCon;
+	}
 	/*
 	 * Get data base result as string
 	 */
@@ -61,9 +66,11 @@ public class DBController {
 			);
 
 			System.out.println("Database connection successful.");
+			guiCon.appendMessage("Database connection successful.");
 			return "Database connection successful.";
 		} catch (Exception e) {
-			System.out.println("Failed to connect to database:");
+			System.out.println("Failed to connect to database!");
+			guiCon.appendMessage("Failed to connect to database!");
 			return e.getMessage();
 		}
 	}
@@ -78,9 +85,7 @@ public class DBController {
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(id));
-
 			ResultSet rs = ps.executeQuery();
-
 			if (rs.next()) {
 				// The order_number exists
 				return true;
@@ -108,9 +113,11 @@ public class DBController {
 
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
+			guiCon.appendMessage("Database updated successfully.");
 			return "true";
 		} catch (Exception e) {
 			System.out.println("Database updated Failed.");
+			guiCon.appendMessage("Database updated Failed.");
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		}
@@ -125,6 +132,7 @@ public class DBController {
 			if (conn != null && !conn.isClosed()) {
 				conn.close();
 				System.out.println("Connection closed.");
+				guiCon.appendMessage("Connection closed.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
