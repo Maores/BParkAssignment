@@ -23,7 +23,13 @@ public class serverGuiController extends Application{
 	private TextField txtPort;
 	
 	@FXML
-	private TextArea txtArea;	;
+	private TextArea txtArea;	
+	
+	@FXML
+	private Button btnStop;
+	
+	private EchoServer sv;
+	
 	@FXML
 	void listen(ActionEvent event) {
 		String p;
@@ -51,7 +57,7 @@ public class serverGuiController extends Application{
         		txtArea.appendText("ERROR - Could not connect!\n");
         }
     	
-        EchoServer sv = new EchoServer(port,this);
+        sv = new EchoServer(port,this);
         
         try 
         {
@@ -68,6 +74,15 @@ public class serverGuiController extends Application{
 	}
 	private String getport() {
 		return txtPort.getText();
+	}
+	@FXML
+	public void closeServer() {
+		try {
+			sv.close();
+		} catch (IOException e) {
+			txtArea.appendText(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	public void start(Stage primaryStage) throws IOException {

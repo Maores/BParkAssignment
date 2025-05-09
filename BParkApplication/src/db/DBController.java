@@ -65,8 +65,8 @@ public class DBController {
 					"Ra8420346" // MySql password
 			);
 
-			System.out.println("Database connection successful.");
-			guiCon.appendMessage("Database connection successful.");
+			System.out.println("Database connection established successfully.");
+			guiCon.appendMessage("Database connection established successfully.");
 			return "Database connection successful.";
 		} catch (Exception e) {
 			System.out.println("Failed to connect to database!");
