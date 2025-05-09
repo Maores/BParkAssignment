@@ -24,6 +24,7 @@ public class ParkingSystemGUI extends Application {
 	 * The default port to connect on.
 	 */
 	final public static int DEFAULT_PORT = 5555;
+	final public static String DEFAULT_HOST = "localhost";
 	private TextArea dbDisplay;
 	private TextField idField, dateField, spotField;
 	private GUIParkingClient guiClient;
@@ -38,7 +39,7 @@ public class ParkingSystemGUI extends Application {
 		primaryStage.setTitle("BPark System");
 
 		// Initialize GUI <-> Server client
-		guiClient = new GUIParkingClient("localhost", DEFAULT_PORT, this);
+		
 
 		Label title = new Label("Smart Parking System");
 		title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2a2a2a;");
@@ -72,8 +73,11 @@ public class ParkingSystemGUI extends Application {
 				displayMessage("Please fill all fields.");
 			}
 		});
+		Button tryBtn = new Button("reconnect");
+		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
+		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
 		// Buttons
-		HBox buttons = new HBox(viewBtn, updateBtn);
+		HBox buttons = new HBox(viewBtn, updateBtn,tryBtn );
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
 		buttons.setSpacing(10);
@@ -83,19 +87,21 @@ public class ParkingSystemGUI extends Application {
 		dbDisplay.setEditable(false);
 		dbDisplay.setStyle(
 				"-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
-
 		VBox root = new VBox(10);
 		root.setPadding(new Insets(20));
 		root.setAlignment(Pos.TOP_CENTER);
 		VBox fields = new VBox(10, orderNumber, orderDate, orderSpot, buttons);
 		root.getChildren().addAll(title, fields, dbDisplay, table);
+		//Create new client
+		guiClient = new GUIParkingClient(DEFAULT_HOST,DEFAULT_PORT,this);
 		primaryStage.setResizable(false);
 		primaryStage.setScene(new Scene(root, 675, 500));
 		primaryStage.show();
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	public void displayMessage(String message) {       
+	public void displayMessage(String message) {   
+		
     	if(message.startsWith("parking")) {
     		Platform.runLater(() -> {
         	String[] str = message.split(" ");
@@ -132,6 +138,7 @@ public class ParkingSystemGUI extends Application {
         }
         else {
         	dbDisplay.setText(message);
+        	
         }
     }
 

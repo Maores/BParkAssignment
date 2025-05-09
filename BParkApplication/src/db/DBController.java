@@ -67,7 +67,7 @@ public class DBController {
 
 			System.out.println("Database connection established successfully.");
 			guiCon.appendMessage("Database connection established successfully.");
-			return "Database connection successful.";
+			return "Database connection established successfully.";
 		} catch (Exception e) {
 			System.out.println("Failed to connect to database!");
 			guiCon.appendMessage("Failed to connect to database!");
