@@ -73,6 +73,7 @@ public class ParkingSystemGUI extends Application {
 				displayMessage("Please fill all fields.");
 			}
 		});
+		
 		Button tryBtn = new Button("reconnect");
 		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));

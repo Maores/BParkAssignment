@@ -17,10 +17,10 @@ public class DBController {
 	public DBController(serverGuiController guiCon) {
 		this.guiCon = guiCon;
 	}
+	
 	/*
 	 * Get data base result as string
 	 */
-
 	public String getDatabaseAsString() {
 
 		StringBuilder str = new StringBuilder();
@@ -62,7 +62,7 @@ public class DBController {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql																											// username
-					"Ra8420346" // MySql password
+					"q1q1Q!Q!" // MySql password
 			);
 
 			System.out.println("Database connection established successfully.");
@@ -83,6 +83,7 @@ public class DBController {
 		String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
 
 		try {
+			//puts the id inside the "?" that is at the end of the query above
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(id));
 			ResultSet rs = ps.executeQuery();

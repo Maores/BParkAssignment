@@ -59,6 +59,7 @@ public class EchoServer extends AbstractServer {
 		try {
 			// Handling "View database"
 			if (message.equals("VIEW_DATABASE")) {
+				//gather data from DB
 				if ((log = db.connectToDB()).startsWith("Database")) {
 					client.sendToClient(log);
 					String data = db.getDatabaseAsString();
@@ -67,12 +68,14 @@ public class EchoServer extends AbstractServer {
 					client.sendToClient(log);
 				}
 			} else if (message.startsWith("UPDATE_ORDER")) {
+				//getting data from DB into parts
 				if ((log = db.connectToDB()).startsWith("Database")) {
 					String[] parts = message.split(" ");
 					String orderNumber = parts[1];
 					String parkingSpace = parts[2];
 					String orderDate = parts[3];
 					if (db.checkDB(orderNumber)) {
+						//updates the DB
 						if ((log = db.updateDB(parkingSpace, orderDate, orderNumber)) == "true") {
 							client.sendToClient("Update successful for order number " + orderNumber);
 						} else {
@@ -84,10 +87,11 @@ public class EchoServer extends AbstractServer {
 				} else {
 					client.sendToClient(log);
 				}
-
+			//if message from client is not ViewDB or UpdateDB - flag so it wont close the server in finally
 			} else {
 				flag = true;
 				if (guiController != null) {
+					//sends the message to the gui
 					guiController.appendMessage("Host: " + message + "\nIP: " + client + "\nStatus: connected");
 				}
 				System.out.println("Host: " + message + "\nIP: " + client + "\nStatus: connected");
