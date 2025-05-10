@@ -62,16 +62,16 @@ public class DBController {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql																											// username
-					"q1q1Q!Q!" // MySql password
+					"Ra8420346" // MySql password
 			);
 
 			System.out.println("Database connection established successfully.");
 			guiCon.appendMessage("Database connection established successfully.");
 			return "Database connection established successfully.";
 		} catch (Exception e) {
-			System.out.println("Failed to connect to database!");
-			guiCon.appendMessage("Failed to connect to database!");
-			return e.getMessage();
+			System.out.println(e.getMessage());
+			guiCon.appendMessage(e.getMessage());
+			return "Failed to connect to database!";
 		}
 	}
 
