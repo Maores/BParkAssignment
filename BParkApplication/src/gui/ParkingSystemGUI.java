@@ -15,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -37,7 +38,8 @@ public class ParkingSystemGUI extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("BPark System");
-
+		Image icon = new Image(getClass().getResourceAsStream("logo.png"));
+		primaryStage.getIcons().add(icon);
 		// Initialize GUI <-> Server client
 		
 
