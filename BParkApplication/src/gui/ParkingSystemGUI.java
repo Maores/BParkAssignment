@@ -16,7 +16,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -37,15 +39,16 @@ public class ParkingSystemGUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("BPark System");
+		primaryStage.setTitle("BPark - Smart Parking System");
 		Image icon = new Image(getClass().getResourceAsStream("logo.png"));
 		primaryStage.getIcons().add(icon);
+		ImageView iv1 = new ImageView();
+		iv1.setImage(icon);
+		iv1.setFitHeight(icon.getHeight()/10);
+		iv1.setFitWidth(icon.getWidth()/10);	
+		
 		// Initialize GUI <-> Server client
-		
 
-		Label title = new Label("Smart Parking System");
-		title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2a2a2a;");
-		
 		idField = new TextField();
 		idField.setPromptText("Enter Order Number");
 		VBox orderNumber = new VBox(new Label("Order Number:"),idField);
@@ -94,11 +97,11 @@ public class ParkingSystemGUI extends Application {
 		root.setPadding(new Insets(20));
 		root.setAlignment(Pos.TOP_CENTER);
 		VBox fields = new VBox(10, orderNumber, orderDate, orderSpot, buttons);
-		root.getChildren().addAll(title, fields, dbDisplay, table);
+		root.getChildren().addAll(iv1, fields, dbDisplay, table);
 		//Create new client
 		guiClient = new GUIParkingClient(DEFAULT_HOST,DEFAULT_PORT,this);
 		primaryStage.setResizable(false);
-		primaryStage.setScene(new Scene(root, 675, 500));
+		primaryStage.setScene(new Scene(root, 675, 600));
 		primaryStage.show();
 	}
 	
