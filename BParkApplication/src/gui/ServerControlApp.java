@@ -14,7 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import server.EchoServer;
 
-public class serverGuiController extends Application{
+public class ServerControlApp extends Application{
 
 	@FXML
 	private Button btnLstn;

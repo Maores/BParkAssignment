@@ -4,7 +4,7 @@
 package server;
 
 import db.DBController;
-import gui.serverGuiController;
+import gui.ServerControlApp;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -25,7 +25,7 @@ public class EchoServer extends AbstractServer {
 	 * The default port to listen on.
 	 */
 	final public static int DEFAULT_PORT = 5555;
-	private serverGuiController guiController;
+	private ServerControlApp guiController;
 	// Constructors ****************************************************
 
 	/**
@@ -33,7 +33,7 @@ public class EchoServer extends AbstractServer {
 	 *
 	 * @param port The port number to connect on.
 	 */
-	public EchoServer(int port, serverGuiController guiController) {
+	public EchoServer(int port, ServerControlApp guiController) {
 		super(port);
 		this.guiController = guiController;
 

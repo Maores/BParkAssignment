@@ -4,12 +4,12 @@ package gui;
 import client.ChatClient;
 import common.ChatIF;
 
-public class GUIParkingClient implements ChatIF {
+public class ParkingClientController implements ChatIF {
 
 	private ChatClient client;
-	private ParkingSystemGUI gui;
+	private ParkingClientApp gui;
 
-	public GUIParkingClient(String host, int port, ParkingSystemGUI gui) {
+	public ParkingClientController(String host, int port, ParkingClientApp gui) {
 		this.gui = gui;
 		try {
 			client = new ChatClient(host, port, this);

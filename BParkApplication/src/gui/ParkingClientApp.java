@@ -21,7 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class ParkingSystemGUI extends Application {
+public class ParkingClientApp extends Application {
 	/**
 	 * The default port to connect on.
 	 */
@@ -29,7 +29,7 @@ public class ParkingSystemGUI extends Application {
 	final public static String DEFAULT_HOST = "localhost";
 	private TextArea dbDisplay;
 	private TextField idField, dateField, spotField, srcField;
-	private GUIParkingClient guiClient;
+	private ParkingClientController guiClient;
 	private TableView<ParkingRow> table = new TableView<>();
 
 	public static void main(String[] args) {
@@ -106,7 +106,7 @@ public class ParkingSystemGUI extends Application {
 		VBox fields = new VBox(10, orderNumber, orderDate, orderSpot, buttons);
 		root.getChildren().addAll(iv1, fields, dbDisplay, table);
 		//Create new client
-		guiClient = new GUIParkingClient(DEFAULT_HOST,DEFAULT_PORT,this);
+		guiClient = new ParkingClientController(DEFAULT_HOST,DEFAULT_PORT,this);
 		primaryStage.setResizable(false);
 		primaryStage.setScene(new Scene(root, 675, 600));
 		primaryStage.show();

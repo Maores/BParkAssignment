@@ -8,13 +8,13 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import gui.serverGuiController;
+import gui.ServerControlApp;
 
 public class DBController {
 	private Connection conn;
-	private serverGuiController guiCon;
+	private ServerControlApp guiCon;
 
-	public DBController(serverGuiController guiCon) {
+	public DBController(ServerControlApp guiCon) {
 		this.guiCon = guiCon;
 	}
 
@@ -102,7 +102,7 @@ public class DBController {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql //
 																											// username
-					"Ra8420346" // MySql password
+					"Aa123456" // MySql password
 			);
 
 			System.out.println("Database connection established successfully.");
