@@ -17,7 +17,7 @@ public class DBController {
 	public DBController(serverGuiController guiCon) {
 		this.guiCon = guiCon;
 	}
-	
+
 	/*
 	 * Get data base result as string
 	 */
@@ -53,22 +53,22 @@ public class DBController {
 		return str.toString();
 
 	}
-	//Search Specific ID
+
+	// Search Specific ID
 	public String SearchID(String id) {
-		
+
 		StringBuilder str = new StringBuilder();
-		
+
 		try {
 //			Statement stmt = conn.createStatement();
 //			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE order_number = ?;");
 //			ResultSetMetaData rsmd = rs.getMetaData();
-			
-			String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
+
+			String sql = "SELECT * FROM `table_order` WHERE order_number = ?;";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(id));
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
-
 
 			// Build string for database - column names
 			for (int i = 1; i <= 6; i++) {
@@ -85,11 +85,9 @@ public class DBController {
 
 				}
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		// returns the string
 		return str.toString();
 
@@ -102,8 +100,9 @@ public class DBController {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
-					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql																											// username
-					"q1q1Q!Q!" // MySql password
+					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql //
+																											// username
+					"Ra8420346" // MySql password
 			);
 
 			System.out.println("Database connection established successfully.");
@@ -124,7 +123,7 @@ public class DBController {
 		String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
 
 		try {
-			//puts the id inside the "?" that is at the end of the query above
+			// puts the id inside the "?" that is at the end of the query above
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(id));
 			ResultSet rs = ps.executeQuery();
