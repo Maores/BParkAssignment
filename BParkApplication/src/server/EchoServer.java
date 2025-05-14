@@ -87,8 +87,28 @@ public class EchoServer extends AbstractServer {
 				} else {
 					client.sendToClient(log);
 				}
+			} 
+			///SEARCH specific parking by id
+			else if (message.startsWith("SEARCH_ORDER")) {
+				if ((log = db.connectToDB()).startsWith("Database")) {
+					//get id from the message
+					String[] parts = message.split(" ");
+					String orderNumber = parts[1];
+					//check if ID exists in DB
+					if (db.checkDB(orderNumber)) {
+						String data = db.SearchID(orderNumber);
+						client.sendToClient(data);
+					}
+					//ID not found in DB
+					else {
+						client.sendToClient(log.substring(0, log.length() - 9) + ".");
+					}
+				}
+				
+			}
 			//if message from client is not ViewDB or UpdateDB - flag so it wont close the server in finally
-			} else {
+
+			else {
 				flag = true;
 				if (guiController != null) {
 					//sends the message to the gui
