@@ -93,8 +93,9 @@ public class EchoServer extends AbstractServer {
 				if (guiController != null) {
 					//sends the message to the gui
 					guiController.appendMessage("Host: " + message + "\nIP: " + client + "\nStatus: Connected");
+					System.out.println("Host: " + message + "\nIP: " + client + "\nStatus: Connected");
 				}
-				System.out.println("Host: " + message + "\nIP: " + client + "\nStatus: Connected");
+				
 			}
 		} catch (Exception e) {
 

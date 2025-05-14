@@ -18,15 +18,15 @@ public class serverGuiController extends Application{
 
 	@FXML
 	private Button btnLstn;
-
+	@FXML
+	private Button btnStop;
 	@FXML
 	private TextField txtPort;
 	
 	@FXML
 	private TextArea txtArea;	
 	
-	@FXML
-	private Button btnStop;
+	
 	
 	private EchoServer sv;
 	

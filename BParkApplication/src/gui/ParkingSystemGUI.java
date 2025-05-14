@@ -27,7 +27,7 @@ public class ParkingSystemGUI extends Application {
 	 * The default port to connect on.
 	 */
 	final public static int DEFAULT_PORT = 5555;
-	final public static String DEFAULT_HOST = "localhost";
+	final public static String DEFAULT_HOST = "172.20.10.2";
 	private TextArea dbDisplay;
 	private TextField idField, dateField, spotField;
 	private GUIParkingClient guiClient;
