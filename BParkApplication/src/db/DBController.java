@@ -29,14 +29,55 @@ public class DBController {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order;");
 			ResultSetMetaData rsmd = rs.getMetaData();
 
-			// Print column names
+			// Build string for database - column names
 			for (int i = 1; i <= 6; i++) {
 				String s = new String();
 				s = String.format("%s ", rsmd.getColumnName(i));
 				str.append(s);
 			}
 
-			// print rows
+			// Build string for database - rows
+			while (rs.next()) {
+				for (int i = 1; i <= 6; i++) {
+					String columnValue = String.format("%s ", rs.getString(i));
+					str.append(columnValue);
+
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// returns the string
+		return str.toString();
+
+	}
+	//Search Specific ID
+	public String SearchID(String id) {
+		
+		StringBuilder str = new StringBuilder();
+		
+		try {
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE order_number = ?;");
+//			ResultSetMetaData rsmd = rs.getMetaData();
+			
+			String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(id));
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+
+			// Build string for database - column names
+			for (int i = 1; i <= 6; i++) {
+				String s = new String();
+				s = String.format("%s ", rsmd.getColumnName(i));
+				str.append(s);
+			}
+
+			// Build string for database - rows
 			while (rs.next()) {
 				for (int i = 1; i <= 6; i++) {
 					String columnValue = String.format("%s ", rs.getString(i));
@@ -62,7 +103,7 @@ public class DBController {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql																											// username
-					"Ra8420346" // MySql password
+					"q1q1Q!Q!" // MySql password
 			);
 
 			System.out.println("Database connection established successfully.");
