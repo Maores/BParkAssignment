@@ -27,9 +27,9 @@ public class ParkingSystemGUI extends Application {
 	 * The default port to connect on.
 	 */
 	final public static int DEFAULT_PORT = 5555;
-	final public static String DEFAULT_HOST = "172.20.10.2";
+	final public static String DEFAULT_HOST = "localhost";
 	private TextArea dbDisplay;
-	private TextField idField, dateField, spotField;
+	private TextField idField, dateField, spotField, srcField;
 	private GUIParkingClient guiClient;
 	private TableView<ParkingRow> table = new TableView<>();
 
@@ -61,6 +61,9 @@ public class ParkingSystemGUI extends Application {
 		spotField.setPromptText("Enter Parking Spot Number");
 		VBox orderSpot = new VBox(new Label("Parking Space:"),spotField);
 		
+		srcField = new TextField();
+		srcField.setPromptText("Search order number");
+		
 		Button viewBtn = new Button("View DB");
 		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
 		viewBtn.setOnAction(e -> guiClient.sendMessage("VIEW_DATABASE"));
@@ -78,12 +81,17 @@ public class ParkingSystemGUI extends Application {
 				displayMessage("Please fill all fields.");
 			}
 		});
-		
-		Button tryBtn = new Button("reconnect");
+		//Button to reconnect to the server
+		Button tryBtn = new Button("Reconnect");
 		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
+		
+		Button srcBtn = new Button("Search");
+		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
+		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
+		
 		// Buttons
-		HBox buttons = new HBox(viewBtn, updateBtn,tryBtn );
+		HBox buttons = new HBox(viewBtn, updateBtn,tryBtn,srcField,srcBtn);
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
 		buttons.setSpacing(10);

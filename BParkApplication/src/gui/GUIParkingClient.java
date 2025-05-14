@@ -32,14 +32,29 @@ public class GUIParkingClient implements ChatIF {
 		}
 
 	}
+	public void search(String msg) {
+		if (client != null && client.isConnected()) {
+			client.handleMessageFromClientUI(msg);
+			if(!msg.isEmpty()) {
+				client.handleMessageFromClientUI("SEARCH_ORDER "+msg);
+			}
+			else {
+				display("Search bar is empty.");
+			}
+			
+		} else {
+			display("ERROR:The server is offline.");
+		}
+
+	}
 
 	public void display(String message) {
 		gui.displayMessage(message);
 	}
 
 	public void connect(String host, int port) {
-
 		try {
+			
 			client = new ChatClient(host, port, this);
 			System.out.println(client);
 			display("Connected!");
