@@ -80,7 +80,7 @@ public class ChatClient extends AbstractClient
   {
     try
     {
-    	sendToServer(message);
+    		sendToServer(message);
     }
     catch(IOException e)
     {

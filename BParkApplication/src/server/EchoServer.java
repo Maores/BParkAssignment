@@ -52,8 +52,8 @@ public class EchoServer extends AbstractServer {
 //			guiController.appendMessage("Message received: " + msg.toString());
 //		}
 		String message = msg.toString();
-		boolean flag = false;
-		String log;
+		boolean flag = false;//if DB not Connected
+		String log;//Log message from DB 
 		// System.out.println("Message received: " + msg + " from " + client);
 		DBController db = new DBController(guiController);
 		try {

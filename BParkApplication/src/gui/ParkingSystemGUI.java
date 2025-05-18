@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 
 public class ParkingSystemGUI extends Application {
 	/**
-	 * The default port to connect on.
+	 * The default port and host to connect on.
 	 */
 	final public static int DEFAULT_PORT = 5555;
 	final public static String DEFAULT_HOST = "localhost";
@@ -115,7 +115,7 @@ public class ParkingSystemGUI extends Application {
 	@SuppressWarnings("unchecked")
 	public void displayMessage(String message) {   
 		
-    	if(message.startsWith("parking")) {
+    	if(message.startsWith("order")) {
     		Platform.runLater(() -> {
         	String[] str = message.split(" ");
             table.setEditable(true);
