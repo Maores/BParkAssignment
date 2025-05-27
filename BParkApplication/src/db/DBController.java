@@ -28,7 +28,6 @@ public class DBController {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order;");
 			ResultSetMetaData rsmd = rs.getMetaData();
-
 			// Build string for database - column names
 			for (int i = 1; i <= 6; i++) {
 				String s = new String();
@@ -102,7 +101,7 @@ public class DBController {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql //
 																											// username
-					"Ra8420346" // MySql password
+					"MyPassword" // MySql password
 			);
 
 			System.out.println("Database connection established successfully.");
