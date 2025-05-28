@@ -10,6 +10,7 @@ public class GUIParkingClient implements ChatIF {
 	private ParkingSystemGUI gui;
 
 	public GUIParkingClient(String host, int port, ParkingSystemGUI gui) {
+		
 		this.gui = gui;
 		try {
 			client = new ChatClient(host, port, this);

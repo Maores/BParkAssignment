@@ -106,8 +106,16 @@ public class EchoServer extends AbstractServer {
 				}
 				
 			}
+			else if (message.startsWith("LOGIN")) {
+				if ((log = db.connectToDB()).startsWith("Database")) {
+					//get id from the message
+					String[] parts = message.split(" ");
+					String id  = parts[1];
+					String role = "role " + db.getUserRoleById(id);
+					client.sendToClient(role);//נשלח ללקוח את התפקיד 
+				}
+			}
 			//if message from client is not ViewDB or UpdateDB - flag so it wont close the server in finally
-
 			else {
 				flag = true;
 				if (guiController != null) {

@@ -10,12 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginController">
    <children>
       <BorderPane prefHeight="205.0" prefWidth="324.0">
          <top>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="BPark Login" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Login" BorderPane.alignment="CENTER">
                <font>
                   <Font size="33.0" />
                </font>

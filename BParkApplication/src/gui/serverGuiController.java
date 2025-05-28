@@ -93,10 +93,10 @@ public class serverGuiController extends Application{
 		primaryStage.show();	
 
 	}
-	public static void main( String args[] ) throws Exception
-	   {   
-		 launch(args);
-	  }
+
+	public static void main(String args[]) throws Exception {
+		launch(args);
+	}
 	public void appendMessage(String msg) {
 		javafx.application.Platform.runLater(() -> {
 	        txtArea.appendText(msg + "\n");
