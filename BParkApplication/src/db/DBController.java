@@ -14,8 +14,27 @@ public class DBController {
 	private Connection conn;
 	private serverGuiController guiCon;
 
-	public DBController(serverGuiController guiCon) {
+	private DBController(serverGuiController guiCon) {
 		this.guiCon = guiCon;
+		
+	}
+	public Connection getInstance(serverGuiController guiCon) {
+		
+		if(conn==null) {
+			new DBController(guiCon);
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				return conn = DriverManager.getConnection(
+						"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql //																						// username
+						"MyPassword" // MySql password
+				);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		return conn;
 	}
 
 	/*
@@ -95,7 +114,7 @@ public class DBController {
 	/**
 	 * Creating a connection to the database.
 	 */
-	public String connectToDB() {
+	private String connectToDB() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
