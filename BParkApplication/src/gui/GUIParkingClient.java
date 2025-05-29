@@ -1,4 +1,3 @@
-
 package gui;
 
 import client.ChatClient;
@@ -35,7 +34,6 @@ public class GUIParkingClient implements ChatIF {
 	}
 	public void search(String msg) {
 		if (client != null && client.isConnected()) {
-			client.handleMessageFromClientUI(msg);
 			if(!msg.isEmpty()) {
 				client.handleMessageFromClientUI("SEARCH_ORDER "+msg);
 			}

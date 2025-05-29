@@ -1,4 +1,3 @@
-
 package gui;
 
 import javafx.application.Application;
@@ -114,8 +113,7 @@ public class ParkingSystemGUI extends Application {
 	
 	@SuppressWarnings("unchecked")
 	public void displayMessage(String message) {   
-		
-    	if(message.startsWith("order")) {
+    	if(message.startsWith("parking_space")) {
     		Platform.runLater(() -> {
         	String[] str = message.split(" ");
             table.setEditable(true);

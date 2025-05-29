@@ -8,14 +8,31 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import gui.serverGuiController;
+import common.DatabaseListener;
 
 public class DBController {
+	// Singleton instance
+	private static DBController instance = null;
 	private Connection conn;
-	private serverGuiController guiCon;
+	private DatabaseListener listener;
+	
+	// Private constructor to prevent direct instantiation
+	private DBController() {
+		// Connection will be initialized when needed
+	}
 
-	public DBController(serverGuiController guiCon) {
-		this.guiCon = guiCon;
+	// Public method to get the singleton instance
+	public static synchronized DBController getInstance(DatabaseListener listener) {
+		if (instance == null) {
+			instance = new DBController();
+			System.out.println("Creating DBController singleton instance.");
+			if (listener != null) {
+				listener.onDatabaseMessage("Creating DBController singleton instance.");
+			}
+		}
+		// Update listener reference (can be null for screens that don't need notifications)
+		instance.listener = listener;
+		return instance;
 	}
 
 	/*
@@ -97,19 +114,37 @@ public class DBController {
 	 */
 	public String connectToDB() {
 		try {
+			// Check if connection already exists and is valid
+			if (conn != null && !conn.isClosed() && conn.isValid(2)) {
+				// Connection exists and is valid - just return success
+				return "Database connection already established.";
+			}
+			
+			// Create new connection only if needed
+			System.out.println("Establishing database connection...");
+			if (listener != null) {
+				listener.onDatabaseMessage("Establishing database connection...");
+			}
+			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
-					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false", "root", // MySql //
+					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true", "root", // MySql //
 																											// username
-					"MyPassword" // MySql password
+					"Aa123456" // MySql password
 			);
 
 			System.out.println("Database connection established successfully.");
-			guiCon.appendMessage("Database connection established successfully.");
+			if (listener != null) {
+				listener.onDatabaseMessage("Database connection established successfully.");
+				listener.onDatabaseConnectionChange(true);
+			}
 			return "Database connection established successfully.";
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			guiCon.appendMessage(e.getMessage());
+			if (listener != null) {
+				listener.onDatabaseError(e.getMessage());
+				listener.onDatabaseConnectionChange(false);
+			}
 			return "Failed to connect to database!";
 		}
 	}
@@ -153,12 +188,16 @@ public class DBController {
 
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
-			guiCon.appendMessage("Database updated successfully.");
+			if (listener != null) {
+				listener.onDatabaseMessage("Database updated successfully.");
+			}
 			return "true";
 		} catch (Exception e) {
 			System.out.println("Database updated Failed.");
-			guiCon.appendMessage("Database updated Failed.");
 			System.out.println(e.getMessage());
+			if (listener != null) {
+				listener.onDatabaseError("Database update failed: " + e.getMessage());
+			}
 			return e.getMessage();
 		}
 
@@ -171,11 +210,17 @@ public class DBController {
 		try {
 			if (conn != null && !conn.isClosed()) {
 				conn.close();
-				System.out.println("Connection closed.");
-				guiCon.appendMessage("Connection closed.");
+				System.out.println("Database connection closed.");
+				if (listener != null) {
+					listener.onDatabaseMessage("Database connection closed.");
+					listener.onDatabaseConnectionChange(false);
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (listener != null) {
+				listener.onDatabaseError("Error closing connection: " + e.getMessage());
+			}
 		}
 	}
 	
@@ -195,5 +240,19 @@ public class DBController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/**
+	 * Close connection and reset singleton instance
+	 */
+	public static void closeAndReset() {
+		if (instance != null) {
+			System.out.println("Closing database connection and resetting singleton.");
+			if (instance.listener != null) {
+				instance.listener.onDatabaseMessage("Closing database connection and resetting singleton.");
+			}
+			instance.close();
+			instance = null;
+		}
 	}
 }
