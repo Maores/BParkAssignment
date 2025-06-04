@@ -3,8 +3,10 @@ package gui;
 import client.ChatClient;
 import common.ChatIF;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 
 /**
  * Example of a client-side GUI that connects to the server through the network.
@@ -96,5 +98,21 @@ public class ReportClientGUI implements ChatIF {
         if (client != null) {
             client.quit();
         }
+    }
+
+    public VBox buildRoot() {
+        reportTypeCombo = new ComboBox<>();
+        reportDisplay = new TextArea();
+        reportDisplay.setPrefHeight(200);
+        reportDisplay.setEditable(false);
+        initializeReportTypes();
+        Button generateBtn = new Button("Generate Report");
+        generateBtn.setOnAction(e -> generateReport());
+        Button statusBtn = new Button("Get All Parking Status");
+        statusBtn.setOnAction(e -> getAllParkingStatus());
+        VBox root = new VBox(10, reportTypeCombo, generateBtn, statusBtn, reportDisplay);
+        root.setPrefWidth(400);
+        root.setPrefHeight(300);
+        return root;
     }
 } 

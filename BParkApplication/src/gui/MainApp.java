@@ -33,6 +33,31 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
+    public void showRoleScreen(String role, String userId, String userName) throws Exception {
+        String roleLower = role.toLowerCase();
+        if (roleLower.contains("customer")) {
+            ParkingSystemGUI parkingSystemGUI = new ParkingSystemGUI();
+            Parent root = parkingSystemGUI.buildRoot();
+            primaryStage.setScene(new Scene(root, 675, 600));
+            primaryStage.setTitle("BPark - Smart Parking System (Customer)");
+        } else if (roleLower.contains("staff")) {
+            ReportClientGUI reportClientGUI = new ReportClientGUI();
+            Parent root = reportClientGUI.buildRoot();
+            primaryStage.setScene(new Scene(root, 600, 400));
+            primaryStage.setTitle("BPark - Staff/Report");
+        } else if (roleLower.contains("manager") || roleLower.contains("admin")) {
+            UserManagementScreen userManagementScreen = new UserManagementScreen();
+            Parent root = userManagementScreen.buildRoot();
+            primaryStage.setScene(new Scene(root, 600, 400));
+            primaryStage.setTitle("BPark - Manager/Admin");
+        } else {
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Unknown role: " + role);
+            alert.showAndWait();
+            showLoginScreen();
+        }
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
         launch(args);
     }

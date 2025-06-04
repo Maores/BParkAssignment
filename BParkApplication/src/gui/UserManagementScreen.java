@@ -1,11 +1,12 @@
 package gui;
 
-import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextArea;
 import db.DBController;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 /**
  * Example screen showing how to access the database after the GUI/DB separation.
@@ -87,5 +88,23 @@ public class UserManagementScreen {
         
         logArea.appendText("Total orders in database: " + orderCount + "\n");
         logArea.appendText("Report generated successfully\n");
+    }
+
+    public VBox buildRoot() {
+        userIdField = new TextField();
+        resultLabel = new Label();
+        logArea = new TextArea();
+        logArea.setPrefHeight(200);
+        logArea.setEditable(false);
+        Button searchBtn = new Button("Search User");
+        searchBtn.setOnAction(e -> searchUser());
+        Button checkOrderBtn = new Button("Check Order");
+        checkOrderBtn.setOnAction(e -> checkOrder());
+        Button reportBtn = new Button("Generate Report");
+        reportBtn.setOnAction(e -> generateReport());
+        VBox root = new VBox(10, new Label("User ID:"), userIdField, searchBtn, checkOrderBtn, reportBtn, resultLabel, logArea);
+        root.setPrefWidth(400);
+        root.setPrefHeight(350);
+        return root;
     }
 } 
