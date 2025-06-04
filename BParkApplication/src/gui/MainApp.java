@@ -26,8 +26,8 @@ public class MainApp extends Application {
     }
 
     public void showMainScreen() throws Exception {
-        ParkingSystemGUI parkingSystemGUI = new ParkingSystemGUI();
-        Parent root = parkingSystemGUI.buildRoot();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/parkingSystem.fxml"));
+        Parent root = loader.load();
         primaryStage.setScene(new Scene(root, 675, 600));
         primaryStage.setTitle("BPark - Smart Parking System");
         primaryStage.show();
