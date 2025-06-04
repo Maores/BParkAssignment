@@ -35,9 +35,9 @@ public class MainApp extends Application {
 
     public void showRoleScreen(String role, String userId, String userName) throws Exception {
         String roleLower = role.toLowerCase();
-        if (roleLower.contains("customer")) {
-            ParkingSystemGUI parkingSystemGUI = new ParkingSystemGUI();
-            Parent root = parkingSystemGUI.buildRoot();
+        if (roleLower.contains("user")) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/parkingSystem.fxml"));
+            Parent root = loader.load();
             primaryStage.setScene(new Scene(root, 675, 600));
             primaryStage.setTitle("BPark - Smart Parking System (Customer)");
         } else if (roleLower.contains("staff")) {
@@ -46,8 +46,8 @@ public class MainApp extends Application {
             primaryStage.setScene(new Scene(root, 600, 400));
             primaryStage.setTitle("BPark - Staff/Report");
         } else if (roleLower.contains("manager") || roleLower.contains("admin")) {
-            UserManagementScreen userManagementScreen = new UserManagementScreen();
-            Parent root = userManagementScreen.buildRoot();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/userManagement.fxml"));
+            Parent root = loader.load();
             primaryStage.setScene(new Scene(root, 600, 400));
             primaryStage.setTitle("BPark - Manager/Admin");
         } else {

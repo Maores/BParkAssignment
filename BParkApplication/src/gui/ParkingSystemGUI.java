@@ -1,67 +1,34 @@
 package gui;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
-public class ParkingSystemGUI {
+public class ParkingSystemGUI implements Initializable {
 	/**
 	 * The default port and host to connect on.
 	 */
 	final public static int DEFAULT_PORT = 5555;
 	final public static String DEFAULT_HOST = "localhost";
-	private TextArea dbDisplay;
-	private TextField idField, dateField, spotField, srcField;
+	@FXML private TextArea dbDisplay;
+	@FXML private TextField idField, dateField, spotField, srcField;
+	@FXML private TableView<ParkingRow> table;
+	@FXML private javafx.scene.control.Button viewBtn, updateBtn, tryBtn, srcBtn;
 	private GUIParkingClient guiClient;
-	private TableView<ParkingRow> table = new TableView<>();
 
-	public ParkingSystemGUI() {
-		// Only initialize data fields here, not the scene or stage
-		idField = new TextField();
-		idField.setPromptText("Enter Order Number");
-		dateField = new TextField();
-		dateField.setPromptText("Enter Order Date (YYYY-MM-DD)");
-		spotField = new TextField();
-		spotField.setPromptText("Enter Parking Spot Number");
-		srcField = new TextField();
-		srcField.setPromptText("Search order number");
-		dbDisplay = new TextArea();
-		dbDisplay.setPrefHeight(200);
-		dbDisplay.setEditable(false);
-		dbDisplay.setStyle("-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
-		guiClient = new GUIParkingClient(DEFAULT_HOST,DEFAULT_PORT,this);
-	}
-
-	public VBox buildRoot() {
-		Image icon = new Image(getClass().getResourceAsStream("logo.png"));
-		ImageView iv1 = new ImageView();
-		iv1.setImage(icon);
-		iv1.setFitHeight(icon.getHeight()/10);
-		iv1.setFitWidth(icon.getWidth()/10);
-
-		VBox orderNumber = new VBox(new Label("Order Number:"),idField);
-		VBox orderDate = new VBox(new Label("Order Date:"),dateField);
-		VBox orderSpot = new VBox(new Label("Parking Space:"),spotField);
-
-		Button viewBtn = new Button("View DB");
-		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		guiClient = new GUIParkingClient(DEFAULT_HOST, DEFAULT_PORT, this);
 		viewBtn.setOnAction(e -> guiClient.sendMessage("VIEW_DATABASE"));
-
-		Button updateBtn = new Button("Update Reservation");
-		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
 		updateBtn.setOnAction(e -> {
 			String id = idField.getText();
 			String date = dateField.getText();
@@ -73,24 +40,10 @@ public class ParkingSystemGUI {
 				displayMessage("Please fill all fields.");
 			}
 		});
-		Button tryBtn = new Button("Reconnect");
-		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
-		Button srcBtn = new Button("Search");
-		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
 		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
-		HBox buttons = new HBox(viewBtn, updateBtn,tryBtn,srcField,srcBtn);
-		buttons.setAlignment(Pos.CENTER_LEFT);
-		buttons.setPadding(new Insets(5));
-		buttons.setSpacing(10);
-		VBox root = new VBox(10);
-		root.setPadding(new Insets(20));
-		root.setAlignment(Pos.TOP_CENTER);
-		VBox fields = new VBox(10, orderNumber, orderDate, orderSpot, buttons);
-		root.getChildren().addAll(iv1, fields, dbDisplay, table);
-		return root;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void displayMessage(String message) {   
     	if(message.startsWith("parking_space")) {
