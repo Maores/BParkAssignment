@@ -113,7 +113,7 @@ public class ParkingSystemGUI extends Application {
 	
 	@SuppressWarnings("unchecked")
 	public void displayMessage(String message) {   
-    	if(message.startsWith("parking_space")) {
+    	if(message.startsWith("order_number")) {
     		Platform.runLater(() -> {
         	String[] str = message.split(" ");
             table.setEditable(true);
