@@ -1,16 +1,13 @@
 package gui;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+// import gui.MainApp;
 
-public class loginController extends Application {
+public class loginController {
 
 	@FXML
 	private TextField id;
@@ -21,23 +18,22 @@ public class loginController extends Application {
 	@FXML
 	private TextField name;
 
+	private MainApp mainApp;
+
+	public void setMainApp(MainApp mainApp) {
+		this.mainApp = mainApp;
+	}
+
 	@FXML
 	void loginUser(ActionEvent event) {
-		ParkingSystemGUI system = new ParkingSystemGUI();
-		Stage primaryStage = new Stage();
-		system.start(primaryStage);
-	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/userLogin.fxml"));
-		Scene scene = new Scene(root);
-		primaryStage.setTitle("BPark system");
-		primaryStage.setScene(scene);
-		primaryStage.show();
-	}
-
-	public static void main(String args[]) throws Exception {
-		launch(args);
+		// Add your login validation logic here
+		if (mainApp != null) {
+			try {
+				mainApp.showMainScreen();
+			} catch (Exception e) {
+				Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load main screen: " + e.getMessage());
+				alert.showAndWait();
+			}
+		}
 	}
 }

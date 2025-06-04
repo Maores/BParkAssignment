@@ -1,12 +1,10 @@
 package gui;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -18,9 +16,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-public class ParkingSystemGUI extends Application {
+public class ParkingSystemGUI {
 	/**
 	 * The default port and host to connect on.
 	 */
@@ -31,37 +28,34 @@ public class ParkingSystemGUI extends Application {
 	private GUIParkingClient guiClient;
 	private TableView<ParkingRow> table = new TableView<>();
 
-	public static void main(String[] args) {
-		launch(args);
+	public ParkingSystemGUI() {
+		// Only initialize data fields here, not the scene or stage
+		idField = new TextField();
+		idField.setPromptText("Enter Order Number");
+		dateField = new TextField();
+		dateField.setPromptText("Enter Order Date (YYYY-MM-DD)");
+		spotField = new TextField();
+		spotField.setPromptText("Enter Parking Spot Number");
+		srcField = new TextField();
+		srcField.setPromptText("Search order number");
+		dbDisplay = new TextArea();
+		dbDisplay.setPrefHeight(200);
+		dbDisplay.setEditable(false);
+		dbDisplay.setStyle("-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
+		guiClient = new GUIParkingClient(DEFAULT_HOST,DEFAULT_PORT,this);
 	}
 
-	@Override
-	public void start(Stage primaryStage) {
-		primaryStage.setTitle("BPark - Smart Parking System");
+	public VBox buildRoot() {
 		Image icon = new Image(getClass().getResourceAsStream("logo.png"));
-		primaryStage.getIcons().add(icon);
 		ImageView iv1 = new ImageView();
 		iv1.setImage(icon);
 		iv1.setFitHeight(icon.getHeight()/10);
-		iv1.setFitWidth(icon.getWidth()/10);	
-		
-		// Initialize GUI <-> Server client
+		iv1.setFitWidth(icon.getWidth()/10);
 
-		idField = new TextField();
-		idField.setPromptText("Enter Order Number");
 		VBox orderNumber = new VBox(new Label("Order Number:"),idField);
-		
-		dateField = new TextField();
-		dateField.setPromptText("Enter Order Date (YYYY-MM-DD)");
 		VBox orderDate = new VBox(new Label("Order Date:"),dateField);
-		
-		spotField = new TextField();
-		spotField.setPromptText("Enter Parking Spot Number");
 		VBox orderSpot = new VBox(new Label("Parking Space:"),spotField);
-		
-		srcField = new TextField();
-		srcField.setPromptText("Search order number");
-		
+
 		Button viewBtn = new Button("View DB");
 		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
 		viewBtn.setOnAction(e -> guiClient.sendMessage("VIEW_DATABASE"));
@@ -79,36 +73,22 @@ public class ParkingSystemGUI extends Application {
 				displayMessage("Please fill all fields.");
 			}
 		});
-		//Button to reconnect to the server
 		Button tryBtn = new Button("Reconnect");
 		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
-		
 		Button srcBtn = new Button("Search");
 		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
 		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
-		
-		// Buttons
 		HBox buttons = new HBox(viewBtn, updateBtn,tryBtn,srcField,srcBtn);
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
 		buttons.setSpacing(10);
-
-		dbDisplay = new TextArea();
-		dbDisplay.setPrefHeight(200);
-		dbDisplay.setEditable(false);
-		dbDisplay.setStyle(
-				"-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
 		VBox root = new VBox(10);
 		root.setPadding(new Insets(20));
 		root.setAlignment(Pos.TOP_CENTER);
 		VBox fields = new VBox(10, orderNumber, orderDate, orderSpot, buttons);
 		root.getChildren().addAll(iv1, fields, dbDisplay, table);
-		//Create new client
-		guiClient = new GUIParkingClient(DEFAULT_HOST,DEFAULT_PORT,this);
-		primaryStage.setResizable(false);
-		primaryStage.setScene(new Scene(root, 675, 600));
-		primaryStage.show();
+		return root;
 	}
 	
 	@SuppressWarnings("unchecked")
