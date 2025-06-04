@@ -25,10 +25,6 @@ public class DBController {
 	public static synchronized DBController getInstance(DatabaseListener listener) {
 		if (instance == null) {
 			instance = new DBController();
-			System.out.println("Creating DBController singleton instance.");
-			if (listener != null) {
-				listener.onDatabaseMessage("Creating DBController singleton instance.");
-			}
 		}
 		// Update listener reference (can be null for screens that don't need notifications)
 		instance.listener = listener;
@@ -130,7 +126,7 @@ public class DBController {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true", "root", // MySql //
 																											// username
-					"Aa123456" // MySql password
+					"Ra8420346" // MySql password
 			);
 
 			System.out.println("Database connection established successfully.");
@@ -155,6 +151,27 @@ public class DBController {
 
 	public boolean checkDB(String id) {
 		String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
+
+		try {
+			// puts the id inside the "?" that is at the end of the query above
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(id));
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				// The order_number exists
+				return true;
+			} else {
+				// No result found -> the order_number does not exist
+				return false;
+			}
+
+		} catch (Exception e) {
+
+			return false;
+		}
+	}
+	public boolean checkUserDB(String id) {
+		String sql = "SELECT order_number FROM `users` WHERE order_number = ?";
 
 		try {
 			// puts the id inside the "?" that is at the end of the query above
@@ -247,7 +264,6 @@ public class DBController {
 	 */
 	public static void closeAndReset() {
 		if (instance != null) {
-			System.out.println("Closing database connection and resetting singleton.");
 			if (instance.listener != null) {
 				instance.listener.onDatabaseMessage("Closing database connection and resetting singleton.");
 			}

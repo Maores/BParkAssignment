@@ -3,11 +3,18 @@ package gui;
 import db.DBController;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * Example screen showing how to access the database after the GUI/DB separation.
@@ -18,6 +25,7 @@ public class UserManagementScreen implements Initializable {
     @FXML private TextField userIdField;
     @FXML private Label resultLabel;
     @FXML private TextArea logArea;
+    @FXML private TableView<ParkingRow> table;
     
     /**
      * Search for a user by ID
@@ -61,13 +69,42 @@ public class UserManagementScreen implements Initializable {
         // Access DB singleton
         DBController db = DBController.getInstance(null);
         
-        boolean exists = db.checkDB(orderId);
-        
+        boolean exists = true;
+        System.out.println(exists);
         if (exists) {
-            String orderData = db.SearchID(orderId);
-            logArea.appendText("Order found:\n" + orderData + "\n");
-        } else {
-            logArea.appendText("Order " + orderId + " does not exist\n");
+        	String DataBaseAsString = db.getDatabaseAsString();
+        	Platform.runLater(() -> {
+            	String[] str = DataBaseAsString.split(" ");
+                table.setEditable(true);
+                
+                table.getColumns().clear();
+
+                TableColumn<ParkingRow, String> a = new TableColumn<>(str[0]);
+                a.setCellValueFactory(new PropertyValueFactory<>("col1"));
+                TableColumn<ParkingRow, String> b = new TableColumn<>(str[1]);
+                b.setCellValueFactory(new PropertyValueFactory<>("col2"));
+                TableColumn<ParkingRow, String> c = new TableColumn<>(str[2]);
+                c.setCellValueFactory(new PropertyValueFactory<>("col3"));
+                TableColumn<ParkingRow, String> d = new TableColumn<>(str[3]);
+                d.setCellValueFactory(new PropertyValueFactory<>("col4"));
+                TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
+                e.setCellValueFactory(new PropertyValueFactory<>("col5"));
+                TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
+                f.setCellValueFactory(new PropertyValueFactory<>("col6"));
+
+                table.getColumns().addAll(a, b, c, d, e, f);
+
+                ObservableList<ParkingRow> items = FXCollections.observableArrayList();
+                for (int i = 6; i + 5 < str.length; i += 6) {
+                    ParkingRow row = new ParkingRow(
+                        str[i], str[i + 1], str[i + 2],
+                        str[i + 3], str[i + 4], str[i + 5]
+                    );
+                    items.add(row);
+                }
+
+                table.setItems(items);  
+        		});
         }
     }
     

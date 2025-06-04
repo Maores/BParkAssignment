@@ -3,21 +3,21 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UserManagementScreen" spacing="10" alignment="TOP_CENTER" prefWidth="400" prefHeight="350">
+<VBox alignment="TOP_CENTER" prefHeight="350" prefWidth="506.0" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UserManagementScreen">
     <children>
         <Label text="User ID:" />
         <TextField fx:id="userIdField" />
-        <Button text="Search User" onAction="#searchUser" />
-        <Button text="Check Order" onAction="#checkOrder" />
-        <Button text="Generate Report" onAction="#generateReport" />
+        <Button onAction="#searchUser" text="Search User" />
+        <Button onAction="#checkOrder" text="View Orders" />
+        <Button onAction="#generateReport" text="Generate Report" />
         <Label fx:id="resultLabel" />
-        <TextArea fx:id="logArea" prefHeight="200" editable="false" />
+      <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" />
     </children>
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20" />
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
-</VBox> 
+</VBox>
