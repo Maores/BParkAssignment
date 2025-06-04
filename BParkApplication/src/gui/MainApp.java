@@ -41,8 +41,8 @@ public class MainApp extends Application {
             primaryStage.setScene(new Scene(root, 675, 600));
             primaryStage.setTitle("BPark - Smart Parking System (Customer)");
         } else if (roleLower.contains("staff")) {
-            ReportClientGUI reportClientGUI = new ReportClientGUI();
-            Parent root = reportClientGUI.buildRoot();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/reportClient.fxml"));
+            Parent root = loader.load();
             primaryStage.setScene(new Scene(root, 600, 400));
             primaryStage.setTitle("BPark - Staff/Report");
         } else if (roleLower.contains("manager") || roleLower.contains("admin")) {

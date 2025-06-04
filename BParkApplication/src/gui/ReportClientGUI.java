@@ -2,18 +2,19 @@ package gui;
 
 import client.ChatClient;
 import common.ChatIF;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
 
 /**
  * Example of a client-side GUI that connects to the server through the network.
  * This demonstrates how multiple client applications can access the database
  * through the server without direct DB access.
  */
-public class ReportClientGUI implements ChatIF {
+public class ReportClientGUI implements ChatIF, Initializable {
     
     @FXML private ComboBox<String> reportTypeCombo;
     @FXML private TextArea reportDisplay;
@@ -100,19 +101,9 @@ public class ReportClientGUI implements ChatIF {
         }
     }
 
-    public VBox buildRoot() {
-        reportTypeCombo = new ComboBox<>();
-        reportDisplay = new TextArea();
-        reportDisplay.setPrefHeight(200);
-        reportDisplay.setEditable(false);
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        reportTypeCombo.getItems().clear();
         initializeReportTypes();
-        Button generateBtn = new Button("Generate Report");
-        generateBtn.setOnAction(e -> generateReport());
-        Button statusBtn = new Button("Get All Parking Status");
-        statusBtn.setOnAction(e -> getAllParkingStatus());
-        VBox root = new VBox(10, reportTypeCombo, generateBtn, statusBtn, reportDisplay);
-        root.setPrefWidth(400);
-        root.setPrefHeight(300);
-        return root;
     }
 } 
