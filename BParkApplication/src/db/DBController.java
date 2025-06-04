@@ -117,7 +117,6 @@ public class DBController {
 			}
 			
 			// Create new connection only if needed
-			System.out.println("Establishing database connection...");
 			if (listener != null) {
 				listener.onDatabaseMessage("Establishing database connection...");
 			}
@@ -128,15 +127,12 @@ public class DBController {
 																											// username
 					"Ra8420346" // MySql password
 			);
-
-			System.out.println("Database connection established successfully.");
 			if (listener != null) {
 				listener.onDatabaseMessage("Database connection established successfully.");
 				listener.onDatabaseConnectionChange(true);
 			}
 			return "Database connection established successfully.";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			if (listener != null) {
 				listener.onDatabaseError(e.getMessage());
 				listener.onDatabaseConnectionChange(false);
@@ -265,7 +261,7 @@ public class DBController {
 	public static void closeAndReset() {
 		if (instance != null) {
 			if (instance.listener != null) {
-				instance.listener.onDatabaseMessage("Closing database connection and resetting singleton.");
+				instance.listener.onDatabaseMessage("Closing database connection.");
 			}
 			instance.close();
 			instance = null;

@@ -44,16 +44,12 @@ public class MainApp extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/reportClient.fxml"));
             Parent root = loader.load();
             primaryStage.setScene(new Scene(root, 600, 400));
-            primaryStage.setTitle("BPark - Staff/Report");
-        } else if (roleLower.contains("manager") || roleLower.contains("admin")) {
+            primaryStage.setTitle("BPark - Staff");
+        } else if (roleLower.contains("manager")) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/userManagement.fxml"));
             Parent root = loader.load();
             primaryStage.setScene(new Scene(root, 600, 400));
-            primaryStage.setTitle("BPark - Manager/Admin");
-        } else {
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Unknown role: " + role);
-            alert.showAndWait();
-            showLoginScreen();
+            primaryStage.setTitle("BPark - Manager");
         }
         primaryStage.show();
     }

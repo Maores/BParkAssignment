@@ -4,7 +4,6 @@
 package server;
 
 import db.DBController;
-import gui.serverGuiController;
 import common.DatabaseListener;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -28,6 +27,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 	final public static int DEFAULT_PORT = 5555;
 	private serverGuiController guiController;
 	private DBController dbController = null;  // Store reference to singleton
+	private static EchoServer server = null;
 
 	// Constructors ****************************************************
 
@@ -36,10 +36,23 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 	 *
 	 * @param port The port number to connect on.
 	 */
-	public EchoServer(int port, serverGuiController guiController) {
+	private EchoServer(int port, serverGuiController guiController) {
 		super(port);
 		this.guiController = guiController;
 
+	}
+	public EchoServer getServerInstance(int port, serverGuiController guiController) {
+		if(server==null) {
+			int PORT = (port==0) ? port : DEFAULT_PORT;
+			return new EchoServer(PORT,guiController);
+		}
+		return server;
+	}
+	public static EchoServer getServer() throws Exception {
+		if(server==null) {
+			throw new Exception();
+		}
+		return server;
 	}
 
 	// Instance methods ************************************************

@@ -1,6 +1,7 @@
-package gui;
+package server;
 
 import java.io.IOException;
+import java.net.Socket;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -12,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import server.EchoServer;
 
 public class serverGuiController extends Application{
 
@@ -26,6 +26,7 @@ public class serverGuiController extends Application{
 	@FXML
 	private TextArea txtArea;	
 	
+	private Thread serverThread;
 	
 	
 	private EchoServer sv;
@@ -45,11 +46,9 @@ public class serverGuiController extends Application{
 	public  void runServer(String p)
 	{
 		int port = 0; //Port to listen on
-
         try
         {
         		port = Integer.parseInt(p); //Set port to 5555
-          
         }
         catch(Throwable t)
         {
@@ -57,12 +56,20 @@ public class serverGuiController extends Application{
         		txtArea.appendText("ERROR - Could not connect!\n");
         }
     	
-        sv = new EchoServer(port,this);
+        sv = sv.getServerInstance(port, this);
         
         try 
         {
-          sv.listen(); //Start listening for connections
-
+        	serverThread = new Thread(() -> {
+				try {
+					sv.listen();//Start listening for connections
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+        	serverThread.setDaemon(true);
+			serverThread.start();
         } 
         catch (Exception ex) 
         {
@@ -86,13 +93,20 @@ public class serverGuiController extends Application{
 	}
 
 	public void start(Stage primaryStage) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/serverGui.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/server/serverGui.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Server");
 		primaryStage.setScene(scene);
-		primaryStage.show();	
-
+		primaryStage.show();
 	}
+
+    @Override
+    public void stop() throws Exception {
+    	if (sv != null) {
+            sv.close();
+        }
+    }
+
 
 	public static void main(String args[]) throws Exception {
 		launch(args);
@@ -101,5 +115,6 @@ public class serverGuiController extends Application{
 		javafx.application.Platform.runLater(() -> {
 	        txtArea.appendText(msg + "\n");
 	    });
+		
 	} 
 }
