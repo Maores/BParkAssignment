@@ -3,6 +3,7 @@ package gui;
 import client.ChatClient;
 import client.singletoneClient;
 import common.ChatIF;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -81,19 +82,12 @@ public class StaffGui implements ChatIF {
      */
     @Override
     public void display(String message) {
-        javafx.application.Platform.runLater(() -> {
+        	Platform.runLater(() -> {
             reportDisplay.appendText(message + "\n");
         });
     }
     
-    /**
-     * Clean up on close
-     */
-//    public void stop() {
-//        if (guiClient != null) {
-//            guiClient.quit();
-//        }
-//    }
+
 
     public VBox buildRoot() {
     	System.out.println("DEBUG: build root");
