@@ -3,12 +3,12 @@ package gui;
 import client.ChatClient;
 import common.ChatIF;
 
-public class GUIParkingClient implements ChatIF {
+public class UserGui implements ChatIF {
 
 	private ChatClient client;
 	private ChatIF gui;
 
-	public GUIParkingClient(String host, int port, ChatIF gui) {
+	public UserGui(String host, int port, ChatIF gui) {
 		this.gui = gui;
 		try {
 			client = new ChatClient(host, port, this);
