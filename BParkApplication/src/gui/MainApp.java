@@ -35,7 +35,7 @@ public class MainApp extends Application {
 
     public void showRoleScreen(String role, String userId, String userName) throws Exception {
         String roleLower = role.toLowerCase();
-        if (roleLower.contains("customer")) {
+        if (roleLower.contains("user")) {
             ParkingSystemGUI parkingSystemGUI = new ParkingSystemGUI();
             Parent root = parkingSystemGUI.buildRoot();
             primaryStage.setScene(new Scene(root, 675, 600));
