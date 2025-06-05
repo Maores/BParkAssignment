@@ -1,16 +1,14 @@
 package gui;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import db.DBController;
+// import gui.MainApp;
 
-public class loginController extends Application {
+public class loginController {
 
 	@FXML
 	private TextField id;
@@ -21,23 +19,38 @@ public class loginController extends Application {
 	@FXML
 	private TextField name;
 
+	private MainApp mainApp;
+
+	public void setMainApp(MainApp mainApp) {
+		this.mainApp = mainApp;
+	}
+
 	@FXML
 	void loginUser(ActionEvent event) {
-		ParkingSystemGUI system = new ParkingSystemGUI();
-		Stage primaryStage = new Stage();
-		system.start(primaryStage);
-	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/userLogin.fxml"));
-		Scene scene = new Scene(root);
-		primaryStage.setTitle("BPark system");
-		primaryStage.setScene(scene);
-		primaryStage.show();
-	}
-
-	public static void main(String args[]) throws Exception {
-		launch(args);
+		String userId = id.getText();
+		String userName = name.getText();
+		if (userId == null || userId.isEmpty() || userName == null || userName.isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter both ID and Name.");
+			alert.showAndWait();
+			return;
+		}
+		DBController db = DBController.getInstance(null);
+		db.connectToDB();
+		String role = db.getUserRoleById(userId);
+		if (role == null) {
+			Alert alert = new Alert(Alert.AlertType.ERROR, "User not found. Please try again.");
+			alert.showAndWait();
+			id.clear();
+			name.clear();
+			return;
+		}
+		if (mainApp != null) {
+			try {
+				mainApp.showRoleScreen(role, userId, userName);
+			} catch (Exception e) {
+				Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load role screen: " + e.getMessage());
+				alert.showAndWait();
+			}
+		}
 	}
 }

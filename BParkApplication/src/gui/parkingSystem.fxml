@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ParkingSystemGUI" spacing="10" alignment="TOP_CENTER" padding="20">
+    <children>
+        <ImageView fx:id="logoView" fitHeight="32" fitWidth="32" />
+        <VBox spacing="10">
+            <children>
+                <VBox spacing="5">
+                    <children>
+                        <Label text="Order Number:" />
+                        <TextField fx:id="idField" promptText="Enter Order Number" />
+                    </children>
+                </VBox>
+                <VBox spacing="5">
+                    <children>
+                        <Label text="Order Date:" />
+                        <TextField fx:id="dateField" promptText="Enter Order Date (YYYY-MM-DD)" />
+                    </children>
+                </VBox>
+                <VBox spacing="5">
+                    <children>
+                        <Label text="Parking Space:" />
+                        <TextField fx:id="spotField" promptText="Enter Parking Spot Number" />
+                    </children>
+                </VBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <children>
+                        <Button fx:id="viewBtn" text="View DB" />
+                        <Button fx:id="updateBtn" text="Update Reservation" />
+                        <Button fx:id="tryBtn" text="Reconnect" />
+                        <TextField fx:id="srcField" promptText="Search order number" />
+                        <Button fx:id="srcBtn" text="Search" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+        <TextArea fx:id="dbDisplay" prefHeight="200" editable="false" />
+        <TableView fx:id="table" />
+    </children>
+</VBox> 

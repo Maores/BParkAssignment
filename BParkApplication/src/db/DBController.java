@@ -25,10 +25,6 @@ public class DBController {
 	public static synchronized DBController getInstance(DatabaseListener listener) {
 		if (instance == null) {
 			instance = new DBController();
-			System.out.println("Creating DBController singleton instance.");
-			if (listener != null) {
-				listener.onDatabaseMessage("Creating DBController singleton instance.");
-			}
 		}
 		// Update listener reference (can be null for screens that don't need notifications)
 		instance.listener = listener;
@@ -121,7 +117,6 @@ public class DBController {
 			}
 			
 			// Create new connection only if needed
-			System.out.println("Establishing database connection...");
 			if (listener != null) {
 				listener.onDatabaseMessage("Establishing database connection...");
 			}
@@ -132,15 +127,12 @@ public class DBController {
 																											// username
 					"Ra8420346" // MySql password
 			);
-
-			System.out.println("Database connection established successfully.");
 			if (listener != null) {
 				listener.onDatabaseMessage("Database connection established successfully.");
 				listener.onDatabaseConnectionChange(true);
 			}
 			return "Database connection established successfully.";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			if (listener != null) {
 				listener.onDatabaseError(e.getMessage());
 				listener.onDatabaseConnectionChange(false);
@@ -155,6 +147,27 @@ public class DBController {
 
 	public boolean checkDB(String id) {
 		String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
+
+		try {
+			// puts the id inside the "?" that is at the end of the query above
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(id));
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				// The order_number exists
+				return true;
+			} else {
+				// No result found -> the order_number does not exist
+				return false;
+			}
+
+		} catch (Exception e) {
+
+			return false;
+		}
+	}
+	public boolean checkUserDB(String id) {
+		String sql = "SELECT order_number FROM `users` WHERE order_number = ?";
 
 		try {
 			// puts the id inside the "?" that is at the end of the query above
@@ -247,9 +260,8 @@ public class DBController {
 	 */
 	public static void closeAndReset() {
 		if (instance != null) {
-			System.out.println("Closing database connection and resetting singleton.");
 			if (instance.listener != null) {
-				instance.listener.onDatabaseMessage("Closing database connection and resetting singleton.");
+				instance.listener.onDatabaseMessage("Closing database connection.");
 			}
 			instance.close();
 			instance = null;
