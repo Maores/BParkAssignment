@@ -1,5 +1,7 @@
 package gui;
 
+import client.ChatClient;
+import client.singletoneClient;
 import common.ChatIF;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,18 +14,19 @@ import javafx.scene.layout.VBox;
  * This demonstrates how multiple client applications can access the database
  * through the server without direct DB access.
  */
-public class ReportClientGUI implements ChatIF {
+public class StaffGui implements ChatIF {
     
     @FXML private ComboBox<String> reportTypeCombo;
     @FXML private TextArea reportDisplay;
     
-    private GUIParkingClient guiClient;
+    private ChatClient client;
+
     private static final String HOST = "localhost";
     private static final int PORT = 5555;
     
     public void start() {
-        gui.ClientUIController.getInstance().setActiveScreen(this);
-        guiClient = gui.ClientSingleton.getInstance();
+        gui.ClientUIController.getInstance().setActiveScreen(this); //is this line needed?
+        client = singletoneClient.getInstance(this);
         display("Connected to server!");
         initializeReportTypes();
     }
@@ -53,7 +56,7 @@ public class ReportClientGUI implements ChatIF {
         String command = "GENERATE_REPORT " + reportType.replace(" ", "_");
         
         try {
-            guiClient.sendMessage(command);
+        	client.handleMessageFromClientUI(command);
             display("Requesting " + reportType + "...");
         } catch (Exception e) {
             display("Error sending request: " + e.getMessage());
@@ -66,7 +69,7 @@ public class ReportClientGUI implements ChatIF {
     @FXML
     void getAllParkingStatus() {
         try {
-            guiClient.sendMessage("GET_ALL_PARKING_STATUS");
+        	client.handleMessageFromClientUI("GET_ALL_PARKING_STATUS");
             display("Fetching parking status...");
         } catch (Exception e) {
             display("Error: " + e.getMessage());
@@ -86,11 +89,11 @@ public class ReportClientGUI implements ChatIF {
     /**
      * Clean up on close
      */
-    public void stop() {
-        if (guiClient != null) {
-            guiClient.quit();
-        }
-    }
+//    public void stop() {
+//        if (guiClient != null) {
+//            guiClient.quit();
+//        }
+//    }
 
     public VBox buildRoot() {
     	System.out.println("DEBUG: build root");

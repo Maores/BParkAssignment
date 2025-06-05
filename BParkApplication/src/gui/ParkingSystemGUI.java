@@ -1,5 +1,7 @@
 package gui;
 
+import client.ChatClient;
+import client.singletoneClient;
 import common.ChatIF;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -26,7 +28,7 @@ public class ParkingSystemGUI implements ChatIF{
 	final public static String DEFAULT_HOST = "localhost";
 	private TextArea dbDisplay;
 	private TextField idField, dateField, spotField, srcField;
-	private GUIParkingClient guiClient;
+	private ChatClient client;
 	private TableView<ParkingRow> table = new TableView<>();
 
 	public ParkingSystemGUI() {
@@ -44,7 +46,7 @@ public class ParkingSystemGUI implements ChatIF{
 		dbDisplay.setEditable(false);
 		dbDisplay.setStyle("-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
 		gui.ClientUIController.getInstance().setActiveScreen(this);
-		guiClient = gui.ClientSingleton.getInstance();
+		client = singletoneClient.getInstance(this);
 	}
 
 	public VBox buildRoot() {
@@ -60,7 +62,7 @@ public class ParkingSystemGUI implements ChatIF{
 
 		Button viewBtn = new Button("View DB");
 		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
-		viewBtn.setOnAction(e -> guiClient.sendMessage("VIEW_DATABASE"));
+		viewBtn.setOnAction(e -> client.handleMessageFromClientUI("VIEW_DATABASE"));
 
 		Button updateBtn = new Button("Update Reservation");
 		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
@@ -70,18 +72,18 @@ public class ParkingSystemGUI implements ChatIF{
 			String spot = spotField.getText();
 			if (!id.isEmpty() && !date.isEmpty() && !spot.isEmpty()) {
 				String updateMsg = "UPDATE_ORDER " + id + " " + spot + " " + date;
-				guiClient.sendMessage(updateMsg);
+				client.handleMessageFromClientUI(updateMsg);
 			} else {
 				displayMessage("Please fill all fields.");
 			}
 		});
-		Button tryBtn = new Button("Reconnect");
-		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
-		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
-		Button srcBtn = new Button("Search");
-		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
-		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
-		HBox buttons = new HBox(viewBtn, updateBtn,tryBtn,srcField,srcBtn);
+//		Button tryBtn = new Button("Reconnect");
+//		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
+//		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
+//		Button srcBtn = new Button("Search");
+//		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
+//		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
+		HBox buttons = new HBox(viewBtn, updateBtn);
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
 		buttons.setSpacing(10);

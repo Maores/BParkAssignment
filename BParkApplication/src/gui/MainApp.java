@@ -45,8 +45,10 @@ public class MainApp extends Application {
 	            primaryStage.setTitle("BPark - Smart Parking System (Customer)");
             });
         } else if (roleLower.contains("staff")) {
-            ReportClientGUI reportClientGUI = new ReportClientGUI();
-            Parent root = reportClientGUI.buildRoot();
+            StaffGui Staff = new StaffGui();
+            
+            Parent root = Staff.buildRoot();
+            Staff.start(); 
             Platform.runLater(() -> {
 	            primaryStage.setScene(new Scene(root, 600, 400));
 	            primaryStage.setTitle("BPark - Staff/Report");

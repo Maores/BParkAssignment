@@ -1,12 +1,20 @@
 package gui;
 
-public class ClientSingleton {
-    private static GUIParkingClient instance;
+import java.io.IOException;
 
-    public static GUIParkingClient getInstance() {
+import client.ChatClient;
+import common.ChatIF;
+
+public class ClientSingleton {
+    private static ChatClient instance;
+
+    public static ChatClient getInstance(ChatIF clientUI) throws IOException {
         if (instance == null) {
-            instance = new GUIParkingClient("localhost", 5555, ClientUIController.getInstance());
+            instance = new ChatClient("localhost", 5555, clientUI);
+        } else {
+            // Rebind UI interface when switching screens
+            instance.setClientUI(clientUI);
         }
         return instance;
     }
-} 
+}

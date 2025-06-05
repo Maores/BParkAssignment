@@ -166,16 +166,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				
 				client.sendToClient(reportData);
 			}
-			// Handle parking status request
-			else if (message.equals("GET_ALL_PARKING_STATUS")) {
-				if (guiController != null) {
-					guiController.appendMessage("Parking status requested from " + client.getInetAddress());
-				}
-				
-				// Get all parking data
-				String allParkingData = db.getDatabaseAsString();
-				client.sendToClient("=== PARKING STATUS ===\n" + allParkingData);
-			}
+
 			//if message from client is not ViewDB or UpdateDB
 			else {
 				if (guiController != null) {
