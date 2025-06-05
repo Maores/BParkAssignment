@@ -1,5 +1,6 @@
 package gui;
 
+import common.ChatIF;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,8 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import common.ChatIF;
-import gui.ClientSingleton;
 
 /**
  * Example screen showing how to access the database after the GUI/DB separation.
@@ -23,7 +22,8 @@ public class UserManagementScreen implements ChatIF {
     private GUIParkingClient guiClient;
 
     public UserManagementScreen() {
-        guiClient = ClientSingleton.getInstance(this);
+        ClientUIController.getInstance().setActiveScreen(this);
+        guiClient = ClientSingleton.getInstance();
     }
 
     /**

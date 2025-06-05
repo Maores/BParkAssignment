@@ -1,14 +1,11 @@
 package gui;
 
-import client.ChatClient;
 import common.ChatIF;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
-import gui.ClientSingleton;
-import gui.GUIParkingClient;
 
 /**
  * Example of a client-side GUI that connects to the server through the network.
@@ -25,7 +22,8 @@ public class ReportClientGUI implements ChatIF {
     private static final int PORT = 5555;
     
     public void start() {
-        guiClient = ClientSingleton.getInstance(this);
+        gui.ClientUIController.getInstance().setActiveScreen(this);
+        guiClient = gui.ClientSingleton.getInstance();
         display("Connected to server!");
         initializeReportTypes();
     }

@@ -33,7 +33,8 @@ public class loginController implements ChatIF {
 			alert.showAndWait();
 			return;
 		}
-		GUIParkingClient client = ClientSingleton.getInstance(this);
+		ClientUIController.getInstance().setActiveScreen(this);
+		gui.GUIParkingClient client = gui.ClientSingleton.getInstance();
 		client.sendMessage("LOGIN " + userId);
 	}
 

@@ -1,5 +1,6 @@
 package gui;
 
+import common.ChatIF;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,8 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import common.ChatIF;
-import gui.ClientSingleton;
 
 public class ParkingSystemGUI implements ChatIF{
 	/**
@@ -44,7 +43,8 @@ public class ParkingSystemGUI implements ChatIF{
 		dbDisplay.setPrefHeight(200);
 		dbDisplay.setEditable(false);
 		dbDisplay.setStyle("-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
-		guiClient = ClientSingleton.getInstance(this);
+		gui.ClientUIController.getInstance().setActiveScreen(this);
+		guiClient = gui.ClientSingleton.getInstance();
 	}
 
 	public VBox buildRoot() {
@@ -137,8 +137,7 @@ public class ParkingSystemGUI implements ChatIF{
 
 	@Override
 	public void display(String message) {
-		// TODO Auto-generated method stub
-		
+		displayMessage(message);
 	}
 
 }
