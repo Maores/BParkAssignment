@@ -208,28 +208,19 @@ public class DBController {
 	 * Insert user to the database.
 	 */
 	public String insertUserToDB(String name, String id) {
-		if(!checkDB(id)) {
+		if(checkDB(id)) {
 			return "Insert_User false";
 		}
-		String sql = "INSERT INTO `users` (id,name,role) VALUES (?,?,user);";
+		String sql = "INSERT INTO `users` (id, name, role) VALUES (?, ?, 'user');";
 		try {
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, Integer.parseInt(id));
-			ps.setString(2, name);
-
-			ps.executeUpdate();
-			System.out.println("Database inserted successfully.");
-			if (listener != null) {
-				listener.onDatabaseMessage("Database inserted successfully.");
-			}
-			return "Insert_User true";
-		} catch (Exception e) {
-			System.out.println("Database inserted Failed.");
-			System.out.println(e.getMessage());
-			if (listener != null) {
-				listener.onDatabaseError("Database inserted failed: " + e.getMessage());
-			}
-			return "Insert_User false";
+		    PreparedStatement ps = conn.prepareStatement(sql);
+		    ps.setInt(1, Integer.parseInt(id));
+		    ps.setString(2, name);
+		    ps.executeUpdate();
+		    return "User added Succsussfully";
+		} catch (SQLException e) {
+		    e.printStackTrace(); // Or handle error properly
+			return "User couldnt be added";
 		}
 
 	}

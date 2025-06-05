@@ -67,6 +67,7 @@ public class StaffGui implements ChatIF {
             	String[] str = message.split(" ");
                 table.setEditable(true);
                 
+                
                 table.getColumns().clear();
 
                 TableColumn<ParkingRow, String> a = new TableColumn<>(str[0]);
@@ -96,6 +97,9 @@ public class StaffGui implements ChatIF {
                 table.setItems(items);  
         		});
             }
+        	else if (message.startsWith("User")) {
+        		outputDisplay.setText(message);
+        	}
         });
     }
 

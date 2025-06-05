@@ -2,28 +2,23 @@ package client;
 
 import java.io.IOException;
 
+import client.ChatClient;
 import common.ChatIF;
 
 public class singletoneClient {
-	private static ChatClient instance;
+    private static ChatClient instance;
 
-    public static ChatClient getInstance(ChatIF gui) {
+    public static ChatClient getInstance(ChatIF clientUI) {
         if (instance == null) {
             try {
-				instance = new ChatClient("localhost", 5555,  gui);
-			} catch (IOException e) {
-				System.out.println("SingletoneClient Error "+ e.getMessage());
-				e.printStackTrace();
-			}
-        }
-        else {
-        	try {
-				instance = new ChatClient("localhost", 5555,  gui);
+				instance = new ChatClient("localhost", 5555, clientUI);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        	//instance.setClientUI(gui);
+        } else {
+            // Rebind UI interface when switching screens
+            instance.setClientUI(clientUI);
         }
         return instance;
     }
