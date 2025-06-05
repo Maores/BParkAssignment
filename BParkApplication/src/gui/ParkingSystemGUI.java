@@ -45,7 +45,6 @@ public class ParkingSystemGUI implements ChatIF{
 		dbDisplay.setPrefHeight(200);
 		dbDisplay.setEditable(false);
 		dbDisplay.setStyle("-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
-		gui.ClientUIController.getInstance().setActiveScreen(this);
 		client = singletoneClient.getInstance(this);
 	}
 

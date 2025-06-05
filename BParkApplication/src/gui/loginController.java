@@ -20,9 +20,9 @@ public class loginController implements ChatIF {
 	@FXML
 	private TextField name;
 
-	private MainApp mainApp;
-
 	private ChatClient client;
+	
+	private MainApp mainApp;
 	
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
@@ -39,6 +39,9 @@ public class loginController implements ChatIF {
 		}
 		client = singletoneClient.getInstance(this);
 		client.handleMessageFromClientUI("LOGIN " + userId);
+	}
+	public ChatClient getClient() {
+		return client;
 	}
 
 	//Get message from the server!!!

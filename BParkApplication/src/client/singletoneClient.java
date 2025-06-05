@@ -2,7 +2,6 @@ package client;
 
 import java.io.IOException;
 
-import client.ChatClient;
 import common.ChatIF;
 
 public class singletoneClient {
@@ -13,12 +12,16 @@ public class singletoneClient {
             try {
 				instance = new ChatClient("localhost", 5555, clientUI);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        } else {
-            // Rebind UI interface when switching screens
-            instance.setClientUI(clientUI);
+        } else { 	
+        	  try {
+  				instance = new ChatClient("localhost", 5555, clientUI);
+  			} catch (IOException e) {
+  				e.printStackTrace();
+  			}
+        		//instance.setClientUI(clientUI);
+
         }
         return instance;
     }

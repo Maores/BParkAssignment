@@ -1,5 +1,8 @@
 package gui;
 
+import client.ChatClient;
+import client.singletoneClient;
+import common.ChatIF;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +13,6 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
     private Stage primaryStage;
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
@@ -25,6 +27,7 @@ public class MainApp extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Login");
         primaryStage.show();
+        
     }
 
     public void showMainScreen() throws Exception {
@@ -68,8 +71,10 @@ public class MainApp extends Application {
 
         primaryStage.show();
     }
-
+    
     public static void main(String[] args) {
         launch(args);
     }
+
+
 } 

@@ -50,16 +50,7 @@ public class UserManagementScreen implements ChatIF {
         logArea.appendText("Searching for user: " + userId + "\n");
     }
     
-    /**
-     * Check if an order exists
-     * Another example of DB access
-     */
-    @FXML
-    void checkOrder() {
-        String orderId = userIdField.getText();
-        
-        client.handleMessageFromClientUI("VIEW_DATABASE");
-    }
+
     
     /**
      * Example of a more complex operation
@@ -135,8 +126,8 @@ public class UserManagementScreen implements ChatIF {
         logArea.setEditable(false);
         Button searchBtn = new Button("Search User");
         searchBtn.setOnAction(e -> searchUser());
-        Button checkOrderBtn = new Button("Check Order");
-        checkOrderBtn.setOnAction(e -> checkOrder());
+        Button checkOrderBtn = new Button("View orders");
+        checkOrderBtn.setOnAction(e -> client.handleMessageFromClientUI("VIEW_DATABASE"));
         Button reportBtn = new Button("Generate Report");
         reportBtn.setOnAction(e -> generateReport());
         VBox root = new VBox(10, new Label("User ID:"), userIdField, searchBtn, checkOrderBtn, reportBtn, resultLabel, logArea, table);
