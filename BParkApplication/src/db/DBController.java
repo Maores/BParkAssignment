@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.Random;
 
 import common.DatabaseListener;
 
@@ -235,8 +237,11 @@ public class DBController {
 	 * Insert user to the database.(order_number, parking_space, order_date, confirmation_code, subscriber_id, date_of_placing_an_order)
 	 */
 	public boolean insertResToDB(String parking_space, String order_date, String id) {
-		String sql = "INSERT INTO `users` (order_number, parking_space, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
+		String sql = "INSERT INTO `users` (parking_space,order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?,?);";
+		Random rand = new Random();
+        int confirCode = rand.nextInt(9000) + 1000; // 0–8999 + 1000 = 1000–9999
+        LocalDate date = LocalDate.now(); 
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(parking_space));
