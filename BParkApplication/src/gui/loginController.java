@@ -1,15 +1,13 @@
 package gui;
 
+import common.ChatIF;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import gui.ClientSingleton;
-import gui.GUIParkingClient;
-// import gui.MainApp;
 
-public class loginController implements common.ChatIF {
+public class loginController implements ChatIF {
 
 	@FXML
 	private TextField id;
@@ -39,6 +37,7 @@ public class loginController implements common.ChatIF {
 		client.sendMessage("LOGIN " + userId);
 	}
 
+	//Get message from the server!!!
 	@Override
 	public void display(String message) {
 		if (message.startsWith("role ")) {

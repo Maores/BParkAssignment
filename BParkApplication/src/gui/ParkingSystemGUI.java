@@ -16,9 +16,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import common.ChatIF;
 import gui.ClientSingleton;
 
-public class ParkingSystemGUI {
+public class ParkingSystemGUI implements ChatIF{
 	/**
 	 * The default port and host to connect on.
 	 */
@@ -133,5 +134,11 @@ public class ParkingSystemGUI {
         	
         }
     }
+
+	@Override
+	public void display(String message) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

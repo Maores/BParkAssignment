@@ -88,7 +88,6 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 		
 		// Get singleton instance - Server passes itself as listener
 		DBController db = DBController.getInstance(this);
-		
 		try {
 			// Handling "View database"
 			if (message.equals("VIEW_DATABASE")) {

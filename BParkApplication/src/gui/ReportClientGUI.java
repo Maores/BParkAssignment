@@ -95,6 +95,7 @@ public class ReportClientGUI implements ChatIF {
     }
 
     public VBox buildRoot() {
+    	System.out.println("DEBUG: build root");
         reportTypeCombo = new ComboBox<>();
         reportDisplay = new TextArea();
         reportDisplay.setPrefHeight(200);

@@ -12,7 +12,7 @@ public class GUIParkingClient implements ChatIF {
 		this.gui = gui;
 		try {
 			client = new ChatClient(host, port, this);
-			display("Connected!");
+			//display("Connected!");
 		} catch (Exception e) {
 			display("Error: Can't setup connection!");
 		}
@@ -20,8 +20,10 @@ public class GUIParkingClient implements ChatIF {
 
 	public void sendMessage(String msg) {
 		try {
+			
 			client.handleMessageFromClientUI(msg);
 		} catch (Exception e) {
+			
 			display("ERROR: Could not send message to server.");
 		}
 	}

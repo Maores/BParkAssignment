@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -69,7 +70,7 @@ public class UserManagementScreen implements ChatIF {
     }
 
     private void displayMessage(String message) {
-        javafx.application.Platform.runLater(() -> {
+        Platform.runLater(() -> {
             logArea.appendText(message + "\n");
             if (message.startsWith("User found!")) {
                 resultLabel.setText(message);
