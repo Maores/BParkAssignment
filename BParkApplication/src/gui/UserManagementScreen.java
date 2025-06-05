@@ -1,5 +1,7 @@
 package gui;
 
+import client.ChatClient;
+import client.singletoneClient;
 import common.ChatIF;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,11 +21,10 @@ public class UserManagementScreen implements ChatIF {
     @FXML private Label resultLabel;
     @FXML private TextArea logArea;
     
-    private GUIParkingClient guiClient;
+    private ChatClient client;
 
     public UserManagementScreen() {
-        ClientUIController.getInstance().setActiveScreen(this);
-        guiClient = ClientSingleton.getInstance();
+    	client = singletoneClient.getInstance(this);
     }
 
     /**
@@ -39,7 +40,7 @@ public class UserManagementScreen implements ChatIF {
             return;
         }
         
-        guiClient.sendMessage("SEARCH_USER " + userId);
+        client.handleMessageFromClientUI("SEARCH_USER " + userId);
         logArea.appendText("Searching for user: " + userId + "\n");
     }
     
@@ -51,7 +52,7 @@ public class UserManagementScreen implements ChatIF {
     void checkOrder() {
         String orderId = userIdField.getText();
         
-        guiClient.sendMessage("SEARCH_ORDER " + orderId);
+        client.handleMessageFromClientUI("SEARCH_ORDER " + orderId);
         logArea.appendText("Checking order: " + orderId + "\n");
     }
     
@@ -60,10 +61,10 @@ public class UserManagementScreen implements ChatIF {
      */
     @FXML
     void generateReport() {
-        guiClient.sendMessage("GENERATE_REPORT DAILY_REPORT");
+    	client.handleMessageFromClientUI("GENERATE_REPORT DAILY_REPORT");
         logArea.appendText("Generating report...\n");
     }
-
+    //Get message from the server
     @Override
     public void display(String message) {
         displayMessage(message);

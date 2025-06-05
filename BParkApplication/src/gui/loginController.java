@@ -1,5 +1,7 @@
 package gui;
 
+import client.ChatClient;
+import client.singletoneClient;
 import common.ChatIF;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +22,8 @@ public class loginController implements ChatIF {
 
 	private MainApp mainApp;
 
+	private ChatClient client;
+	
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
@@ -33,9 +37,8 @@ public class loginController implements ChatIF {
 			alert.showAndWait();
 			return;
 		}
-		ClientUIController.getInstance().setActiveScreen(this);
-		gui.GUIParkingClient client = gui.ClientSingleton.getInstance();
-		client.sendMessage("LOGIN " + userId);
+		client = singletoneClient.getInstance(this);
+		client.handleMessageFromClientUI("LOGIN " + userId);
 	}
 
 	//Get message from the server!!!

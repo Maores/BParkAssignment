@@ -104,5 +104,15 @@ public class ChatClient extends AbstractClient
     catch(IOException e) {}
     System.exit(0);
   }
+
+
+  public ChatIF getClientUI() {
+	return clientUI;
+  }
+
+
+  public void setClientUI(ChatIF clientUI) {
+	this.clientUI = clientUI;
+  }
 }
 //End of ChatClient class
