@@ -5,10 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import db.DBController;
+import gui.ClientSingleton;
+import gui.GUIParkingClient;
 // import gui.MainApp;
 
-public class loginController {
+public class loginController implements common.ChatIF {
 
 	@FXML
 	private TextField id;
@@ -34,23 +35,25 @@ public class loginController {
 			alert.showAndWait();
 			return;
 		}
-		DBController db = DBController.getInstance(null);
-		db.connectToDB();
-		String role = db.getUserRoleById(userId);
-		if (role == null) {
-			Alert alert = new Alert(Alert.AlertType.ERROR, "User not found. Please try again.");
-			alert.showAndWait();
-			id.clear();
-			name.clear();
-			return;
-		}
-		if (mainApp != null) {
-			try {
-				mainApp.showRoleScreen(role, userId, userName);
-			} catch (Exception e) {
-				Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load role screen: " + e.getMessage());
-				alert.showAndWait();
+		GUIParkingClient client = ClientSingleton.getInstance(this);
+		client.sendMessage("LOGIN " + userId);
+	}
+
+	@Override
+	public void display(String message) {
+		if (message.startsWith("role ")) {
+			String role = message.substring(5);
+			if (mainApp != null) {
+				try {
+					mainApp.showRoleScreen(role, id.getText(), name.getText());
+				} catch (Exception e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load role screen: " + e.getMessage());
+					alert.showAndWait();
+				}
 			}
+		} else {
+			Alert alert = new Alert(Alert.AlertType.ERROR, message);
+			alert.showAndWait();
 		}
 	}
 }

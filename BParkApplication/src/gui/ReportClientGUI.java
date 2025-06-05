@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
+import gui.ClientSingleton;
+import gui.GUIParkingClient;
 
 /**
  * Example of a client-side GUI that connects to the server through the network.
@@ -18,20 +20,13 @@ public class ReportClientGUI implements ChatIF {
     @FXML private ComboBox<String> reportTypeCombo;
     @FXML private TextArea reportDisplay;
     
-    private ChatClient client;
+    private GUIParkingClient guiClient;
     private static final String HOST = "localhost";
     private static final int PORT = 5555;
     
     public void start() {
-        // Initialize connection to server
-        try {
-            client = new ChatClient(HOST, PORT, this);
-            display("Connected to server!");
-        } catch (Exception e) {
-            display("Error: Cannot connect to server");
-        }
-        
-        // Setup UI...
+        guiClient = ClientSingleton.getInstance(this);
+        display("Connected to server!");
         initializeReportTypes();
     }
     
@@ -60,7 +55,7 @@ public class ReportClientGUI implements ChatIF {
         String command = "GENERATE_REPORT " + reportType.replace(" ", "_");
         
         try {
-            client.handleMessageFromClientUI(command);
+            guiClient.sendMessage(command);
             display("Requesting " + reportType + "...");
         } catch (Exception e) {
             display("Error sending request: " + e.getMessage());
@@ -73,8 +68,7 @@ public class ReportClientGUI implements ChatIF {
     @FXML
     void getAllParkingStatus() {
         try {
-            // Custom command for this specific screen
-            client.handleMessageFromClientUI("GET_ALL_PARKING_STATUS");
+            guiClient.sendMessage("GET_ALL_PARKING_STATUS");
             display("Fetching parking status...");
         } catch (Exception e) {
             display("Error: " + e.getMessage());
@@ -95,8 +89,8 @@ public class ReportClientGUI implements ChatIF {
      * Clean up on close
      */
     public void stop() {
-        if (client != null) {
-            client.quit();
+        if (guiClient != null) {
+            guiClient.quit();
         }
     }
 

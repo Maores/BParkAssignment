@@ -1,23 +1,30 @@
 package gui;
 
-import db.DBController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import common.ChatIF;
+import gui.ClientSingleton;
 
 /**
  * Example screen showing how to access the database after the GUI/DB separation.
  * This screen doesn't need to receive database notifications, so it passes null as listener.
  */
-public class UserManagementScreen {
+public class UserManagementScreen implements ChatIF {
     
     @FXML private TextField userIdField;
     @FXML private Label resultLabel;
     @FXML private TextArea logArea;
     
+    private GUIParkingClient guiClient;
+
+    public UserManagementScreen() {
+        guiClient = ClientSingleton.getInstance(this);
+    }
+
     /**
      * Search for a user by ID
      * Demonstrates accessing DB without being a listener
@@ -31,22 +38,8 @@ public class UserManagementScreen {
             return;
         }
         
-        // Get DB instance without listener (null)
-        // This screen doesn't need to receive DB notifications
-        DBController db = DBController.getInstance(null);
-        
+        guiClient.sendMessage("SEARCH_USER " + userId);
         logArea.appendText("Searching for user: " + userId + "\n");
-        
-        // Use DB methods normally
-        String userRole = db.getUserRoleById(userId);
-        
-        if (userRole != null) {
-            resultLabel.setText("User found! Role: " + userRole);
-            logArea.appendText("User role: " + userRole + "\n");
-        } else {
-            resultLabel.setText("User not found");
-            logArea.appendText("No user found with ID: " + userId + "\n");
-        }
     }
     
     /**
@@ -57,17 +50,8 @@ public class UserManagementScreen {
     void checkOrder() {
         String orderId = userIdField.getText();
         
-        // Access DB singleton
-        DBController db = DBController.getInstance(null);
-        
-        boolean exists = db.checkDB(orderId);
-        
-        if (exists) {
-            String orderData = db.SearchID(orderId);
-            logArea.appendText("Order found:\n" + orderData + "\n");
-        } else {
-            logArea.appendText("Order " + orderId + " does not exist\n");
-        }
+        guiClient.sendMessage("SEARCH_ORDER " + orderId);
+        logArea.appendText("Checking order: " + orderId + "\n");
     }
     
     /**
@@ -75,19 +59,30 @@ public class UserManagementScreen {
      */
     @FXML
     void generateReport() {
-        DBController db = DBController.getInstance(null);
-        
+        guiClient.sendMessage("GENERATE_REPORT DAILY_REPORT");
         logArea.appendText("Generating report...\n");
-        
-        // Get all database data
-        String allData = db.getDatabaseAsString();
-        
-        // Process the data (count orders, etc.)
-        String[] lines = allData.split("\n");
-        int orderCount = lines.length - 1; // Minus header
-        
-        logArea.appendText("Total orders in database: " + orderCount + "\n");
-        logArea.appendText("Report generated successfully\n");
+    }
+
+    @Override
+    public void display(String message) {
+        displayMessage(message);
+    }
+
+    private void displayMessage(String message) {
+        javafx.application.Platform.runLater(() -> {
+            logArea.appendText(message + "\n");
+            if (message.startsWith("User found!")) {
+                resultLabel.setText(message);
+            } else if (message.startsWith("User not found")) {
+                resultLabel.setText(message);
+            } else if (message.startsWith("Order found:")) {
+                resultLabel.setText("Order found");
+            } else if (message.startsWith("Order") && message.contains("does not exist")) {
+                resultLabel.setText(message);
+            } else if (message.startsWith("=== DAILY PARKING REPORT ===")) {
+                resultLabel.setText("Report generated");
+            }
+        });
     }
 
     public VBox buildRoot() {

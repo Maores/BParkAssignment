@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import gui.ClientSingleton;
 
 public class ParkingSystemGUI {
 	/**
@@ -42,7 +43,7 @@ public class ParkingSystemGUI {
 		dbDisplay.setPrefHeight(200);
 		dbDisplay.setEditable(false);
 		dbDisplay.setStyle("-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
-		guiClient = new GUIParkingClient(DEFAULT_HOST,DEFAULT_PORT,this);
+		guiClient = ClientSingleton.getInstance(this);
 	}
 
 	public VBox buildRoot() {

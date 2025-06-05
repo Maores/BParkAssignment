@@ -6,62 +6,46 @@ import common.ChatIF;
 public class GUIParkingClient implements ChatIF {
 
 	private ChatClient client;
-	private ParkingSystemGUI gui;
+	private ChatIF gui;
 
-	public GUIParkingClient(String host, int port, ParkingSystemGUI gui) {
-		
+	public GUIParkingClient(String host, int port, ChatIF gui) {
 		this.gui = gui;
 		try {
 			client = new ChatClient(host, port, this);
 			display("Connected!");
-			client.sendToServer(host);
-
 		} catch (Exception e) {
 			display("Error: Can't setup connection!");
-
 		}
-
 	}
 
 	public void sendMessage(String msg) {
-		if (client != null && client.isConnected()) {
+		try {
 			client.handleMessageFromClientUI(msg);
-
-		} else {
-			display("ERROR:The server is offline.");
+		} catch (Exception e) {
+			display("ERROR: Could not send message to server.");
 		}
-
 	}
-	public void search(String msg) {
-		if (client != null && client.isConnected()) {
-			if(!msg.isEmpty()) {
-				client.handleMessageFromClientUI("SEARCH_ORDER "+msg);
-			}
-			else {
-				display("Search bar is empty.");
-			}
-			
-		} else {
-			display("ERROR:The server is offline.");
-		}
 
+	public void search(String msg) {
+		if (!msg.isEmpty()) {
+			sendMessage("SEARCH_ORDER " + msg);
+		} else {
+			display("Search bar is empty.");
+		}
 	}
 
 	public void display(String message) {
-		gui.displayMessage(message);
+		gui.display(message);
 	}
 
 	public void connect(String host, int port) {
 		try {
-			
 			client = new ChatClient(host, port, this);
 			System.out.println(client);
 			display("Connected!");
-			client.sendToServer(host);
 		} catch (Exception e) {
 			display("Error: Can't setup connection!");
 		}
-
 	}
 
 	public String getLastServerResponse() {
@@ -70,5 +54,9 @@ public class GUIParkingClient implements ChatIF {
 
 	public void quit() {
 		client.quit();
+	}
+
+	public void setGui(ChatIF gui) {
+		this.gui = gui;
 	}
 }
