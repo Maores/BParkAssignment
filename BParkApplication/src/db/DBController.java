@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.Random;
 
 import common.DatabaseListener;
 
@@ -202,7 +204,66 @@ public class DBController {
 		}
 
 	}
+	/**
+	 * Insert user to the database.
+	 */
+	public String insertUserToDB(String name, String id) {
+		if(!checkDB(id)) {
+			return "Insert_User false";
+		}
+		String sql = "INSERT INTO `users` (id,name,role) VALUES (?,?,user);";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(id));
+			ps.setString(2, name);
 
+			ps.executeUpdate();
+			System.out.println("Database inserted successfully.");
+			if (listener != null) {
+				listener.onDatabaseMessage("Database inserted successfully.");
+			}
+			return "Insert_User true";
+		} catch (Exception e) {
+			System.out.println("Database inserted Failed.");
+			System.out.println(e.getMessage());
+			if (listener != null) {
+				listener.onDatabaseError("Database inserted failed: " + e.getMessage());
+			}
+			return "Insert_User false";
+		}
+
+	}
+	/**
+	 * Insert user to the database.(order_number, parking_space, order_date, confirmation_code, subscriber_id, date_of_placing_an_order)
+	 */
+	public boolean insertResToDB(String parking_space, String order_date, String id) {
+		String sql = "INSERT INTO `users` (parking_space,order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
+				+ "VALUES (?,?,?,?,?,?);";
+		Random rand = new Random();
+        int confirCode = rand.nextInt(9000) + 1000; // 0–8999 + 1000 = 1000–9999
+        LocalDate date = LocalDate.now(); 
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(parking_space));
+			ps.setString(2, order_date);
+			ps.setInt(3, Integer.parseInt(id));
+
+			ps.executeUpdate();
+			System.out.println("Database updated successfully.");
+			if (listener != null) {
+				listener.onDatabaseMessage("Database updated successfully.");
+			}
+			return true;
+		} catch (Exception e) {
+			System.out.println("Database updated Failed.");
+			System.out.println(e.getMessage());
+			if (listener != null) {
+				listener.onDatabaseError("Database update failed: " + e.getMessage());
+			}
+			return false;
+		}
+
+	}
 	/**
 	 * Close the database connection.
 	 */
