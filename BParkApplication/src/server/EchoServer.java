@@ -166,6 +166,13 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				
 				client.sendToClient(reportData);
 			}
+			else if (message.startsWith("ADD_USER")) {
+				String[] parts = message.split(" ");
+				String id = parts[1];
+				String name = parts[2];
+				String succes =  db.insertUserToDB(name, id);
+				client.sendToClient(succes);//Send the role to client
+			}
 
 			//if message from client is not ViewDB or UpdateDB
 			else {
