@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -91,7 +92,15 @@ public class serverGuiController extends Application{
 		primaryStage.setTitle("Server");
 		primaryStage.setScene(scene);
 		primaryStage.show();	
-
+//		primaryStage.setOnCloseRequest(event ->{
+//			System.out.println("Window is closing...");
+//			while(sv==null) {
+//				if(sv!=null) {
+//					closeServer();
+//				}
+//				System.out.println("Window is closing...");
+//			}
+//		});
 	}
 
 	public static void main(String args[]) throws Exception {

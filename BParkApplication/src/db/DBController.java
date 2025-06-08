@@ -27,10 +27,6 @@ public class DBController {
 	public static synchronized DBController getInstance(DatabaseListener listener) {
 		if (instance == null) {
 			instance = new DBController();
-			System.out.println("Creating DBController singleton instance.");
-			if (listener != null) {
-				listener.onDatabaseMessage("Creating DBController singleton instance.");
-			}
 		}
 		// Update listener reference (can be null for screens that don't need notifications)
 		instance.listener = listener;
