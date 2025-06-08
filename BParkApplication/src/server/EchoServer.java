@@ -3,9 +3,9 @@
 // license found at www.lloseng.com 
 package server;
 
+import common.DatabaseListener;
 import db.DBController;
 import gui.serverGuiController;
-import common.DatabaseListener;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -175,11 +175,12 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 			}
 
 			//if message from client is not ViewDB or UpdateDB
-			else {
+			else if(message.startsWith("CONNECTION")){
+				String[] parts = message.split(" ");
 				if (guiController != null) {
 					//sends the message to the gui
-					guiController.appendMessage("Host: " + message + "\nIP: " + client + "\nStatus: Connected");
-					System.out.println("Host: " + message + "\nIP: " + client + "\nStatus: Connected");
+					guiController.appendMessage("Host: " + parts[1] + "\nIP: " + client + "\nStatus: Connected");
+					System.out.println("Host: " + parts[1] + "\nIP: " + client + "\nStatus: Connected");
 				}
 			}
 		} catch (Exception e) {
@@ -202,7 +203,6 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 		// Pass 'this' as the listener to receive database notifications
 		dbController = DBController.getInstance(this);
 		String result = dbController.connectToDB();
-		System.out.println("Database initialization: " + result);
 	}
 
 	/**

@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import server.EchoServer;
 
-public class serverGuiController extends Application{
+public class serverGuiController extends Application {
 
 	@FXML
 	private Button btnLstn;
@@ -23,14 +23,12 @@ public class serverGuiController extends Application{
 	private Button btnStop;
 	@FXML
 	private TextField txtPort;
-	
+
 	@FXML
-	private TextArea txtArea;	
-	
-	
-	
+	private TextArea txtArea;
+
 	private EchoServer sv;
-	
+
 	@FXML
 	void listen(ActionEvent event) {
 		String p;
@@ -43,72 +41,69 @@ public class serverGuiController extends Application{
 			runServer(p);
 		}
 	}
-	public  void runServer(String p)
-	{
-		int port = 0; //Port to listen on
 
-        try
-        {
-        		port = Integer.parseInt(p); //Set port to 5555
-          
-        }
-        catch(Throwable t)
-        {
-        		System.out.println("ERROR - Could not connect!");
-        		txtArea.appendText("ERROR - Could not connect!\n");
-        }
-    	
-        sv = new EchoServer(port,this);
-        
-        try 
-        {
-          sv.listen(); //Start listening for connections
+	public void runServer(String p) {
+		int port = 0; // Port to listen on
 
-        } 
-        catch (Exception ex) 
-        {
-          System.out.println("ERROR - Could not listen for clients!");
-          txtArea.appendText("ERROR - Could not listen for clients!\n");
-        }
-        	
-		
+		try {
+			port = Integer.parseInt(p); // Set port to 5555
+
+		} catch (Throwable t) {
+			System.out.println("ERROR - Could not connect!");
+			txtArea.appendText("ERROR - Could not connect!\n");
+		}
+
+		sv = new EchoServer(port, this);
+
+		try {
+			sv.listen(); // Start listening for connections
+
+		} catch (Exception ex) {
+			System.out.println("ERROR - Could not listen for clients!");
+			txtArea.appendText("ERROR - Could not listen for clients!\n");
+		}
+
 	}
+
 	private String getport() {
 		return txtPort.getText();
 	}
+
 	@FXML
 	public void closeServer() {
-		try {
-			sv.close();
-		} catch (IOException e) {
-			txtArea.appendText(e.getMessage());
-			e.printStackTrace();
+		if (sv != null) {
+			try {
+				sv.close();
+			} catch (IOException e) {
+				 txtArea.appendText("Error closing server: " + e.getMessage() + "\n");
+				e.printStackTrace();
+			}
+		}
+		else {
+			txtArea.appendText("Server is not running.\n");
 		}
 	}
 
 	public void start(Stage primaryStage) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/serverGui.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/serverGui.fxml"));
+		Parent root = loader.load();
 		Scene scene = new Scene(root);
-		primaryStage.setTitle("Server");
+		serverGuiController controller = loader.getController();
+		primaryStage.setTitle("BPark - Server");
 		primaryStage.setScene(scene);
-		primaryStage.show();	
-//		primaryStage.setOnCloseRequest(event ->{
-//			System.out.println("Window is closing...");
-//			while(sv==null) {
-//				if(sv!=null) {
-//					closeServer();
-//				}
-//				System.out.println("Window is closing...");
-//			}
-//		});
+		primaryStage.show();
+		primaryStage.setOnCloseRequest(event -> {
+			controller.closeServer();
+		});
 	}
 
 	public static void main(String args[]) throws Exception {
 		launch(args);
 	}
+
 	public void appendMessage(String msg) {
 		javafx.application.Platform.runLater(() -> {
-	        txtArea.appendText(msg + "\n");
-	    });
-	} 
+			txtArea.appendText(msg + "\n");
+		});
+	}
 }

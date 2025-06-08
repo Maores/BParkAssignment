@@ -119,7 +119,6 @@ public class DBController {
 			}
 			
 			// Create new connection only if needed
-			System.out.println("Establishing database connection...");
 			if (listener != null) {
 				listener.onDatabaseMessage("Establishing database connection...");
 			}
@@ -131,7 +130,6 @@ public class DBController {
 					"Ra8420346" // MySql password
 			);
 
-			System.out.println("Database connection established successfully.");
 			if (listener != null) {
 				listener.onDatabaseMessage("Database connection established successfully.");
 				listener.onDatabaseConnectionChange(true);
@@ -258,7 +256,6 @@ public class DBController {
 		try {
 			if (conn != null && !conn.isClosed()) {
 				conn.close();
-				System.out.println("Database connection closed.");
 				if (listener != null) {
 					listener.onDatabaseMessage("Database connection closed.");
 					listener.onDatabaseConnectionChange(false);
@@ -289,16 +286,12 @@ public class DBController {
 		}
 		return null;
 	}
-	
+		
 	/**
 	 * Close connection and reset singleton instance
 	 */
 	public static void closeAndReset() {
 		if (instance != null) {
-			System.out.println("Closing database connection and resetting singleton.");
-			if (instance.listener != null) {
-				instance.listener.onDatabaseMessage("Closing database connection and resetting singleton.");
-			}
 			instance.close();
 			instance = null;
 		}

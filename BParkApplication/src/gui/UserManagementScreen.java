@@ -26,11 +26,13 @@ public class UserManagementScreen implements ChatIF {
     @FXML private Label resultLabel;
     @FXML private TextArea logArea;
     
-    private ChatClient client;
+    private singletoneClient sg = new singletoneClient();
+    private  ChatClient client;
+    
     private TableView<ParkingRow> table = new TableView<>();
     
     public UserManagementScreen() {
-    	client = singletoneClient.getInstance(this);
+    	client = sg.getInstance(this);
     }
 
     /**

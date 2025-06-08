@@ -1,8 +1,5 @@
 package gui;
 
-import client.ChatClient;
-import client.singletoneClient;
-import common.ChatIF;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

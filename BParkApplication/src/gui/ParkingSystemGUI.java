@@ -24,11 +24,10 @@ public class ParkingSystemGUI implements ChatIF{
 	/**
 	 * The default port and host to connect on.
 	 */
-	final public static int DEFAULT_PORT = 5555;
-	final public static String DEFAULT_HOST = "localhost";
 	private TextArea dbDisplay;
 	private TextField idField, dateField, spotField, srcField;
 	private ChatClient client;
+	private singletoneClient sg = new singletoneClient();
 	private TableView<ParkingRow> table = new TableView<>();
 
 	public ParkingSystemGUI() {
@@ -45,7 +44,7 @@ public class ParkingSystemGUI implements ChatIF{
 		dbDisplay.setPrefHeight(200);
 		dbDisplay.setEditable(false);
 		dbDisplay.setStyle("-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
-		client = singletoneClient.getInstance(this);
+		client = sg.getInstance(this);
 	}
 
 	public VBox buildRoot() {

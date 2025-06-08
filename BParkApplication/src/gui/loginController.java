@@ -19,13 +19,17 @@ public class loginController implements ChatIF {
 
 	@FXML
 	private TextField name;
-
-	private ChatClient client;
 	
+	private singletoneClient sg = new singletoneClient();
+	private static ChatClient client;
+
 	private MainApp mainApp;
+	
+	
 	
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+		 
 	}
 
 	@FXML
@@ -37,14 +41,20 @@ public class loginController implements ChatIF {
 			alert.showAndWait();
 			return;
 		}
-		client = singletoneClient.getInstance(this);
-		client.handleMessageFromClientUI("LOGIN " + userId);
+		try {
+			client = sg.getInstance(this);
+			if (client != null) {
+				client.handleMessageFromClientUI("CONNECTION " + client.getHost());
+			}
+			client.handleMessageFromClientUI("LOGIN " + userId);
+		} catch (Exception e) {}
 	}
+
 	public ChatClient getClient() {
 		return client;
 	}
 
-	//Get message from the server!!!
+	// Get message from the server!!!
 	@Override
 	public void display(String message) {
 		if (message.startsWith("role ")) {

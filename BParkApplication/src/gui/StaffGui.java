@@ -20,11 +20,13 @@ public class StaffGui implements ChatIF {
     @FXML private TextField nameField;
     @FXML private TextField idField;
     @FXML private TextArea outputDisplay;
+    
     private TableView<ParkingRow> table = new TableView<>();
+    private singletoneClient sg = new singletoneClient();
     private ChatClient client;
 
     public void start() {
-        client = singletoneClient.getInstance(this);
+        client = sg.getInstance(this);
         display("Connected to server!");
     }
 
