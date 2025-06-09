@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Random;
@@ -212,9 +213,11 @@ public class DBController {
 		    ps.setString(2, name);
 		    ps.executeUpdate();
 		    return "User added Succsussfully";
-		} catch (SQLException e) {
-		    e.printStackTrace(); // Or handle error properly
-			return "User couldnt be added";
+		} catch (SQLIntegrityConstraintViolationException e1) {
+		  // Or handle error properly
+			return "User name/id alreay exists!" ;
+		}catch(SQLException e2) {
+			return "User couldnt be added!" ;
 		}
 
 	}
