@@ -28,6 +28,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 	final public static int DEFAULT_PORT = 5555;
 	private serverGuiController guiController;
 	private DBController dbController = null;  // Store reference to singleton
+	private String roleConnected;
 
 	// Constructors ****************************************************
 
@@ -131,8 +132,16 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				//get id from the message
 				String[] parts = message.split(" ");
 				String id  = parts[1];
-				String role = "role " + db.getUserRoleById(id);
-				client.sendToClient(role);//Send the role to client
+				String name = parts[2];
+				String role =db.getUserRoleById(id,name);
+				if(role.equals("null")) {
+					client.sendToClient("ERROR:UserName/id is wrong!");
+				}
+				else
+				{
+					client.sendToClient("role " +role);//Send the role to client
+				}
+				
 			}
 			// Handle new report generation command
 			else if (message.startsWith("GENERATE_REPORT")) {
@@ -174,13 +183,15 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				client.sendToClient(succes);//Send the role to client
 			}
 
-			//if message from client is not ViewDB or UpdateDB
-			else if(message.startsWith("CONNECTION")){
+			
+			//CONNECTION host_name role
+ 			else if(message.startsWith("CONNECTION")){
 				String[] parts = message.split(" ");
 				if (guiController != null) {
+					roleConnected = parts[2];
 					//sends the message to the gui
-					guiController.appendMessage("Host: " + parts[1] + "\nIP: " + client + "\nStatus: Connected");
-					System.out.println("Host: " + parts[1] + "\nIP: " + client + "\nStatus: Connected");
+					guiController.appendMessage("Host: " + parts[1] + "\nIP: " + client +"\nRole: "+parts[2]+"\nStatus: Connected");
+					System.out.println("Host: " + parts[1] + "\nIP: " + client + "\nRole: "+parts[2]+"\nStatus: Connected");
 				}
 			}
 		} catch (Exception e) {

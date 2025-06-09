@@ -3,6 +3,7 @@ package gui;
 import client.ChatClient;
 import client.singletoneClient;
 import common.ChatIF;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -26,10 +27,9 @@ public class loginController implements ChatIF {
 	private MainApp mainApp;
 	
 	
-	
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
-		 
+		
 	}
 
 	@FXML
@@ -43,11 +43,10 @@ public class loginController implements ChatIF {
 		}
 		try {
 			client = sg.getInstance(this);
-			if (client != null) {
-				client.handleMessageFromClientUI("CONNECTION " + client.getHost());
-			}
-			client.handleMessageFromClientUI("LOGIN " + userId);
-		} catch (Exception e) {}
+			client.handleMessageFromClientUI("LOGIN " + userId +" " + userName);
+			
+		} catch (Exception e) {
+		}
 	}
 
 	public ChatClient getClient() {
@@ -61,15 +60,22 @@ public class loginController implements ChatIF {
 			String role = message.substring(5);
 			if (mainApp != null) {
 				try {
-					mainApp.showRoleScreen(role, id.getText(), name.getText());
+					if (client != null) {
+						client.handleMessageFromClientUI("CONNECTION " + client.getHost() +" " + role);
+					}
+					mainApp.showRoleScreen(role, id.getText(), name.getText());					
 				} catch (Exception e) {
 					Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load role screen: " + e.getMessage());
 					alert.showAndWait();
 				}
 			}
-		} else {
-			Alert alert = new Alert(Alert.AlertType.ERROR, message);
-			alert.showAndWait();
+		}
+		else {
+			Platform.runLater(()-> {
+				Alert alert = new Alert(Alert.AlertType.ERROR, message);
+				alert.showAndWait();
+			});
+			
 		}
 	}
 }

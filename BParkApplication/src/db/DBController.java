@@ -275,19 +275,21 @@ public class DBController {
 	/**
 	 * Get user role by id from the users table
 	 */
-	public String getUserRoleById(String id) {
-		String sql = "SELECT role FROM users WHERE id = ?";
+	public String getUserRoleById(String id , String name) {
+		String sql = "SELECT role FROM users WHERE id = ? AND name = ?";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, id);
+			ps.setString(2, name);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return rs.getString("role");
 			}
 		} catch (SQLException e) {
+			
 			e.printStackTrace();
 		}
-		return null;
+		return "null";
 	}
 		
 	/**
