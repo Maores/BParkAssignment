@@ -20,7 +20,7 @@ public class DBController {
 	private Connection conn;
 	private DatabaseListener listener;
 	private int orderNumber=1005;
-	private int maxSpace = 2;
+	private int maxSpace = 40;
 	private final int columnSize=5;
 	// Private constructor to prevent direct instantiation
 	private DBController() {
@@ -123,7 +123,6 @@ public class DBController {
 			for (int i = 1; i <= columnSize; i++) {
 				String s = new String();
 				s = String.format("%s ", rsmd.getColumnName(i));
-				System.out.println(s);
 				str.append(s);
 			}
 
@@ -134,6 +133,9 @@ public class DBController {
 					str.append(columnValue);
 
 				}
+			}
+			if(str.length()==columnSize) {
+				return "Order number not exist!";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

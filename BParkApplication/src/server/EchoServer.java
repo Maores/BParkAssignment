@@ -114,7 +114,6 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 			} 
 			///SEARCH  parking orders by id
 			else if (message.startsWith("SEARCH_ORDER")) {
-				System.out.println("gotta");
 				//get id from the message
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
