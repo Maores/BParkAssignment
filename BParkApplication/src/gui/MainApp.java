@@ -38,12 +38,15 @@ public class MainApp extends Application {
     public void showRoleScreen(String role, String userId, String userName) throws Exception {
         String roleLower = role.toLowerCase();
         if (roleLower.contains("user")) {
-            ParkingSystemGUI parkingSystemGUI = new ParkingSystemGUI();
-            Parent root = parkingSystemGUI.buildRoot();
-            Platform.runLater(() -> {
+//            ParkingSystemGUI parkingSystemGUI = new ParkingSystemGUI();
+//            Parent root = parkingSystemGUI.buildRoot();
+        	 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/userAccessOptionsGUI.fxml"));
+             Parent root = loader.load();
+            // loginAccess controller = loader.getController();
+           // Platform.runLater(() -> {
 	            primaryStage.setScene(new Scene(root, 675, 600));
-	            primaryStage.setTitle("BPark - Smart Parking System (Customer)");
-            });
+	            primaryStage.setTitle("BPark - Customer Access");
+          
         } else if (roleLower.contains("staff")) {
             StaffGui Staff = new StaffGui();
             
