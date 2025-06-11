@@ -58,11 +58,10 @@ public class OffSiteScreen implements ChatIF{
 
 		VBox orderNumber = new VBox(new Label("Order Number:"),idField);
 		VBox orderDate = new VBox(new Label("Order Date:"),dateField);
-		VBox orderSpot = new VBox(new Label("Parking Space:"),spotField);
 
-		Button viewBtn = new Button("View DB");
+		Button viewBtn = new Button("View order History");
 		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
-		viewBtn.setOnAction(e -> client.handleMessageFromClientUI("VIEW_DATABASE"));
+		viewBtn.setOnAction(e -> client.handleMessageFromClientUI("VIEW_DATABASE_ID "+id));
 
 		Button updateBtn = new Button("Update Reservation");
 		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
@@ -70,8 +69,8 @@ public class OffSiteScreen implements ChatIF{
 			String id = idField.getText();
 			String date = dateField.getText();
 			String spot = spotField.getText();
-			if (!id.isEmpty() && !date.isEmpty() && !spot.isEmpty()) {
-				String updateMsg = "UPDATE_ORDER " + id + " " + spot + " " + date;
+			if (!id.isEmpty() && !date.isEmpty() ) {
+				String updateMsg = "UPDATE_ORDER " + id  + " " + date;
 				client.handleMessageFromClientUI(updateMsg);
 			} else {
 				displayMessage("Please fill all fields.");
@@ -90,14 +89,14 @@ public class OffSiteScreen implements ChatIF{
 		VBox root = new VBox(10);
 		root.setPadding(new Insets(20));
 		root.setAlignment(Pos.TOP_CENTER);
-		VBox fields = new VBox(10, orderNumber, orderDate, orderSpot, buttons);
+		VBox fields = new VBox(10, orderNumber, orderDate, buttons);
 		root.getChildren().addAll(iv1, fields, dbDisplay, table);
 		return root;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void displayMessage(String message) {   
-    	if(message.startsWith("parking_space")) {
+    	if(message.startsWith("order_number")) {
     		Platform.runLater(() -> {
         	String[] str = message.split(" ");
             table.setEditable(true);
@@ -114,16 +113,15 @@ public class OffSiteScreen implements ChatIF{
             d.setCellValueFactory(new PropertyValueFactory<>("col4"));
             TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
             e.setCellValueFactory(new PropertyValueFactory<>("col5"));
-            TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
-            f.setCellValueFactory(new PropertyValueFactory<>("col6"));
+          
 
-            table.getColumns().addAll(a, b, c, d, e, f);
+            table.getColumns().addAll(a, b, c, d, e);
 
             ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-            for (int i = 6; i + 5 < str.length; i += 6) {
+            for (int i = 5; i + 4 < str.length; i += 5) {
                 ParkingRow row = new ParkingRow(
                     str[i], str[i + 1], str[i + 2],
-                    str[i + 3], str[i + 4], str[i + 5]
+                    str[i + 3], str[i + 4]
                 );
                 items.add(row);
             }

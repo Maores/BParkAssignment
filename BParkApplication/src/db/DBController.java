@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Random;
 
 import common.DatabaseListener;
@@ -19,8 +20,8 @@ public class DBController {
 	private Connection conn;
 	private DatabaseListener listener;
 	private int orderNumber=1005;
-	private int maxSpace = 40;
-	
+	private int maxSpace = 2;
+	private final int columnSize=5;
 	// Private constructor to prevent direct instantiation
 	private DBController() {
 		// Connection will be initialized when needed
@@ -47,7 +48,7 @@ public class DBController {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order;");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			// Build string for database - column names
-			for (int i = 1; i <= 6; i++) {
+			for (int i = 1; i <= columnSize; i++) {
 				String s = new String();
 				s = String.format("%s ", rsmd.getColumnName(i));
 				str.append(s);
@@ -55,7 +56,38 @@ public class DBController {
 
 			// Build string for database - rows
 			while (rs.next()) {
-				for (int i = 1; i <= 6; i++) {
+				for (int i = 1; i <= columnSize; i++) {
+					String columnValue = String.format("%s ", rs.getString(i));
+					str.append(columnValue);
+
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// returns the string
+		return str.toString();
+
+	}
+	public String getDatabaseByIDAsString(String id) {
+
+		StringBuilder str = new StringBuilder();
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE subscriber_id ="+id+";");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			// Build string for database - column names
+			for (int i = 1; i <= columnSize; i++) {
+				String s = new String();
+				s = String.format("%s ", rsmd.getColumnName(i));
+				str.append(s);
+			}
+
+			// Build string for database - rows
+			while (rs.next()) {
+				for (int i = 1; i <= columnSize; i++) {
 					String columnValue = String.format("%s ", rs.getString(i));
 					str.append(columnValue);
 
@@ -88,15 +120,16 @@ public class DBController {
 			ResultSetMetaData rsmd = rs.getMetaData();
 
 			// Build string for database - column names
-			for (int i = 1; i <= 6; i++) {
+			for (int i = 1; i <= columnSize; i++) {
 				String s = new String();
 				s = String.format("%s ", rsmd.getColumnName(i));
+				System.out.println(s);
 				str.append(s);
 			}
 
 			// Build string for database - rows
 			while (rs.next()) {
-				for (int i = 1; i <= 6; i++) {
+				for (int i = 1; i <= columnSize; i++) {
 					String columnValue = String.format("%s ", rs.getString(i));
 					str.append(columnValue);
 
@@ -177,13 +210,16 @@ public class DBController {
 	/**
 	 * Update the database.
 	 */
-	public String updateDB(String parking_space, String order_date, String id) {
-		String sql = "UPDATE `table_order` SET parking_space = ?, order_date = ? WHERE order_number = ?;";
+	public String updateDB( String order_date, String id) {
+		String sql = "UPDATE `table_order` SET  order_date = ? WHERE order_number = ?;";
+		if(!availableSpots(order_date)) {
+			return "Not enough space at this date!";
+		}
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, Integer.parseInt(parking_space));
-			ps.setString(2, order_date);
-			ps.setInt(3, Integer.parseInt(id));
+			
+			ps.setString(1, order_date);
+			ps.setInt(2, Integer.parseInt(id));
 
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
@@ -226,32 +262,51 @@ public class DBController {
 	/**
 	 * Insert user to the database.(order_number, parking_space, order_date, confirmation_code, subscriber_id, date_of_placing_an_order)
 	 */
-	public boolean insertResToDB(String order_date, String id) {
-		String sql = "INSERT INTO `users` (parking_space,order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
-				+ "VALUES (?,?,?,?,?,?);";
+	public String insertResToDB(String order_date, String id) {
+		String sql = "INSERT INTO `users` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
+				+ "VALUES (?,?,?,?,?);";
+		if(!availableSpots(order_date)) {
+			return "Not enough space at this date!";
+		}
 		Random rand = new Random();
         int confirCode = rand.nextInt(9000) + 1000; // 0–8999 + 1000 = 1000–9999
         LocalDate date = LocalDate.now(); 
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, maxSpace--);
-			ps.setInt(2, orderNumber++);
-			ps.setString(3, order_date);
-			ps.setInt(3, Integer.parseInt(id));
-
+			ps.setInt(1, orderNumber++);
+			ps.setString(2, order_date);
+			ps.setInt(3, confirCode);
+			ps.setInt(4, Integer.parseInt(id));
+			ps.setString(5, date.toString());
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
 			if (listener != null) {
 				listener.onDatabaseMessage("Database updated successfully.");
 			}
-			return true;
+			return "User added Succsussfully";
 		} catch (Exception e) {
-			System.out.println("Database updated Failed.");
-			System.out.println(e.getMessage());
-			if (listener != null) {
-				listener.onDatabaseError("Database update failed: " + e.getMessage());
+			return "Order couldnt be added!" ;
+		}
+
+	}
+	//true -> theres spaces available (more than 40%)
+	public boolean availableSpots(String order_date) {
+		String sql = "SELECT COUNT(*) FROM table_order WHERE order_date = ?;";
+		int count=0;
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, order_date);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+			    count = rs.getInt(1);
+			}
+			if(((maxSpace-count)/maxSpace) >= 0.4 ) {
+				return true;
 			}
 			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false ;
 		}
 
 	}

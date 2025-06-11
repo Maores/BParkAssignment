@@ -100,11 +100,10 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				//getting data from DB into parts
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
-				String parkingSpace = parts[2];
-				String orderDate = parts[3];
+				String orderDate = parts[2];
 				if (db.checkDB(orderNumber)) {
 					//updates the DB
-					if ((log = db.updateDB(parkingSpace, orderDate, orderNumber)) == "true") {
+					if ((log = db.updateDB(orderDate, orderNumber)) == "true") {
 						client.sendToClient("Update successful for order number " + orderNumber);
 					} else {
 						client.sendToClient(log.substring(0, log.length() - 9) + ".");
@@ -113,8 +112,9 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					client.sendToClient("Invalid order number Try again...");
 				}
 			} 
-			///SEARCH specific parking by id
+			///SEARCH  parking orders by id
 			else if (message.startsWith("SEARCH_ORDER")) {
+				System.out.println("gotta");
 				//get id from the message
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
@@ -182,8 +182,21 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String succes =  db.insertUserToDB(name, id);
 				client.sendToClient(succes);//Send the role to client
 			}
-
-			
+			else if (message.startsWith("ADD_ORDER")) {
+				String[] parts = message.split(" ");
+				String id = parts[1];
+				String orderDate = parts[2];
+				String succes =  db.insertResToDB(orderDate, id);
+				client.sendToClient(succes);//Send the role to client
+			}
+			else if (message.startsWith("VIEW_DATABASE_ID")) {
+				//gather data from DB
+				String[] parts = message.split(" ");
+				String id = parts[1];
+				// Connection is already established in singleton
+				String data = db.getDatabaseByIDAsString(id);
+				client.sendToClient(data);
+			}
 			//CONNECTION host_name role
  			else if(message.startsWith("CONNECTION")){
 				String[] parts = message.split(" ");

@@ -33,6 +33,7 @@ public class StaffGui implements ChatIF {
     @FXML
     void ViewDB() {
         String command = "VIEW_DATABASE";
+        outputDisplay.appendText("Fetching data from DataBase...");
         try {
             client.handleMessageFromClientUI(command);
             display("Requesting database contents...");
@@ -64,7 +65,7 @@ public class StaffGui implements ChatIF {
     public void display(String message) {
         Platform.runLater(() -> {
             //outputDisplay.appendText(message + "\n");
-        	if(message.startsWith("parking_space")) {
+        	if(message.startsWith("order_number")) {
         		Platform.runLater(() -> {
             	String[] str = message.split(" ");
                 table.setEditable(true);
@@ -82,16 +83,15 @@ public class StaffGui implements ChatIF {
                 d.setCellValueFactory(new PropertyValueFactory<>("col4"));
                 TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
                 e.setCellValueFactory(new PropertyValueFactory<>("col5"));
-                TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
-                f.setCellValueFactory(new PropertyValueFactory<>("col6"));
 
-                table.getColumns().addAll(a, b, c, d, e, f);
+
+                table.getColumns().addAll(a, b, c, d, e);
 
                 ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-                for (int i = 6; i + 5 < str.length; i += 6) {
+                for (int i = 5; i + 4 < str.length; i += 5) {
                     ParkingRow row = new ParkingRow(
                         str[i], str[i + 1], str[i + 2],
-                        str[i + 3], str[i + 4], str[i + 5]
+                        str[i + 3], str[i + 4]
                     );
                     items.add(row);
                 }
