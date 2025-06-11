@@ -18,6 +18,8 @@ public class DBController {
 	private static DBController instance = null;
 	private Connection conn;
 	private DatabaseListener listener;
+	private int orderNumber=1005;
+	private int maxSpace = 40;
 	
 	// Private constructor to prevent direct instantiation
 	private DBController() {
@@ -128,7 +130,7 @@ public class DBController {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true", "root", // MySql //
 																											// username
-					"Ra8420346" // MySql password
+					"Aa12345" // MySql password
 			);
 
 			if (listener != null) {
@@ -224,7 +226,7 @@ public class DBController {
 	/**
 	 * Insert user to the database.(order_number, parking_space, order_date, confirmation_code, subscriber_id, date_of_placing_an_order)
 	 */
-	public boolean insertResToDB(String parking_space, String order_date, String id) {
+	public boolean insertResToDB(String order_date, String id) {
 		String sql = "INSERT INTO `users` (parking_space,order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?,?);";
 		Random rand = new Random();
@@ -232,8 +234,9 @@ public class DBController {
         LocalDate date = LocalDate.now(); 
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, Integer.parseInt(parking_space));
-			ps.setString(2, order_date);
+			ps.setInt(1, maxSpace--);
+			ps.setInt(2, orderNumber++);
+			ps.setString(3, order_date);
 			ps.setInt(3, Integer.parseInt(id));
 
 			ps.executeUpdate();

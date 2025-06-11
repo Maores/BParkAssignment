@@ -20,7 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class ParkingSystemGUI implements ChatIF{
+public class OffSiteScreen implements ChatIF{
 	/**
 	 * The default port and host to connect on.
 	 */
@@ -29,8 +29,10 @@ public class ParkingSystemGUI implements ChatIF{
 	private ChatClient client;
 	private singletoneClient sg = new singletoneClient();
 	private TableView<ParkingRow> table = new TableView<>();
-
-	public ParkingSystemGUI() {
+	
+	private String id = MainApp.getUserId();
+	
+	public OffSiteScreen() {
 		// Only initialize data fields here, not the scene or stage
 		idField = new TextField();
 		idField.setPromptText("Enter Order Number");

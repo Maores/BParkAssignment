@@ -10,7 +10,18 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
     private Stage primaryStage;
-    @Override
+    private static String userId;
+    
+    //getter and setter for ID
+    public static void setUserId(String userId) {
+		MainApp.userId = userId;
+	}
+
+	public static String getUserId() {
+		return userId;
+	}
+
+	@Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         showLoginScreen();
@@ -28,7 +39,7 @@ public class MainApp extends Application {
     }
 
     public void showMainScreen() throws Exception {
-        ParkingSystemGUI parkingSystemGUI = new ParkingSystemGUI();
+        OffSiteScreen parkingSystemGUI = new OffSiteScreen();
         Parent root = parkingSystemGUI.buildRoot();
         primaryStage.setScene(new Scene(root, 675, 600));
         primaryStage.setTitle("BPark - Smart Parking System");
@@ -37,20 +48,22 @@ public class MainApp extends Application {
 
     public void showRoleScreen(String role, String userId, String userName) throws Exception {
         String roleLower = role.toLowerCase();
-       
+        this.userId = userId;
+       //USER
         if (roleLower.contains("user")) {
         	 
 //            ParkingSystemGUI parkingSystemGUI = new ParkingSystemGUI();
 //            Parent root = parkingSystemGUI.buildRoot();
         	 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/userAccessOptionsGUI.fxml")); 	 
              Parent root = loader.load();
-             loginAccess controller = loader.getController();
+             UserLoginAccess controller = loader.getController();
              controller.setPrimaryStage(primaryStage);
              Platform.runLater(() -> {
 	            primaryStage.setScene(new Scene(root, 550, 350));
 	            primaryStage.setTitle("BPark - Customer Access");
           
              });
+        //STAFF
         } else if (roleLower.contains("staff")) {
             StaffGui Staff = new StaffGui();
             
@@ -60,6 +73,7 @@ public class MainApp extends Application {
 	            primaryStage.setScene(new Scene(root, 600, 400));
 	            primaryStage.setTitle("BPark - Staff/Report");
             });
+        //MANAGER
         } else if (roleLower.contains("manager")) {
             UserManagementScreen userManagementScreen = new UserManagementScreen();
             Parent root = userManagementScreen.buildRoot();
