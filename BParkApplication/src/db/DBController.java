@@ -128,7 +128,7 @@ public class DBController {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true", "root", // MySql //
 																											// username
-					"Aa123456" // MySql password
+					"Ra8420346" // MySql password
 			);
 
 			if (listener != null) {
