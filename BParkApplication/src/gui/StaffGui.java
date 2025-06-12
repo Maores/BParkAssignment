@@ -7,12 +7,16 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class StaffGui implements ChatIF {
@@ -105,15 +109,18 @@ public class StaffGui implements ChatIF {
         });
     }
 
-    public VBox buildRoot() {
+    public StackPane buildRoot() {
+    	StackPane root = new StackPane();
+    	Label name =  new Label("User name:");
         nameField = new TextField();
         nameField.setPromptText("Enter user name");
-
+        VBox nameBox = new VBox(name,nameField);
+        Label id =  new Label("User ID:");
         idField = new TextField();
         idField.setPromptText("Enter user ID");
-
+        VBox idBox = new VBox(id ,idField);
         outputDisplay = new TextArea();
-        outputDisplay.setPrefHeight(200);
+        outputDisplay.setPrefHeight(350);
         outputDisplay.setEditable(false);
 
         Button addUserBtn = new Button("Add New User");
@@ -121,15 +128,21 @@ public class StaffGui implements ChatIF {
 
         Button viewDBBtn = new Button("View Database");
         viewDBBtn.setOnAction(e -> ViewDB());
-
-        VBox root = new VBox(10,
-            nameField,
-            idField,
-            addUserBtn,
-            viewDBBtn,
+        
+        //Btn styles
+        addUserBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+        viewDBBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+        HBox btns = new HBox(viewDBBtn,addUserBtn);
+        btns.setSpacing(10);
+        VBox Interior = new VBox(10,
+        	nameBox,
+            idBox,
+            btns,
             outputDisplay,
             table
         );
+        root.setMargin(Interior, new Insets(15));
+        root.getChildren().add(Interior);
         root.setPrefWidth(400);
         root.setPrefHeight(400);
         return root;
