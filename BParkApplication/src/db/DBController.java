@@ -19,7 +19,7 @@ public class DBController {
 	private static DBController instance = null;
 	private Connection conn;
 	private DatabaseListener listener;
-	private int orderNumber=1005;
+	private int orderNumber=1071;
 	private int maxSpace = 40;
 	private final int columnSize=5;
 	// Private constructor to prevent direct instantiation
@@ -285,7 +285,7 @@ public class DBController {
 			if (listener != null) {
 				listener.onDatabaseMessage("Database updated successfully.");
 			}
-			return "User added Succsussfully";
+			return "Order added Succsussfully";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "Order couldnt be added!" ;
