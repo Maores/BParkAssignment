@@ -52,7 +52,7 @@
                         <Insets left="22.0" />
                      </padding>
                   </HBox>
-                  <Button fx:id="login" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" text="login">
+                  <Button fx:id="login" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;" text="login">
                      <VBox.margin>
                         <Insets left="115.0" top="10.0" />
                      </VBox.margin>
