@@ -19,8 +19,8 @@ public class DBController {
 	private static DBController instance = null;
 	private Connection conn;
 	private DatabaseListener listener;
-	private int orderNumber=1005;
-	private int maxSpace = 40;
+	private int orderNumber; 
+	private int maxSpace = 10;
 	private final int columnSize=5;
 	// Private constructor to prevent direct instantiation
 	private DBController() {
@@ -166,8 +166,9 @@ public class DBController {
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true", "root", // MySql //
 																											// username
 					"Aa12345" // MySql password
+					
 			);
-
+			
 			if (listener != null) {
 				listener.onDatabaseMessage("Database connection established successfully.");
 				listener.onDatabaseConnectionChange(true);
@@ -210,7 +211,7 @@ public class DBController {
 	}
 
 	/**
-	 * Update the database.
+	 * Update a specific order (change the date)
 	 */
 	public String updateDB( String order_date, String id) {
 		String sql = "UPDATE `table_order` SET  order_date = ? WHERE order_number = ?;";
@@ -265,6 +266,8 @@ public class DBController {
 	 * Insert user to the database.(order_number, parking_space, order_date, confirmation_code, subscriber_id, date_of_placing_an_order)
 	 */
 	public String insertResToDB(String order_date, String id) {
+		orderNumber = this.getMaxOrderNumber();
+		orderNumber++;
 		String sql = "INSERT INTO `table_order` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?);";
 		if(!availableSpots(order_date)) {
@@ -275,7 +278,7 @@ public class DBController {
         LocalDate date = LocalDate.now(); 
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, orderNumber++);
+			ps.setInt(1, orderNumber);
 			ps.setString(2, order_date);
 			ps.setInt(3, confirCode);
 			ps.setInt(4, Integer.parseInt(id));
@@ -303,7 +306,8 @@ public class DBController {
 			if (rs.next()) {
 			    count = rs.getInt(1);
 			}
-			if(((maxSpace-count)/maxSpace) >= 0.4 ) {
+			
+			if(((float)(maxSpace-count)/maxSpace) >= 0.4 ) {
 				return true;
 			}
 			return false;
@@ -352,7 +356,23 @@ public class DBController {
 		}
 		return "null";
 	}
-		
+	//get the maximum order number so the numbers are going up 
+	public int getMaxOrderNumber() {
+		String orderNum;
+		String sql = "SELECT MAX(order_number) FROM table_order;";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				 orderNum = rs.getString("MAX(order_number)");
+				 return Integer.parseInt(orderNum);
+			}
+			else return 1000;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 1000;
+		}
+	}
 	/**
 	 * Close connection and reset singleton instance
 	 */
