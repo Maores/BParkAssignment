@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -14,6 +15,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -116,23 +119,32 @@ public class UserManagementScreen implements ChatIF {
 
 	}
 
-	public VBox buildRoot() {
+	public StackPane buildRoot() {
 		userIdField = new TextField();
-		resultLabel = new Label();
+		StackPane root = new StackPane();
+		
 		logArea = new TextArea();
-		logArea.setPrefHeight(200);
+		logArea.setPrefHeight(300);
 		logArea.setEditable(false);
 		Button searchBtn = new Button("Search order");
 		searchBtn.setOnAction(e -> searchUser());
-		Button checkOrderBtn = new Button("View orders");
-		checkOrderBtn.setOnAction(e -> {
+		Button viewOrderBtn = new Button("View orders");
+		viewOrderBtn.setOnAction(e -> {
 			logArea.appendText("Showing orders..."+ "\n");
 			client.handleMessageFromClientUI("VIEW_DATABASE");
-			});
+		});
 		Button reportBtn = new Button("Generate Report");
 		reportBtn.setOnAction(e -> generateReport());
-		VBox root = new VBox(10, new Label("Order number:"), userIdField, searchBtn, checkOrderBtn, reportBtn,
-				resultLabel, logArea, table);
+		//Btn styles
+		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+		HBox btns = new HBox(viewOrderBtn,searchBtn,reportBtn);
+		btns.setSpacing(10);
+		VBox Interior = new VBox(10, new Label("Order number:"), userIdField,btns,
+				 logArea, table);
+		root.setMargin(Interior, new Insets(15));
+		root.getChildren().add(Interior);
 		root.setPrefWidth(400);
 		root.setPrefHeight(350);
 		return root;
