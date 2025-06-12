@@ -288,7 +288,7 @@ public class DBController {
 			if (listener != null) {
 				listener.onDatabaseMessage("Database updated successfully.");
 			}
-			return "User added Succsussfully";
+			return "Order added Succsussfully";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "Order couldnt be added!" ;

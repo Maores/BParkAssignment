@@ -12,11 +12,11 @@
 
 <StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginController">
    <children>
-      <BorderPane prefHeight="205.0" prefWidth="324.0">
+      <BorderPane prefHeight="205.0" prefWidth="324.0" style="-fx-background-color: #F0EDCC;">
          <top>
             <Label alignment="CENTER" contentDisplay="CENTER" text="Login" BorderPane.alignment="CENTER">
                <font>
-                  <Font size="33.0" />
+                  <Font name="Arial Rounded MT Bold" size="33.0" />
                </font>
                <padding>
                   <Insets bottom="20.0" top="20.0" />
@@ -32,6 +32,9 @@
                            <padding>
                               <Insets right="5.0" />
                            </padding>
+                           <font>
+                              <Font name="Arial Rounded MT Bold" size="12.0" />
+                           </font>
                         </Label>
                         <TextField fx:id="name" />
                      </children>
@@ -45,6 +48,9 @@
                            <padding>
                               <Insets right="5.0" />
                            </padding>
+                           <font>
+                              <Font name="Arial Rounded MT Bold" size="12.0" />
+                           </font>
                         </Label>
                         <TextField fx:id="id" />
                      </children>
@@ -52,7 +58,7 @@
                         <Insets left="22.0" />
                      </padding>
                   </HBox>
-                  <Button fx:id="login" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" text="login">
+                  <Button fx:id="login" alignment="CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #02343F; -fx-text-fill: #F0EDCC; -fx-cursor: hand;" text="login">
                      <VBox.margin>
                         <Insets left="115.0" top="10.0" />
                      </VBox.margin>
