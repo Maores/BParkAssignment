@@ -11,8 +11,17 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
     private Stage primaryStage;
     private static String userId;
-    
-    //getter and setter for ID
+    private static String userName;
+  //getter and setter for userName
+    public static String getUserName() {
+		return userName;
+	}
+
+	public static void setUserName(String userName) {
+		MainApp.userName = userName;
+	}
+
+	//getter and setter for ID
     public static void setUserId(String userId) {
 		MainApp.userId = userId;
 	}
@@ -39,7 +48,7 @@ public class MainApp extends Application {
     }
 
     public void showMainScreen() throws Exception {
-        OffSiteScreen parkingSystemGUI = new OffSiteScreen();
+        RemoteScreen parkingSystemGUI = new RemoteScreen();
         Parent root = parkingSystemGUI.buildRoot();
         primaryStage.setScene(new Scene(root, 675, 600));
         primaryStage.setTitle("BPark - Smart Parking System");
@@ -49,6 +58,7 @@ public class MainApp extends Application {
     public void showRoleScreen(String role, String userId, String userName) throws Exception {
         String roleLower = role.toLowerCase();
         this.userId = userId;
+        this.userName = userName;
        //USER
         if (roleLower.contains("user")) {
         	 

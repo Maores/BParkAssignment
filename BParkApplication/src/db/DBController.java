@@ -265,7 +265,7 @@ public class DBController {
 	 * Insert user to the database.(order_number, parking_space, order_date, confirmation_code, subscriber_id, date_of_placing_an_order)
 	 */
 	public String insertResToDB(String order_date, String id) {
-		String sql = "INSERT INTO `users` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
+		String sql = "INSERT INTO `table_order` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?);";
 		if(!availableSpots(order_date)) {
 			return "Not enough space at this date!";
@@ -287,6 +287,7 @@ public class DBController {
 			}
 			return "User added Succsussfully";
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "Order couldnt be added!" ;
 		}
 
