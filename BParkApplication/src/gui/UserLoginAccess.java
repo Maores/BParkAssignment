@@ -54,7 +54,7 @@ public class UserLoginAccess  {
 
 	@FXML
 	void loadRemoteScreen(ActionEvent event) {
-		OffSiteScreen OffSite = new OffSiteScreen();
+		RemoteScreen OffSite = new RemoteScreen();
 		Parent root = OffSite.buildRoot();
 		Platform.runLater(() -> {
 			primaryStage.setScene(new Scene(root, 700, 550));

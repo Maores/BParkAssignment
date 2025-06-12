@@ -20,7 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class OffSiteScreen implements ChatIF{
+public class RemoteScreen implements ChatIF{
 	/**
 	 * The default port and host to connect on.
 	 */
@@ -31,8 +31,9 @@ public class OffSiteScreen implements ChatIF{
 	private TableView<ParkingRow> table = new TableView<>();
 	
 	private String id = MainApp.getUserId();
+	private String name = MainApp.getUserName();
 	
-	public OffSiteScreen() {
+	public RemoteScreen() {
 		// Only initialize data fields here, not the scene or stage
 		idField = new TextField();
 		idField.setPromptText("Enter Order Number");
@@ -76,13 +77,17 @@ public class OffSiteScreen implements ChatIF{
 				displayMessage("Please fill all fields.");
 			}
 		});
+		Button insertBtn = new Button("New Order");
+		insertBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
+		insertBtn.setOnAction(e -> client.handleMessageFromClientUI("ADD_ORDER "+id+ " "+ dateField.getText()));
+		
 //		Button tryBtn = new Button("Reconnect");
 //		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 //		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
 //		Button srcBtn = new Button("Search");
 //		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
 //		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
-		HBox buttons = new HBox(viewBtn, updateBtn);
+		HBox buttons = new HBox(viewBtn, updateBtn,insertBtn);
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
 		buttons.setSpacing(10);
