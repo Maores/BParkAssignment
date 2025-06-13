@@ -35,8 +35,10 @@ public class UserLoginAccess  {
 	   	Parent root = loader.load();
 	   	OnSiteScreen controller = loader.getController();
 	    controller.setPrimaryStage(primaryStage);
+	    Scene s = new Scene(root, 500, 300);
+        s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 	    Platform.runLater(() -> {
-	        primaryStage.setScene(new Scene(root, 550, 350));
+	        primaryStage.setScene(s);
 	        primaryStage.setTitle("BPark - On-Site");
 	
 	     });
@@ -56,9 +58,10 @@ public class UserLoginAccess  {
 	void loadRemoteScreen(ActionEvent event) {
 		RemoteScreen OffSite = new RemoteScreen();
 		Parent root = OffSite.buildRoot();
+
 		Platform.runLater(() -> {
-			primaryStage.setScene(new Scene(root, 700, 550));
-			primaryStage.setTitle("BPark - Customer");
+			primaryStage.setScene(new Scene(root, 700, 600));
+			primaryStage.setTitle("BPark - Customer: " + mainApp.getUserName());
 			primaryStage.show();
 		});
 	}

@@ -41,7 +41,9 @@ public class MainApp extends Application {
         Parent root = loader.load();
         loginController controller = loader.getController();
         controller.setMainApp(this);
-        primaryStage.setScene(new Scene(root));
+        Scene s = new Scene(root);
+        s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+        primaryStage.setScene(s);
         primaryStage.setTitle("Login");
         primaryStage.show();
         
@@ -50,6 +52,7 @@ public class MainApp extends Application {
     public void showMainScreen() throws Exception {
         RemoteScreen parkingSystemGUI = new RemoteScreen();
         Parent root = parkingSystemGUI.buildRoot();
+        
         primaryStage.setScene(new Scene(root, 675, 600));
         primaryStage.setTitle("BPark - Smart Parking System");
         primaryStage.show();
@@ -76,19 +79,22 @@ public class MainApp extends Application {
         //STAFF
         } else if (roleLower.contains("staff")) {
             StaffGui Staff = new StaffGui();
-            
             Parent root = Staff.buildRoot();
+            Scene s = new Scene(root, 600, 400);
+            s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
             Staff.start(); 
             Platform.runLater(() -> {
-	            primaryStage.setScene(new Scene(root, 600, 400));
+	            primaryStage.setScene(s);
 	            primaryStage.setTitle("BPark - Staff/Report");
             });
         //MANAGER
         } else if (roleLower.contains("manager")) {
             UserManagementScreen userManagementScreen = new UserManagementScreen();
             Parent root = userManagementScreen.buildRoot();
+            Scene s = new Scene(root, 600, 400);
+            s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
             Platform.runLater(() -> {
-	            primaryStage.setScene(new Scene(root, 600, 400));
+	            primaryStage.setScene(s);
 	            primaryStage.setTitle("BPark - Manager/Admin");
             });
         } else {

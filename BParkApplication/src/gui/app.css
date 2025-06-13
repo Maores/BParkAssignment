@@ -1,0 +1,94 @@
+.root {
+    -fx-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+#pane {
+    -fx-background-color: #F0EDCC;
+
+}
+
+.button {
+    -fx-background-color: #02343F;
+    -fx-text-fill: #F0EDCC;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    -fx-background-color: #045560;
+}
+
+#btnGetCar, #btnDeliverCar, #OrdersMenu {
+    -fx-background-color: black;
+    -fx-text-fill: #F0EDCC;
+    -fx-background-radius: 3;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+#btnGetCar:hover, #btnDeliverCar:hover, #OrdersMenu:hover {
+    -fx-background-color: #02343F;
+}
+#labelHead{
+	-fx-font-weight: bold;
+	-fx-font-size: 24px;
+}
+
+.text-field, .text-area {
+    -fx-background-color: #f2f1e9;
+    -fx-text-fill: #333333;
+    -fx-border-color: #333333;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 1, 0, 0, 1);
+}
+
+.text-field:focused {
+    -fx-border-color: #f7c886;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(247,200,134,0.7), 4, 0, 0, 0);
+}
+
+.table-view {
+    -fx-background-color: #f2f1e9;
+	-fx-border-color: #333333;
+    -fx-font-size: 13px;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #E6E2B3;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #f9f8f4;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f7c886;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #FFAA33;
+    -fx-text-fill: black;
+}
+
+.table-column-header {
+    -fx-background-color: #D9D6A3;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-border-radius: 3 3 0 0;
+    -fx-background-radius: 3 3 0 0;
+}

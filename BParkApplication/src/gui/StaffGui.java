@@ -111,6 +111,7 @@ public class StaffGui implements ChatIF {
 
     public StackPane buildRoot() {
     	StackPane root = new StackPane();
+    	root.setId("pane");
     	Label name =  new Label("User name:");
         nameField = new TextField();
         nameField.setPromptText("Enter user name");
@@ -130,8 +131,8 @@ public class StaffGui implements ChatIF {
         viewDBBtn.setOnAction(e -> ViewDB());
         
         //Btn styles
-        addUserBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-        viewDBBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+//        addUserBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+//        viewDBBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
         HBox btns = new HBox(viewDBBtn,addUserBtn);
         btns.setSpacing(10);
         VBox Interior = new VBox(10,

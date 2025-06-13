@@ -16,6 +16,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -27,7 +28,7 @@ import javafx.scene.layout.VBox;
 public class UserManagementScreen implements ChatIF {
 
 	@FXML
-	private TextField userIdField;
+	private TextField orderN_ID;
 	@FXML
 	private Label resultLabel;
 	@FXML
@@ -47,7 +48,7 @@ public class UserManagementScreen implements ChatIF {
 	 */
 	@FXML
 	void searchUser() {
-		String userId = userIdField.getText();
+		String userId = orderN_ID.getText();
 
 		if (userId.isEmpty()) {
 			resultLabel.setText("Please enter a user ID");
@@ -120,9 +121,9 @@ public class UserManagementScreen implements ChatIF {
 	}
 
 	public StackPane buildRoot() {
-		userIdField = new TextField();
+		orderN_ID = new TextField();
 		StackPane root = new StackPane();
-		
+		root.setId("pane");
 		logArea = new TextArea();
 		logArea.setPrefHeight(300);
 		logArea.setEditable(false);
@@ -136,12 +137,12 @@ public class UserManagementScreen implements ChatIF {
 		Button reportBtn = new Button("Generate Report");
 		reportBtn.setOnAction(e -> generateReport());
 		//Btn styles
-		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+//		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+//		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
+//		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 		HBox btns = new HBox(viewOrderBtn,searchBtn,reportBtn);
 		btns.setSpacing(10);
-		VBox Interior = new VBox(10, new Label("Order number:"), userIdField,btns,
+		VBox Interior = new VBox(10, new Label("Order number:"), orderN_ID,btns,
 				 logArea, table);
 		root.setMargin(Interior, new Insets(15));
 		root.getChildren().add(Interior);

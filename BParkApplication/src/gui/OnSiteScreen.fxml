@@ -8,12 +8,15 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane maxHeight="260.0" maxWidth="461.0" minHeight="260.0" minWidth="461.0" prefHeight="260.0" prefWidth="461.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.OnSiteScreen">
+<StackPane fx:id="pane" maxHeight="260.0" maxWidth="461.0" minHeight="260.0" minWidth="461.0" prefHeight="260.0" prefWidth="461.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.OnSiteScreen">
    <children>
       <VBox alignment="CENTER" prefHeight="0.0" prefWidth="201.0">
          <children>
-            <Label text="OnSiteScreen" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="70.0">
+            <Label fx:id="labelHead" text="OnSiteScreen">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin></Label>
+            <HBox alignment="CENTER" prefHeight="56.0" prefWidth="461.0" spacing="30.0">
                <children>
                   <Button fx:id="btnDeliverCar" lineSpacing="50.0" mnemonicParsing="false" onAction="#Delivery" text="Deliver Car">
                      <opaqueInsets>
@@ -24,14 +27,17 @@
                   <Button fx:id="OrdersMenu" mnemonicParsing="false" onAction="#Orders" text="Orders Menu" />
                </children>
             </HBox>
-            <Label alignment="TOP_LEFT" text="Terminal Messages:">
+            <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="524.0" text="Terminal Messages:">
                <VBox.margin>
-                  <Insets right="300.0" />
+                  <Insets />
                </VBox.margin>
+               <padding>
+                  <Insets left="15.0" />
+               </padding>
             </Label>
-            <TextArea fx:id="Terminal" prefHeight="100.0" prefWidth="100.0">
+            <TextArea fx:id="Terminal" prefHeight="143.0" prefWidth="431.0">
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" />
+                  <Insets left="15.0" right="15.0" />
                </VBox.margin>
             </TextArea>
          </children>

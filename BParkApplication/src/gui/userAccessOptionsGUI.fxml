@@ -29,11 +29,11 @@
                <children>
                   <Button fx:id="remote" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#loadRemoteScreen" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #02343F; -fx-text-fill: #F0EDCC; -fx-background-radius: 5;" text="Remote">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font></Button>
                   <Button fx:id="onsite" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#loadOnSiteScreen" prefHeight="70.0" prefWidth="150.0" style="-fx-text-fill: #F0EDCC; -fx-background-color: #02343F; -fx-border-radius: 5;" text="On-Site">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font></Button>
                </children>
             </HBox>

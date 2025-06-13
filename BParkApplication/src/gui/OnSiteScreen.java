@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class OnSiteScreen {
@@ -21,8 +22,11 @@ public class OnSiteScreen {
     private Button btnGetCar;
     @FXML
     private TextArea Terminal;
+    @FXML
+    private StackPane pane;
     
     private Stage primaryStage;
+    private MainApp mainApp;
     
     @FXML
     void Delivery(ActionEvent event) {
@@ -40,7 +44,7 @@ public class OnSiteScreen {
 		Parent root = OffSite.buildRoot();
 		Platform.runLater(() -> {
 			primaryStage.setScene(new Scene(root, 700, 550));
-			primaryStage.setTitle("BPark - Customer");
+			primaryStage.setTitle("BPark - Customer: "+mainApp.getUserName());
 			primaryStage.show();
 		});
     }
