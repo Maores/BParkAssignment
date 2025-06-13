@@ -28,7 +28,8 @@ import javafx.scene.layout.VBox;
 public class UserManagementScreen implements ChatIF {
 
 	@FXML
-	private TextField orderN_ID;
+	private TextField orderF;
+	private TextField userF;
 	@FXML
 	private TextArea logArea;
 
@@ -42,18 +43,33 @@ public class UserManagementScreen implements ChatIF {
 	}
 
 	/**
+	 * Search for a order accessing DB without being a listener
+	 */
+	@FXML
+	void searchOrder() {
+		String order = orderF.getText();
+
+		if (order.isEmpty()) {
+			logArea.setText("Please enter order number..\n");
+			return;
+		}
+
+		client.handleMessageFromClientUI("SEARCH_ORDER " + order);
+		logArea.appendText("Searching for order: " + order + "\n");
+	}
+	/**
 	 * Search for a user by ID Demonstrates accessing DB without being a listener
 	 */
 	@FXML
 	void searchUser() {
-		String userId = orderN_ID.getText();
+		String userId = userF.getText();
 
 		if (userId.isEmpty()) {
-			logArea.setText("Please enter a user ID\n");
+			logArea.setText("Please enter a User ID..\n");
 			return;
 		}
 
-		client.handleMessageFromClientUI("SEARCH_ORDER " + userId);
+		client.handleMessageFromClientUI("SEARCH_USER " + userId);
 		logArea.appendText("Searching for user: " + userId + "\n");
 	}
 
@@ -111,6 +127,28 @@ public class UserManagementScreen implements ChatIF {
 				});
 				logArea.appendText("Completed!"+ "\n");
 			}
+		 else if (message.startsWith("id")) {
+			Platform.runLater(() -> {
+				String[] str = message.split(" ");
+				table.setEditable(true);
+				table.getColumns().clear();
+				TableColumn<ParkingRow, String> a = new TableColumn<>(str[0]);
+				a.setCellValueFactory(new PropertyValueFactory<>("col1"));
+				TableColumn<ParkingRow, String> b = new TableColumn<>(str[1]);
+				b.setCellValueFactory(new PropertyValueFactory<>("col2"));
+				TableColumn<ParkingRow, String> c = new TableColumn<>(str[2]);
+				c.setCellValueFactory(new PropertyValueFactory<>("col3"));
+				table.getColumns().addAll(a, b, c);
+				ObservableList<ParkingRow> items = FXCollections.observableArrayList();
+				for (int i = 3; i + 2 < str.length; i += 3) {
+					ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2]);
+					items.add(row);
+				}
+
+				table.setItems(items);
+			});
+			logArea.appendText("Completed!"+ "\n");
+		}
 			else {
 				logArea.appendText(message+"\n");
 			}
@@ -119,28 +157,34 @@ public class UserManagementScreen implements ChatIF {
 	}
 
 	public StackPane buildRoot() {
-		orderN_ID = new TextField();
+		orderF = new TextField();
+		userF = new TextField();
 		StackPane root = new StackPane();
 		root.setId("pane");
 		logArea = new TextArea();
 		logArea.setPrefHeight(300);
 		logArea.setEditable(false);
 		Button searchBtn = new Button("Search order");
-		searchBtn.setOnAction(e -> searchUser());
+		searchBtn.setOnAction(e -> searchOrder());
+		Button searchUserBtn = new Button("Search User");
+		searchUserBtn.setOnAction(e -> searchUser());
+		VBox userS = new VBox(10,new Label("User ID:"), userF);
+		VBox orderS = new VBox(10,new Label("Order number:"), orderF);
+		HBox searchBox = new HBox(orderS,userS);
+		searchBox.setSpacing(5);
 		Button viewOrderBtn = new Button("View orders");
 		viewOrderBtn.setOnAction(e -> {
 			logArea.setText("Showing orders..."+ "\n");
-			client.handleMessageFromClientUI("VIEW_DATABASE");
-		});
+			client.handleMessageFromClientUI("VIEW_DATABASE");});
 		Button reportBtn = new Button("Generate Report");
 		reportBtn.setOnAction(e -> generateReport());
 		//Btn styles
 //		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-		HBox btns = new HBox(viewOrderBtn,searchBtn,reportBtn);
+		HBox btns = new HBox(viewOrderBtn,searchBtn,searchUserBtn,reportBtn);
 		btns.setSpacing(10);
-		VBox Interior = new VBox(10, new Label("Order number:"), orderN_ID,btns,
+		VBox Interior = new VBox(10, searchBox,btns,
 				 logArea, table);
 		root.setMargin(Interior, new Insets(15));
 		root.getChildren().add(Interior);

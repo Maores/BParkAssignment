@@ -16,7 +16,13 @@ public class ParkingRow {
         this.col4 = new SimpleStringProperty(c4);
         this.col5 = new SimpleStringProperty(c5);
     }
-
+    public ParkingRow(String c1, String c2, String c3) {
+        this.col1 = new SimpleStringProperty(c1);
+        this.col2 = new SimpleStringProperty(c2);
+        this.col3 = new SimpleStringProperty(c3);
+        this.col4 = new SimpleStringProperty(null);
+        this.col5 = new SimpleStringProperty(null);
+    }
     public String getCol1() { return col1.get(); }
     public String getCol2() { return col2.get(); }
     public String getCol3() { return col3.get(); }

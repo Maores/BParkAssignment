@@ -119,12 +119,27 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String orderNumber = parts[1];
 				//check if ID exists in DB
 				if (db.checkDB(orderNumber)) {
-					String data = db.SearchID(orderNumber);
+					String data = db.SearchOrder(orderNumber);
 					client.sendToClient(data);
 				}
 				//ID not found in DB
 				else {
 					client.sendToClient("Order not found in database.");
+				}
+			}
+			///SEARCH  parking orders by id
+			else if (message.startsWith("SEARCH_USER")) {
+				//get id from the message
+				String[] parts = message.split(" ");
+				String userID = parts[1];
+				//check if ID exists in DB
+				if (db.checkUserDB(userID)) {
+					String data = db.SearchID(userID);
+					client.sendToClient(data);
+				}
+				//ID not found in DB
+				else {
+					client.sendToClient("User not found in database.\n");
 				}
 			}
 			else if (message.startsWith("LOGIN")) {

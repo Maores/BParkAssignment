@@ -21,7 +21,6 @@ public class DBController {
 	private DatabaseListener listener;
 	private int orderNumber; 
 	private int maxSpace = 10;
-	private final int columnSize=5;
 	// Private constructor to prevent direct instantiation
 	private DBController() {
 		// Connection will be initialized when needed
@@ -47,6 +46,7 @@ public class DBController {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order;");
 			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnSize = rsmd.getColumnCount(); 
 			// Build string for database - column names
 			for (int i = 1; i <= columnSize; i++) {
 				String s = new String();
@@ -78,6 +78,7 @@ public class DBController {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE subscriber_id ="+id+";");
 			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnSize = rsmd.getColumnCount(); 
 			// Build string for database - column names
 			for (int i = 1; i <= columnSize; i++) {
 				String s = new String();
@@ -104,7 +105,7 @@ public class DBController {
 	}
 
 	// Search Specific ID
-	public String SearchID(String id) {
+	public String SearchOrder(String order) {
 
 		StringBuilder str = new StringBuilder();
 
@@ -115,10 +116,10 @@ public class DBController {
 
 			String sql = "SELECT * FROM `table_order` WHERE order_number = ?;";
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, Integer.parseInt(id));
+			ps.setInt(1, Integer.parseInt(order));
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
-
+			int columnSize = rsmd.getColumnCount(); 
 			// Build string for database - column names
 			for (int i = 1; i <= columnSize; i++) {
 				String s = new String();
@@ -144,6 +145,48 @@ public class DBController {
 		return str.toString();
 
 	}
+	// Search Specific ID
+		public String SearchID(String id) {
+
+			StringBuilder str = new StringBuilder();
+
+			try {
+//				Statement stmt = conn.createStatement();
+//				ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE order_number = ?;");
+//				ResultSetMetaData rsmd = rs.getMetaData();
+
+				String sql = "SELECT * FROM `users` WHERE id = ?;";
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.setInt(1, Integer.parseInt(id));
+				ResultSet rs = ps.executeQuery();
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int columnCount = rsmd.getColumnCount(); 
+
+				// Build string for database - column names
+				for (int i = 1; i <= columnCount; i++) {
+					String s = new String();
+					s = String.format("%s ", rsmd.getColumnName(i));
+					str.append(s);
+				}
+
+				// Build string for database - rows
+				while (rs.next()) {
+					for (int i = 1; i <= columnCount; i++) {
+						String columnValue = String.format("%s ", rs.getString(i));
+						str.append(columnValue);
+
+					}
+				}
+				if(str.length()==columnCount) {
+					return "User ID not exist!";
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			// returns the string
+			return str.toString();
+
+		}
 
 	/**
 	 * Creating a connection to the database.
@@ -188,8 +231,29 @@ public class DBController {
 	 * Validates if information exists in DB.
 	 */
 
-	public boolean checkDB(String id) {
+	public boolean checkDB(String order) {
 		String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
+
+		try {
+			// puts the id inside the "?" that is at the end of the query above
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(order));
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				// The order_number exists
+				return true;
+			} else {
+				// No result found -> the order_number does not exist
+				return false;
+			}
+
+		} catch (Exception e) {
+
+			return false;
+		}
+	}
+	public boolean checkUserDB(String id) {
+		String sql = "SELECT id FROM `users` WHERE id = ?";
 
 		try {
 			// puts the id inside the "?" that is at the end of the query above
@@ -209,6 +273,7 @@ public class DBController {
 			return false;
 		}
 	}
+	
 
 	/**
 	 * Update a specific order (change the date)
