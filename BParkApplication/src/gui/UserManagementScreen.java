@@ -30,8 +30,6 @@ public class UserManagementScreen implements ChatIF {
 	@FXML
 	private TextField orderN_ID;
 	@FXML
-	private Label resultLabel;
-	@FXML
 	private TextArea logArea;
 
 	private singletoneClient sg = new singletoneClient();
@@ -51,7 +49,7 @@ public class UserManagementScreen implements ChatIF {
 		String userId = orderN_ID.getText();
 
 		if (userId.isEmpty()) {
-			resultLabel.setText("Please enter a user ID");
+			logArea.setText("Please enter a user ID\n");
 			return;
 		}
 
@@ -65,7 +63,7 @@ public class UserManagementScreen implements ChatIF {
 	@FXML
 	void generateReport() {
 		client.handleMessageFromClientUI("GENERATE_REPORT DAILY_REPORT");
-		logArea.appendText("Generating report...\n");
+		logArea.setText("Generating report...\n");
 	}
 
 	// Get message from the server
@@ -78,15 +76,15 @@ public class UserManagementScreen implements ChatIF {
 		Platform.runLater(() -> {
 
 			if (message.startsWith("User found!")) {
-				resultLabel.setText(message);
+				logArea.appendText(message);
 			} else if (message.startsWith("User not found")) {
-				resultLabel.setText(message);
+				logArea.appendText(message);
 			} else if (message.startsWith("Order found:")) {
-				resultLabel.setText("Order found");
+				logArea.appendText("Order found");
 			} else if (message.startsWith("Order") && message.contains("does not exist")) {
-				resultLabel.setText(message);
+				logArea.appendText(message);
 			} else if (message.startsWith("=== DAILY PARKING REPORT ===")) {
-				resultLabel.setText("Report generated");
+				logArea.appendText("Report generated");
 			} else if (message.startsWith("order_number")) {
 				Platform.runLater(() -> {
 					String[] str = message.split(" ");
@@ -131,7 +129,7 @@ public class UserManagementScreen implements ChatIF {
 		searchBtn.setOnAction(e -> searchUser());
 		Button viewOrderBtn = new Button("View orders");
 		viewOrderBtn.setOnAction(e -> {
-			logArea.appendText("Showing orders..."+ "\n");
+			logArea.setText("Showing orders..."+ "\n");
 			client.handleMessageFromClientUI("VIEW_DATABASE");
 		});
 		Button reportBtn = new Button("Generate Report");
