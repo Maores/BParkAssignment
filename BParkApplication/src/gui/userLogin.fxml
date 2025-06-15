@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="259.0" prefWidth="348.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginController">
+<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="324.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginController">
    <children>
       <BorderPane prefHeight="350.0" prefWidth="560.0" style="-fx-background-color: #F0EDCC;">
          <center>
-            <VBox prefHeight="344.0" prefWidth="345.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="224.0" prefWidth="351.0" BorderPane.alignment="CENTER">
                <children>
                   <HBox alignment="CENTER" prefHeight="78.0" prefWidth="348.0">
                      <children>
@@ -35,10 +35,10 @@
                         </Label>
                      </children>
                      <VBox.margin>
-                        <Insets bottom="20.0" />
+                        <Insets bottom="20.0" top="20.0" />
                      </VBox.margin>
                   </HBox>
-                  <VBox alignment="TOP_CENTER" prefHeight="140.0" prefWidth="547.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="130.0" prefWidth="342.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="25.0" prefWidth="0.0">
                            <children>
