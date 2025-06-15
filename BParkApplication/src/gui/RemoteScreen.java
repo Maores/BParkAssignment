@@ -9,14 +9,13 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -26,25 +25,26 @@ public class RemoteScreen implements ChatIF {
 	 * The default port and host to connect on.
 	 */
 	private TextArea dbDisplay;
-	private TextField idField, dateField, spotField, srcField;
+	private TextField orderField;
 	private ChatClient client;
 	private singletoneClient sg = new singletoneClient();
 	private TableView<ParkingRow> table = new TableView<>();
+	private DatePicker datepic;
 
 	private String id = MainApp.getUserId();
 	private String name = MainApp.getUserName();
 
 	public RemoteScreen() {
 		// Only initialize data fields here, not the scene or stage
-		idField = new TextField();
-		idField.setPromptText("Enter Order Number");
-		dateField = new TextField();
-		dateField.setPromptText("Enter Order Date (YYYY-MM-DD)");
-		spotField = new TextField();
-		spotField.setPromptText("Enter Parking Spot Number");
-		srcField = new TextField();
-		srcField.setPromptText("Search order number");
+		orderField = new TextField();
+		orderField.setPromptText("Enter order number");
+		orderField.setMaxWidth(170);
+//		srcField = new TextField();
+//		srcField.setPromptText("Search order number");
 		dbDisplay = new TextArea();
+		datepic = new DatePicker();
+		datepic.setPromptText("Enter order date");
+		datepic.setMaxWidth(170);
 		dbDisplay.setPrefHeight(200);
 		dbDisplay.setEditable(false);
 		dbDisplay.setStyle(
@@ -59,10 +59,7 @@ public class RemoteScreen implements ChatIF {
 //		iv1.setFitHeight(icon.getHeight() / 10);
 //		iv1.setFitWidth(icon.getWidth() / 10);
 		StackPane root = new StackPane();
-		//root.setId("pane");
-		
-		VBox orderNumber = new VBox(new Label("Order Number:"), idField);
-		VBox orderDate = new VBox(new Label("Order Date:"), dateField);
+		// root.setId("pane");
 
 		Button viewBtn = new Button("View order History");
 
@@ -71,31 +68,32 @@ public class RemoteScreen implements ChatIF {
 		Button updateBtn = new Button("Update Reservation");
 
 		updateBtn.setOnAction(e -> {
-			String id = idField.getText();
-			String date = dateField.getText();
-			String spot = spotField.getText();
-			if (!id.isEmpty() && !date.isEmpty()) {
+			if (!orderField.getText().isEmpty() && datepic.getValue() != null) {
+				String date = datepic.getValue().toString();
 				String updateMsg = "UPDATE_ORDER " + id + " " + date;
 				client.handleMessageFromClientUI(updateMsg);
 			} else {
-				displayMessage("Please fill all fields.");
+				displayMessage("Please fill order number AND date fields.");
 			}
 		});
 		Button insertBtn = new Button("New Order");
 
-		insertBtn.setOnAction(e -> client.handleMessageFromClientUI("ADD_ORDER " + id + " " + dateField.getText()));
+		insertBtn.setOnAction(e -> {
+
+			if (datepic.getValue() != null) {
+				String date = datepic.getValue().toString();
+				client.handleMessageFromClientUI("ADD_ORDER " + id + " " + date);
+			} else {
+				displayMessage("Please fill date field.");
+			}
+
+		});
 		// Styles
 		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
 		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
 		insertBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
-		
-		//not available for now/at all
-//		Button tryBtn = new Button("Reconnect");
-//		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
-//		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
-//		Button srcBtn = new Button("Search");
-//		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
-//		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
+		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
+		VBox orderDate = new VBox(new Label("Order Date:"), datepic);
 		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn);
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
@@ -103,10 +101,19 @@ public class RemoteScreen implements ChatIF {
 		VBox interior = new VBox(10);
 		root.setPadding(new Insets(15));
 		root.setAlignment(Pos.TOP_CENTER);
-		VBox fields = new VBox(10, orderNumber, orderDate, buttons);
-		interior.getChildren().addAll(fields, dbDisplay, table);
+		HBox fields = new HBox(orderNumber, orderDate);
+		fields.setSpacing(10);
+		VBox inter = new VBox(10, fields, buttons);
+		interior.getChildren().addAll(inter, dbDisplay, table);
 		root.getChildren().add(interior);
 		return root;
+		// not available for now/at all
+//		Button tryBtn = new Button("Reconnect");
+//		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
+//		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
+//		Button srcBtn = new Button("Search");
+//		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
+//		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -139,8 +146,7 @@ public class RemoteScreen implements ChatIF {
 
 				table.setItems(items);
 			});
-		}
-		else {
+		} else {
 			dbDisplay.setText(message);
 
 		}

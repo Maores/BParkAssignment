@@ -44,7 +44,7 @@ public class MainApp extends Application {
         Scene s = new Scene(root);
         s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
         primaryStage.setScene(s);
-        primaryStage.setTitle("Login");
+        primaryStage.setTitle("BPark - Login");
         primaryStage.show();
         
     }
