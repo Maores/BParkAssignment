@@ -14,7 +14,7 @@
 
 <StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="324.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginController">
    <children>
-      <BorderPane prefHeight="350.0" prefWidth="560.0" style="-fx-background-color: #F0EDCC;">
+      <BorderPane prefHeight="350.0" prefWidth="560.0">
          <center>
             <VBox prefHeight="224.0" prefWidth="351.0" BorderPane.alignment="CENTER">
                <children>
@@ -72,7 +72,7 @@
                               <Insets left="22.0" />
                            </padding>
                         </HBox>
-                        <Button fx:id="login" alignment="CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #02343F; -fx-text-fill: #F0EDCC; -fx-cursor: hand;" text="login">
+                        <Button fx:id="login" alignment="CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" text="login">
                            <VBox.margin>
                               <Insets left="115.0" top="10.0" />
                            </VBox.margin>

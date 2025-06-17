@@ -63,7 +63,9 @@ public class RemoteScreen implements ChatIF {
 
 		Button viewBtn = new Button("View order History");
 
-		viewBtn.setOnAction(e -> client.handleMessageFromClientUI("VIEW_DATABASE_ID " + id));
+		viewBtn.setOnAction(e -> {
+			dbDisplay.setText("Fetching data...\n");
+			client.handleMessageFromClientUI("VIEW_DATABASE_ID " + id);});
 
 		Button updateBtn = new Button("Update Reservation");
 
@@ -119,12 +121,11 @@ public class RemoteScreen implements ChatIF {
 	@SuppressWarnings("unchecked")
 	public void displayMessage(String message) {
 		if (message.startsWith("order_number")) {
+			dbDisplay.appendText("succeded!\n");
 			Platform.runLater(() -> {
 				String[] str = message.split(" ");
 				table.setEditable(true);
-
 				table.getColumns().clear();
-
 				TableColumn<ParkingRow, String> a = new TableColumn<>(str[0]);
 				a.setCellValueFactory(new PropertyValueFactory<>("col1"));
 				TableColumn<ParkingRow, String> b = new TableColumn<>(str[1]);
@@ -135,15 +136,12 @@ public class RemoteScreen implements ChatIF {
 				d.setCellValueFactory(new PropertyValueFactory<>("col4"));
 				TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
 				e.setCellValueFactory(new PropertyValueFactory<>("col5"));
-
 				table.getColumns().addAll(a, b, c, d, e);
-
 				ObservableList<ParkingRow> items = FXCollections.observableArrayList();
 				for (int i = 5; i + 4 < str.length; i += 5) {
 					ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4]);
 					items.add(row);
 				}
-
 				table.setItems(items);
 			});
 		} else {

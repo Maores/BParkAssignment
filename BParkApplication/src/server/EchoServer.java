@@ -92,11 +92,12 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 		try {
 			// Handling "View database"
 			if (message.equals("VIEW_DATABASE")) {
+				guiController.appendMessage("["+roleConnected+"] Fetching data from database..");
 				//gather data from DB
-				// Connection is already established in singleton
 				String data = db.getDatabaseAsString();
 				client.sendToClient(data);
 			} else if (message.startsWith("UPDATE_ORDER")) {
+				guiController.appendMessage("["+roleConnected+"] Updating database..");
 				//getting data from DB into parts
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
@@ -114,6 +115,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 			} 
 			///SEARCH  parking orders by id
 			else if (message.startsWith("SEARCH_ORDER")) {
+				guiController.appendMessage("["+roleConnected+"] Searching order in database..");
 				//get id from the message
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
@@ -129,6 +131,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 			}
 			///SEARCH  parking orders by id
 			else if (message.startsWith("SEARCH_USER")) {
+				guiController.appendMessage("["+roleConnected+"] Searching user in database..");
 				//get id from the message
 				String[] parts = message.split(" ");
 				String userID = parts[1];
@@ -143,11 +146,13 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				}
 			}
 			else if (message.startsWith("LOGIN")) {
+				
 				//get id from the message
 				String[] parts = message.split(" ");
 				String id  = parts[1];
 				String name = parts[2];
 				String role =db.getUserRoleById(id,name);
+				guiController.appendMessage("["+role+"] Login to the system");
 				if(role.equals("null")) {
 					client.sendToClient("ERROR:UserName/id is wrong!");
 				}
@@ -190,6 +195,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				client.sendToClient(reportData);
 			}
 			else if (message.startsWith("ADD_USER")) {
+				guiController.appendMessage("["+roleConnected+"] Add new user");
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String name = parts[2];
@@ -197,6 +203,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				client.sendToClient(succes);//Send the role to client
 			}
 			else if (message.startsWith("ADD_ORDER")) {
+				guiController.appendMessage("["+roleConnected+"] Add new order");
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String orderDate = parts[2];
@@ -204,6 +211,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				client.sendToClient(succes);//Send the role to client
 			}
 			else if (message.startsWith("VIEW_DATABASE_ID")) {
+				guiController.appendMessage("["+roleConnected+"] View user");
 				//gather data from DB
 				String[] parts = message.split(" ");
 				String id = parts[1];
@@ -217,7 +225,9 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				if (guiController != null) {
 					roleConnected = parts[2];
 					//sends the message to the gui
+					guiController.appendMessage("+++++++++++++++++++++++++++++++++++");
 					guiController.appendMessage("Host: " + parts[1] + "\nIP: " + client +"\nRole: "+parts[2]+"\nStatus: Connected");
+					guiController.appendMessage("+++++++++++++++++++++++++++++++++++");
 					System.out.println("Host: " + parts[1] + "\nIP: " + client + "\nRole: "+parts[2]+"\nStatus: Connected");
 				}
 			}
@@ -234,7 +244,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 		if (guiController != null) {
-			guiController.appendMessage("Server listening for connections on port " + getPort());
+			guiController.appendMessage("[Server] Server listening for connections on port " + getPort());
 		}
 		
 		// Initialize database connection once when server starts
@@ -250,7 +260,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 	protected void serverStopped() {
 		System.out.println("Server has stopped listening for connections.");
 		if (guiController != null) {
-			guiController.appendMessage("Server has stopped listening for connections.");
+			guiController.appendMessage("[Server] Server has stopped listening for connections.");
 		}
 		// Close database connection only when server stops
 		DBController.closeAndReset();
