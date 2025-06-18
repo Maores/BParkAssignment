@@ -1,5 +1,5 @@
 .root {
-    -fx-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    -fx-font-family: "Trebuchet MS", Tahoma, sans-serif;
     -fx-font-size: 14px;
     -fx-text-fill: #815854;
     -fx-background-color: #F9EBDE;
@@ -20,7 +20,6 @@
     -fx-background-color: #fafafa;
     -fx-text-fill: #815854;
 }
-
 #labelHead{
 	-fx-font-weight: bold;
 	-fx-font-size: 24px;
@@ -33,8 +32,12 @@
     -fx-border-width: 1;
     -fx-border-radius: 3;
     -fx-background-radius: 3;
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
     -fx-effect: dropshadow(gaussian,#0000001A, 1, 0, 0, 1);
+}
+.text-area{
+	-fx-font-size: 12px;
+	-fx-font-family:"Courier New", monospace;
 }
 
 .text-field:focused {
@@ -52,6 +55,9 @@
     -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
 }
 
+.table-cell {
+     -fx-alignment: CENTER;
+}
 .table-row-cell:odd {
     -fx-background-color: #e3cecc;
 }
@@ -69,11 +75,13 @@
 	-fx-text-fill: #F9EBDE;
     -fx-background-color: #815854;
 }
+
 .table-column-header {
     -fx-background-color: #b5aba1;
-    -fx-font-weight: bold;
-    -fx-font-size: 12px;
+    -fx-font-weight: normal; /* Changed from bold to match table-view text */
+    -fx-font-size: 12px;      /* Increased to match .table-view font-size */
     -fx-text-fill: #000000;
    
 }
+
 

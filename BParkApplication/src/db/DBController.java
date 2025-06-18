@@ -353,7 +353,7 @@ public class DBController {
 			if (listener != null) {
 				listener.onDatabaseMessage("Database updated successfully.");
 			}
-			return "Order added Succsussfully"+"\nYour confirmation code is: " + confirCode;
+			return "New order added Succsussfully"+"\nYour order number: " + orderNumber+"\nYour confirmation code: " + confirCode;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "Order couldnt be added!" ;
