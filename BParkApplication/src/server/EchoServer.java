@@ -211,7 +211,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				client.sendToClient(succes);//Send the role to client
 			}
 			else if (message.startsWith("VIEW_DATABASE_ID")) {
-				guiController.appendMessage("["+roleConnected+"] View user");
+				guiController.appendMessage("["+roleConnected+"] View user order");
 				//gather data from DB
 				String[] parts = message.split(" ");
 				String id = parts[1];

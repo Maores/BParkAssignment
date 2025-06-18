@@ -70,9 +70,11 @@ public class MainApp extends Application {
         	 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/userAccessOptionsGUI.fxml")); 	 
              Parent root = loader.load();
              UserLoginAccess controller = loader.getController();
+             Scene s = new Scene(root, 550, 350);
+             s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
              controller.setPrimaryStage(primaryStage);
              Platform.runLater(() -> {
-	            primaryStage.setScene(new Scene(root, 550, 350));
+	            primaryStage.setScene(s);
 	            primaryStage.setTitle("BPark - Customer Access");
           
              });
