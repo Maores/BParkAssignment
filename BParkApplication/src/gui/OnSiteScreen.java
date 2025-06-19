@@ -51,6 +51,6 @@ public class OnSiteScreen {
 		});
     }
     public void setPrimaryStage(Stage primaryStage) {
-		this.primaryStage = primaryStage;;
+		this.primaryStage = primaryStage;
 	}
 }

@@ -3,6 +3,8 @@
 // license found at www.lloseng.com 
 package server;
 
+import java.time.LocalDate;
+
 import common.DatabaseListener;
 import db.DBController;
 import gui.serverGuiController;
@@ -174,23 +176,30 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				
 				// Generate report based on type
 				String reportData = "";
-				switch (reportType) {
-					case "DAILY_REPORT":
-						reportData = "=== DAILY PARKING REPORT ===\n";
-						reportData += db.getDatabaseAsString();
-						reportData += "\nGenerated at: " + new java.util.Date();
-						break;
-					case "PARKING_USAGE_REPORT":
-						// Count occupied spaces
-						String allData = db.getDatabaseAsString();
-						int totalSpaces = allData.split("\n").length - 1;
-						reportData = "=== PARKING USAGE REPORT ===\n";
-						reportData += "Total occupied spaces: " + totalSpaces + "\n";
-						reportData += "Report generated at: " + new java.util.Date();
-						break;
-					default:
-						reportData = "Report type not implemented: " + reportType;
-				}
+				int totalSpaces = db.Count();
+				reportData = "=== PARKING USAGE REPORT ===\n";
+				reportData += "Total Orderes Created: " + totalSpaces + "\n";
+				reportData += "Available Spaces for today: " + db.AvailableSpaces(LocalDate.now().toString()) + "\n";
+				reportData += "Report generated at: " + new java.util.Date();
+				
+				
+//				switch (reportType) {
+//					case "DAILY_REPORT":
+//						reportData = "=== DAILY PARKING REPORT ===\n";
+//						reportData += db.getDatabaseAsString();
+//						reportData += "\nGenerated at: " + new java.util.Date();
+//						break;
+//					case "PARKING_USAGE_REPORT":
+//						// Count occupied spaces
+//						String allData = db.getDatabaseAsString();
+//						int totalSpaces = allData.split("\n").length - 1;
+//						reportData = "=== PARKING USAGE REPORT ===\n";
+//						reportData += "Total occupied spaces: " + totalSpaces + "\n";
+//						reportData += "Report generated at: " + new java.util.Date();
+//						break;
+//					default:
+//						reportData = "Report type not implemented: " + reportType;
+//				}
 				
 				client.sendToClient(reportData);
 			}

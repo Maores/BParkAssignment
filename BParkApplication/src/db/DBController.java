@@ -280,7 +280,7 @@ public class DBController {
 	 */
 	public String updateDB( String order_date, String id) {
 		String sql = "UPDATE `table_order` SET  order_date = ? WHERE order_number = ?;";
-		if(!availableSpots(order_date)) {
+		if(!AvailableSpots(order_date)) {
 			return "Not enough space at this date!";
 		}
 		try {
@@ -335,7 +335,7 @@ public class DBController {
 		orderNumber++;
 		String sql = "INSERT INTO `table_order` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?);";
-		if(!availableSpots(order_date)) {
+		if(!AvailableSpots(order_date)) {
 			return "Not enough space at this date!";
 		}
 		Random rand = new Random();
@@ -360,8 +360,8 @@ public class DBController {
 		}
 
 	}
-	//true -> theres spaces available (more than 40%)
-	public boolean availableSpots(String order_date) {
+	//available spaces for a specific
+	public int AvailableSpaces(String order_date) {
 		String sql = "SELECT COUNT(*) FROM table_order WHERE order_date = ?;";
 		int count=0;
 		try {
@@ -371,17 +371,25 @@ public class DBController {
 			if (rs.next()) {
 			    count = rs.getInt(1);
 			}
-			
-			if(((float)(maxSpace-count)/maxSpace) >= 0.4 ) {
-				return true;
-			}
-			return false;
+			return maxSpace - count ;
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false ;
+			return -1 ;
 		}
 
 	}
+	public boolean AvailableSpots(String date) {
+		int count = AvailableSpaces(date);
+		if(((float)(count)/maxSpace) >= 0.4 ) {
+			return true;
+		}
+		return false;
+	}
+	
+
+	
+	
 	/**
 	 * Close the database connection.
 	 */
@@ -421,6 +429,8 @@ public class DBController {
 		}
 		return "null";
 	}
+	
+	
 	//get the maximum order number so the numbers are going up 
 	public int getMaxOrderNumber() {
 		String orderNum;
@@ -438,6 +448,25 @@ public class DBController {
 			return 1000;
 		}
 	}
+	
+	
+	public int Count() {
+		String sql = "SELECT COUNT(*) FROM table_order;";
+		int count=0;
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+			    count = rs.getInt(1);
+			}
+			return count ;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0 ;
+		}
+	}
+	
 	/**
 	 * Close connection and reset singleton instance
 	 */

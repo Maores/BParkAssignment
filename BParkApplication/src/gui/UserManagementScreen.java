@@ -77,7 +77,7 @@ public class UserManagementScreen implements ChatIF {
 	 */
 	@FXML
 	void generateReport() {
-		client.handleMessageFromClientUI("GENERATE_REPORT DAILY_REPORT");
+		client.handleMessageFromClientUI("GENERATE_REPORT");
 		logArea.setText("Generating report...\n");
 	}
 
