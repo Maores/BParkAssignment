@@ -47,8 +47,8 @@ public class RemoteScreen implements ChatIF {
 		datepic.setMaxWidth(170);
 		dbDisplay.setPrefHeight(200);
 		dbDisplay.setEditable(false);
-		dbDisplay.setStyle(
-				"-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
+//		dbDisplay.setStyle(
+//				"-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
 		client = sg.getInstance(this);
 	}
 
@@ -90,10 +90,10 @@ public class RemoteScreen implements ChatIF {
 			}
 
 		});
-		// Styles
-		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
-		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
-		insertBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
+//		// Styles
+//		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
+//		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
+//		insertBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
 		VBox orderDate = new VBox(new Label("Order Date:"), datepic);
 		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn);

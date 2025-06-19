@@ -58,9 +58,11 @@ public class UserLoginAccess  {
 	void loadRemoteScreen(ActionEvent event) {
 		RemoteScreen OffSite = new RemoteScreen();
 		Parent root = OffSite.buildRoot();
+		Scene s = new Scene(root, 700, 600);
+        s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 
 		Platform.runLater(() -> {
-			primaryStage.setScene(new Scene(root, 700, 600));
+			primaryStage.setScene(s);
 			primaryStage.setTitle("BPark - Customer: " + mainApp.getUserName());
 			primaryStage.show();
 		});
