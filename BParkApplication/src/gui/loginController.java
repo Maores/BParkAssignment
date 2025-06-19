@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 public class loginController implements ChatIF {
 
 	@FXML
-	private TextField id;
+	private TextField password;
 
 	@FXML
 	private Button login;
@@ -33,16 +33,16 @@ public class loginController implements ChatIF {
 
 	@FXML
 	void loginUser(ActionEvent event) {
-		String userId = id.getText();
+		String userPass = password.getText();
 		String userName = name.getText();
-		if (userId == null || userId.isEmpty() || userName == null || userName.isEmpty()) {
-			Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter both ID and Name.");
+		if (userPass == null || userPass.isEmpty() || userName == null || userName.isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter both Name and Password.");
 			alert.showAndWait();
 			return;
 		}
 		try {
 			client = sg.getInstance(this);
-			client.handleMessageFromClientUI("LOGIN " + userId + " " + userName);
+			client.handleMessageFromClientUI("LOGIN " + userPass + " " + userName);
 
 		} catch (Exception e) {}
 	}
@@ -61,7 +61,7 @@ public class loginController implements ChatIF {
 					if (client != null) {
 						client.handleMessageFromClientUI("CONNECTION " + client.getHost() + " " + role);
 					}
-					mainApp.showRoleScreen(role, id.getText(), name.getText());
+					mainApp.showRoleScreen(role, password.getText(), name.getText());
 				} catch (Exception e) {
 					Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load role screen: " + e.getMessage());
 					alert.showAndWait();

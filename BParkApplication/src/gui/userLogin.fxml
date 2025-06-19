@@ -58,7 +58,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="25.0" prefWidth="0.0">
                            <children>
-                              <Label text="Id:">
+                              <Label text="Password:">
                                  <padding>
                                     <Insets right="5.0" />
                                  </padding>
@@ -66,7 +66,7 @@
                                     <Font name="Arial Rounded MT Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="id" />
+                              <TextField fx:id="password" />
                            </children>
                            <padding>
                               <Insets left="22.0" />

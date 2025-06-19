@@ -23,6 +23,8 @@ public class StaffGui implements ChatIF {
 
     @FXML private TextField nameField;
     @FXML private TextField idField;
+    private TextField phoneField;
+    private TextField emailField;
     @FXML private TextArea outputDisplay;
     
     private TableView<ParkingRow> table = new TableView<>();
@@ -50,13 +52,14 @@ public class StaffGui implements ChatIF {
     void addNewUser() {
         String name = nameField.getText();
         String id = idField.getText();
-
-        if (name == null || name.isEmpty() || id == null || id.isEmpty()) {
-            display("Please enter both name and ID.");
+        String email = emailField.getText();
+        String phone = phoneField.getText();
+        if (name == null || name.isEmpty() || id == null || id.isEmpty() || email == null || email.isEmpty() || phone == null || phone.isEmpty()) {
+            display("Please fill all fields.");
             return;
         }
 
-        String command = "ADD_USER " + id + " " + name;
+        String command = "ADD_USER " + id + " " + name + " " + phone + " " + email;
         try {
             client.handleMessageFromClientUI(command);
             display("Request sent to add user: " + name + " (" + id + ")");
@@ -74,7 +77,6 @@ public class StaffGui implements ChatIF {
             	String[] str = message.split(" ");
                 table.setEditable(true);
                 
-                
                 table.getColumns().clear();
 
                 TableColumn<ParkingRow, String> a = new TableColumn<>(str[0]);
@@ -87,7 +89,6 @@ public class StaffGui implements ChatIF {
                 d.setCellValueFactory(new PropertyValueFactory<>("col4"));
                 TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
                 e.setCellValueFactory(new PropertyValueFactory<>("col5"));
-
 
                 table.getColumns().addAll(a, b, c, d, e);
 
@@ -106,20 +107,39 @@ public class StaffGui implements ChatIF {
         	else if (message.startsWith("User")) {
         		outputDisplay.setText(message);
         	}
+        	else {
+        		outputDisplay.appendText(message);
+        	}
         });
     }
 
     public StackPane buildRoot() {
     	StackPane root = new StackPane();
     	root.setId("pane");
+    	
     	Label name =  new Label("User name:");
         nameField = new TextField();
         nameField.setPromptText("Enter user name");
         VBox nameBox = new VBox(name,nameField);
+        
         Label id =  new Label("User ID:");
         idField = new TextField();
         idField.setPromptText("Enter user ID");
         VBox idBox = new VBox(id ,idField);
+        
+        HBox nameIdBox = new HBox(nameBox,idBox);
+        nameIdBox.setSpacing(10);
+        
+        Label email =  new Label("E-Mail:");
+        emailField = new TextField();
+        VBox emailBox = new VBox(email,emailField);
+        
+        Label phone =  new Label("Phone:");
+        phoneField = new TextField();
+        VBox phoneBox = new VBox(phone,phoneField);
+        
+        
+        
         outputDisplay = new TextArea();
         outputDisplay.setPrefHeight(350);
         outputDisplay.setEditable(false);
@@ -130,15 +150,16 @@ public class StaffGui implements ChatIF {
         Button viewDBBtn = new Button("View Database");
         viewDBBtn.setOnAction(e -> ViewDB());
         
+        VBox emptyAddBox = new VBox(new Label(""),addUserBtn);
+        HBox phoneEmailAddBox = new HBox(emailBox,phoneBox,emptyAddBox);
+        phoneEmailAddBox.setSpacing(10);
         //Btn styles
 //        addUserBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //        viewDBBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-        HBox btns = new HBox(viewDBBtn,addUserBtn);
-        btns.setSpacing(10);
         VBox Interior = new VBox(10,
-        	nameBox,
-            idBox,
-            btns,
+        		nameIdBox ,
+        		phoneEmailAddBox,
+        		viewDBBtn,
             outputDisplay,
             table
         );

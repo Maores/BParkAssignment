@@ -158,7 +158,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String role =db.getUserRoleById(id,name);
 				guiController.appendMessage("["+role+"] Login to the system");
 				if(role.equals("null")) {
-					client.sendToClient("ERROR:UserName/id is wrong!");
+					client.sendToClient("ERROR:UserName/Password is wrong!");
 				}
 				else
 				{
@@ -212,7 +212,9 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String name = parts[2];
-				String succes =  db.insertUserToDB(name, id);
+				String phone = parts[3];
+				String email = parts[4];
+				String succes =  db.insertUserToDB(name, id,phone,email);
 				client.sendToClient(succes);//Send the role to client
 			}
 			else if (message.startsWith("ADD_ORDER")) {
