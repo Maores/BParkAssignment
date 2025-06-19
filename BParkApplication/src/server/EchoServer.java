@@ -4,6 +4,8 @@
 package server;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import common.DatabaseListener;
 import db.DBController;
@@ -180,7 +182,9 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				reportData = "=== PARKING USAGE REPORT ===\n";
 				reportData += "Total Orderes Created: " + totalSpaces + "\n";
 				reportData += "Available Spaces for today: " + db.AvailableSpaces(LocalDate.now().toString()) + "\n";
-				reportData += "Report generated at: " + new java.util.Date();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				String formattedDateTime = LocalDateTime.now().format(formatter);
+				reportData += "Report generated at: " + formattedDateTime;
 				
 				
 //				switch (reportType) {
