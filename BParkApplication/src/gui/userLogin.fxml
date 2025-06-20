@@ -38,9 +38,9 @@
                         <Insets bottom="20.0" top="20.0" />
                      </VBox.margin>
                   </HBox>
-                  <VBox alignment="TOP_CENTER" prefHeight="130.0" prefWidth="342.0">
+                  <VBox alignment="TOP_RIGHT" prefHeight="130.0" prefWidth="342.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="25.0" prefWidth="0.0">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="0.0">
                            <children>
                               <Label text="Name:">
                                  <padding>
@@ -53,10 +53,13 @@
                               <TextField fx:id="name" />
                            </children>
                            <padding>
-                              <Insets bottom="10.0" />
+                              <Insets bottom="10.0" right="50.0" />
                            </padding>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="25.0" prefWidth="0.0">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="0.0">
                            <children>
                               <Label text="Password:">
                                  <padding>
@@ -69,12 +72,15 @@
                               <TextField fx:id="password" />
                            </children>
                            <padding>
-                              <Insets left="22.0" />
+                              <Insets bottom="10.0" right="50.0" />
                            </padding>
-                        </HBox>
-                        <Button fx:id="login" alignment="CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" text="login">
                            <VBox.margin>
-                              <Insets left="115.0" top="10.0" />
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <Button fx:id="login" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" text="login">
+                           <VBox.margin>
+                              <Insets right="50.0" />
                            </VBox.margin>
                         </Button>
                      </children>

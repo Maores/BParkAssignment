@@ -310,6 +310,34 @@ public class DBController {
 		}
 
 	}
+	
+	/**
+	 * Update a user info (change the date)
+	 */
+	public String updateUserInfoDB(String phone, String email,String id) {
+		String sql = "UPDATE `users` SET  phone = ?  , email = ? WHERE id = ?;";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, phone);
+			ps.setString(2, email);
+			ps.setInt(3, Integer.parseInt(id));
+
+			ps.executeUpdate();
+			System.out.println("Database user information updated successfully.");
+			if (listener != null) {
+				listener.onDatabaseMessage("Database user information updated successfully.");
+			}
+			return "true";
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Database user information updated Failed.");
+			if (listener != null) {
+				listener.onDatabaseError("Database update failed: " + e.getMessage());
+			}
+			return "ERROR_UPDATE_USER";
+		}
+
+	}
 
 	/**
 	 * Insert user to the database.
@@ -457,14 +485,14 @@ public class DBController {
 	 * Get user role by id from the users table
 	 */
 	public String getUserRoleById(String password, String name) {
-		String sql = "SELECT role FROM users WHERE password = ? AND name = ?";
+		String sql = "SELECT role,id FROM users WHERE password = ? AND name = ?";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, password);
 			ps.setString(2, name);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return rs.getString("role");
+				return rs.getString("role") + " " +rs.getString("id");
 			}
 		} catch (SQLException e) {
 

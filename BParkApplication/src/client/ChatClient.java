@@ -59,7 +59,7 @@ public class ChatClient extends AbstractClient {
 	@Override
 	public void handleMessageFromServer(Object msg) {
 		lastServerResponse = msg.toString();
-		clientUI.display(lastServerResponse);
+		clientUI.handleMessageFromServer(lastServerResponse);
 	}
 
 	public String getLastServerResponse() {
@@ -76,7 +76,7 @@ public class ChatClient extends AbstractClient {
 			sendToServer(message);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-			clientUI.display("Could not send message to server.  Terminating client.");
+			clientUI.handleMessageFromServer("Could not send message to server.  Terminating client.");
 			quit();
 		}
 	}

@@ -53,15 +53,17 @@ public class loginController implements ChatIF {
 
 	// Get message from the server!!!
 	@Override
-	public void display(String message) {
+	public void handleMessageFromServer(String message) {
 		if (message.startsWith("role ")) {
-			String role = message.substring(5);
+			String[] parts = message.split(" ");
+			String role = parts[1];
+			String id = parts[2];
 			if (mainApp != null) {
 				try {
 					if (client != null) {
 						client.handleMessageFromClientUI("CONNECTION " + client.getHost() + " " + role);
 					}
-					mainApp.showRoleScreen(role, password.getText(), name.getText());
+					mainApp.showRoleScreen(role, id, name.getText());
 				} catch (Exception e) {
 					Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load role screen: " + e.getMessage());
 					alert.showAndWait();

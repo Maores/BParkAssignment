@@ -83,7 +83,7 @@ public class UserManagementScreen implements ChatIF {
 
 	// Get message from the server
 	@Override
-	public void display(String message) {
+	public void handleMessageFromServer(String message) {
 		displayMessage(message);
 	}
 

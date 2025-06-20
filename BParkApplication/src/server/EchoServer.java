@@ -117,6 +117,21 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					client.sendToClient("Invalid order number Try again...");
 				}
 			} 
+			else if (message.startsWith("UPDATE_USER_INFO")) {
+				guiController.appendMessage("["+roleConnected+"] Updating user database..");
+				//getting data from DB into parts
+				String[] parts = message.split(" ");
+				String phone = parts[1];
+				String email = parts[2];
+				String id = parts[3];
+				//updates the DB
+				if ((log = db.updateUserInfoDB(phone, email,id)) == "true") {
+					client.sendToClient("Update user information succeded");
+				} else {
+					client.sendToClient(log);
+				}
+				
+			} 
 			///SEARCH  parking orders by id
 			else if (message.startsWith("SEARCH_ORDER")) {
 				guiController.appendMessage("["+roleConnected+"] Searching order in database..");
@@ -156,12 +171,14 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String id  = parts[1];
 				String name = parts[2];
 				String role =db.getUserRoleById(id,name);
-				guiController.appendMessage("["+role+"] Login to the system");
+				
 				if(role.equals("null")) {
 					client.sendToClient("ERROR:UserName/Password is wrong!");
 				}
 				else
 				{
+					String roleS =role.split(" ")[1];
+					guiController.appendMessage("["+roleS+"] Login to the system");
 					client.sendToClient("role " +role);//Send the role to client
 				}
 				

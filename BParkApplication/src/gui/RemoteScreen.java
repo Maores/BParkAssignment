@@ -1,13 +1,18 @@
 package gui;
 
+import java.io.IOException;
+
 import client.ChatClient;
 import client.singletoneClient;
 import common.ChatIF;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -19,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class RemoteScreen implements ChatIF {
 	/**
@@ -31,6 +37,7 @@ public class RemoteScreen implements ChatIF {
 	private TableView<ParkingRow> table = new TableView<>();
 	private DatePicker datepic;
 
+	private Stage primary;
 	private String id = MainApp.getUserId();
 	private String name = MainApp.getUserName();
 
@@ -65,21 +72,23 @@ public class RemoteScreen implements ChatIF {
 
 		viewBtn.setOnAction(e -> {
 			dbDisplay.setText("Fetching data...\n");
-			client.handleMessageFromClientUI("VIEW_DATABASE_ID " + id);});
+			client.handleMessageFromClientUI("VIEW_DATABASE_ID " + id);
+		});
 
 		Button updateBtn = new Button("Update Reservation");
 
 		updateBtn.setOnAction(e -> {
-			if (!orderField.getText().isEmpty() && datepic.getValue() != null) {
-				String date = datepic.getValue().toString();
-				String updateMsg = "UPDATE_ORDER " + id + " " + date;
+			String orderNum = orderField.getText();
+			String date = datepic.getValue().toString();
+			if (!orderNum.isEmpty() && !date.isEmpty()) {
+				String updateMsg = "UPDATE_ORDER " + orderNum + " " + date;
 				client.handleMessageFromClientUI(updateMsg);
 			} else {
 				displayMessage("Please fill order number AND date fields.");
 			}
 		});
-		Button insertBtn = new Button("New Order");
 
+		Button insertBtn = new Button("New Order");
 		insertBtn.setOnAction(e -> {
 
 			if (datepic.getValue() != null) {
@@ -90,13 +99,39 @@ public class RemoteScreen implements ChatIF {
 			}
 
 		});
+
+		Button updateUserBtn = new Button("Update user information");
+		updateUserBtn.setOnAction(e -> {
+			Stage updateScreen = new Stage();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/userInfoUpdate.fxml"));
+			Parent pop;
+			try {
+				pop = loader.load();
+				Scene s = new Scene(pop,300,210);
+				s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+				UserUpdate controller = loader.getController();
+				controller.setPopWindow(updateScreen);
+				controller.name.setText(name);
+				updateScreen.setScene(s);
+				updateScreen.setResizable(false);
+				updateScreen.setTitle("Update Information");	
+				updateScreen.show();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			
+
+		});
+
 //		// Styles
 //		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
 //		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
 //		insertBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
 		VBox orderDate = new VBox(new Label("Order Date:"), datepic);
-		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn);
+		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn,updateUserBtn);
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
 		buttons.setSpacing(10);
@@ -151,7 +186,7 @@ public class RemoteScreen implements ChatIF {
 	}
 
 	@Override
-	public void display(String message) {
+	public void handleMessageFromServer(String message) {
 		displayMessage(message);
 	}
 

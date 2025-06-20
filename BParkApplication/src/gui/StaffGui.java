@@ -33,7 +33,7 @@ public class StaffGui implements ChatIF {
 
     public void start() {
         client = sg.getInstance(this);
-        display("Connected to server!");
+        handleMessageFromServer("Connected to server!");
     }
 
     @FXML
@@ -42,9 +42,9 @@ public class StaffGui implements ChatIF {
         outputDisplay.appendText("Fetching data from DataBase...");
         try {
             client.handleMessageFromClientUI(command);
-            display("Requesting database contents...");
+            handleMessageFromServer("Requesting database contents...");
         } catch (Exception e) {
-            display("Error sending request: " + e.getMessage());
+            handleMessageFromServer("Error sending request: " + e.getMessage());
         }
     }
 
@@ -55,21 +55,21 @@ public class StaffGui implements ChatIF {
         String email = emailField.getText();
         String phone = phoneField.getText();
         if (name == null || name.isEmpty() || id == null || id.isEmpty() || email == null || email.isEmpty() || phone == null || phone.isEmpty()) {
-            display("Please fill all fields.");
+            handleMessageFromServer("Please fill all fields.");
             return;
         }
 
         String command = "ADD_USER " + id + " " + name + " " + phone + " " + email;
         try {
             client.handleMessageFromClientUI(command);
-            display("Request sent to add user: " + name + " (" + id + ")");
+            handleMessageFromServer("Request sent to add user: " + name + " (" + id + ")");
         } catch (Exception e) {
-            display("Error: " + e.getMessage());
+            handleMessageFromServer("Error: " + e.getMessage());
         }
     }
 
     @Override
-    public void display(String message) {
+    public void handleMessageFromServer(String message) {
         Platform.runLater(() -> {
             //outputDisplay.appendText(message + "\n");
         	if(message.startsWith("order_number")) {
