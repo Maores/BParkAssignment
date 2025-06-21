@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Random;
 
 import common.DatabaseListener;
@@ -310,12 +309,16 @@ public class DBController {
 		}
 
 	}
-	
+
 	/**
 	 * Update a user info (change the date)
 	 */
-	public String updateUserInfoDB(String phone, String email,String id) {
-		String sql = "UPDATE `users` SET  phone = ?  , email = ? WHERE id = ?;";
+	public String updateUserInfoDB(String phone, String email, String id) {
+		if(email.isEmpty())
+			email=null;
+		if(phone.isEmpty())
+			phone=null;
+		String sql = "UPDATE `users` SET  phone = COALESCE(?, phone),email = COALESCE(?, email) WHERE id = ?;";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, phone);
@@ -349,7 +352,7 @@ public class DBController {
 		String password = generatePassword();
 		String sql = "INSERT INTO `users` (id, name, role,phone,email,password) VALUES (?, ?, 'user',?,?,?);";
 		System.out.println(password);
-		if(password.equals("ERROR")) {
+		if (password.equals("ERROR")) {
 			return "User couldnt be added!";
 		}
 		try {
@@ -374,8 +377,8 @@ public class DBController {
 	private String generatePassword() {
 
 		Random rand = new Random();
-		int password,count=0;
-		while (count<10) {
+		int password, count = 0;
+		while (count < 10) {
 			password = rand.nextInt(9000) + 1000; // 0–8999 + 1000 = 1000–9999
 			String sql = "SELECT password FROM `users` WHERE password = ?";
 			try {
@@ -388,11 +391,10 @@ public class DBController {
 				}
 
 			} catch (Exception e) {
-			}
-			finally {
+			} finally {
 				count++;
 			}
-			
+
 		}
 		return "ERROR";
 	}
@@ -406,6 +408,11 @@ public class DBController {
 		orderNumber++;
 		String sql = "INSERT INTO `table_order` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?);";
+
+		// checks if an order was alreadt placed in the same date by the given user
+		if (orderByDateExists(id, order_date))
+			return "Order Already exists for the given date, choose another date.";
+
 		if (!AvailableSpots(order_date)) {
 			return "Not enough space at this date!";
 		}
@@ -461,6 +468,26 @@ public class DBController {
 		return false;
 	}
 
+	// checks if an order for a user has already been set in a certain date
+	public boolean orderByDateExists(String id, String date) {
+		String sql = "SELECT order_number FROM table_order WHERE subscriber_id = ? AND order_date = ?;";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(id));
+			ps.setString(2, date);
+
+			ResultSet rs = ps.executeQuery();
+			if (rs.next())
+				// The order_number exists at the given date for the given user
+				return true;
+			else
+				return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	/**
 	 * Close the database connection.
 	 */
@@ -492,7 +519,7 @@ public class DBController {
 			ps.setString(2, name);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return rs.getString("role") + " " +rs.getString("id");
+				return rs.getString("role") + " " + rs.getString("id");
 			}
 		} catch (SQLException e) {
 
