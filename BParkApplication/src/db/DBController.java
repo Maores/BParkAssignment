@@ -328,14 +328,17 @@ public class DBController {
 
 	}
 	/**
-	 * Insert user to the database.(order_number, parking_space, order_date, confirmation_code, subscriber_id, date_of_placing_an_order)
+	 * inserting a new order to DB
 	 */
 	public String insertResToDB(String order_date, String id) {
 		orderNumber = this.getMaxOrderNumber();
 		orderNumber++;
 		String sql = "INSERT INTO `table_order` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?);";
-		if(!AvailableSpots(order_date)) {
+		//checks if an order was alreadt placed in the same date by the given user
+		if (orderByDateExists(id, order_date))
+			return "Order Already exists for the given date, choose another date.";
+		if (!AvailableSpots(order_date)) {
 			return "Not enough space at this date!";
 		}
 		Random rand = new Random();
@@ -387,7 +390,24 @@ public class DBController {
 		return false;
 	}
 	
+	//checks if an order for a user has already been set in a certain date
+	public boolean orderByDateExists(String id, String date) {
+		String sql = "SELECT order_number FROM table_order WHERE subscriber_id = ? AND order_date = ?;";
+		try {
+		    PreparedStatement ps = conn.prepareStatement(sql);
+		    ps.setInt(1, Integer.parseInt(id));
+		    ps.setString(2, date);
 
+		    ResultSet rs = ps.executeQuery();
+			if (rs.next()) 
+				// The order_number exists at the given date  for the given user
+				return true;	
+			else return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		  }
+		return false;
+	}
 	
 	
 	/**
