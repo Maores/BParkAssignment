@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import client.ChatClient;
 import client.singletoneClient;
@@ -90,8 +91,20 @@ public class RemoteScreen implements ChatIF {
 
 		Button insertBtn = new Button("New Order");
 		insertBtn.setOnAction(e -> {
-
+			/*
+			 * Implementing 7 days -> 24 days prior limit
+			 */
 			if (datepic.getValue() != null) {
+				LocalDate selectedDate = datepic.getValue();
+				LocalDate today = LocalDate.now();
+				LocalDate minDate = today.plusDays(1);
+				LocalDate maxDate = today.plusDays(7);
+				
+				if (selectedDate.isBefore(minDate) || selectedDate.isAfter(maxDate)) {
+					displayMessage("Error! Reservation must be between 1 and 7 days from today.");
+					return;
+				}
+				
 				String date = datepic.getValue().toString();
 				client.handleMessageFromClientUI("ADD_ORDER " + id + " " + date);
 			} else {
