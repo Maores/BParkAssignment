@@ -535,6 +535,23 @@ public class DBController {
 			return 0;
 		}
 	}
+	
+	public boolean emailExists(String email) {
+	    try {
+	        if (conn == null || conn.isClosed()) {
+	            connectToDB();
+	        }
+
+	        String sql = "SELECT 1 FROM users WHERE email = ?";
+	        PreparedStatement stmt = conn.prepareStatement(sql);
+	        stmt.setString(1, email.trim().toLowerCase());
+	        ResultSet rs = stmt.executeQuery();
+	        return rs.next(); // true if a match is found
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 
 	/**
 	 * Close connection and reset singleton instance

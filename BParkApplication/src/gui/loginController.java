@@ -1,14 +1,20 @@
 package gui;
 
+import java.io.IOException;
+
 import client.ChatClient;
 import client.singletoneClient;
 import common.ChatIF;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class loginController implements ChatIF {
 
@@ -68,7 +74,7 @@ public class loginController implements ChatIF {
 					Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load role screen: " + e.getMessage());
 					alert.showAndWait();
 				}
-			}
+			} 
 		} else {
 			Platform.runLater(() -> {
 				Alert alert = new Alert(Alert.AlertType.ERROR, message);
@@ -77,4 +83,26 @@ public class loginController implements ChatIF {
 
 		}
 	}
+	
+	@FXML
+	private void forgotPass() {
+	    Stage forgotPasswordStage = new Stage();
+	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ForgotPassword.fxml"));
+	    Parent pop;
+	    try {
+	        pop = loader.load();
+	        Scene s = new Scene(pop, 300, 150);
+	        s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+	        ForgotPasswordController controller = loader.getController();
+	        controller.setPopWindow(forgotPasswordStage);
+	        forgotPasswordStage.setScene(s);
+	        forgotPasswordStage.setResizable(false);
+	        forgotPasswordStage.setTitle("Reset Password");
+	        forgotPasswordStage.show();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	
 }

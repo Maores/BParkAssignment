@@ -263,6 +263,22 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					System.out.println("Host: " + parts[1] + "\nIP: " + client + "\nRole: "+parts[2]+"\nStatus: Connected");
 				}
 			}
+ 			else if (message.startsWith("#CheckEmailReset#")) {
+ 			    guiController.appendMessage("[SERVER] Checking if email exists in DB..");
+ 			    String email = message.replace("#CheckEmailReset#", "").trim();
+ 			    boolean exists = db.emailExists(email);
+
+ 			    try {
+ 			        if (exists) {
+ 			            client.sendToClient("EMAIL_EXISTS");
+ 			        } else {
+ 			            client.sendToClient("EMAIL_NOT_FOUND");
+ 			        }
+ 			    } catch (Exception e) {
+ 			        e.printStackTrace();
+ 			    }
+ 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
