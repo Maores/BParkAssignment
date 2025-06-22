@@ -59,10 +59,6 @@ public class loginController implements ChatIF {
 	public ChatClient getClient() {
 		return client;
 	}
-	@FXML
-	public void forgotPass() {
-		
-	}
 
 	// Get message from the server!!!
 	@Override
