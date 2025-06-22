@@ -34,7 +34,6 @@ public class StaffGui implements ChatIF {
     
     public void start() {
         client = sg.getInstance(this);
-        handleMessageFromServer("Connected to server!");
     }
     public void setMain(MainApp main) {
 		this.main = main;
@@ -108,9 +107,7 @@ public class StaffGui implements ChatIF {
                 table.setItems(items);  
         		});
             }
-        	else if (message.startsWith("User")) {
-        		outputDisplay.setText(message+"\n");
-        	}
+      
         	else {
         		outputDisplay.appendText(message+"\n");
         	}
@@ -168,6 +165,7 @@ public class StaffGui implements ChatIF {
         HBox phoneEmailAddBox = new HBox(emailBox,phoneBox,emptyAddBox);
         HBox viewlogBox = new HBox(viewDBBtn,logOutBtn);
         phoneEmailAddBox.setSpacing(10);
+        viewlogBox.setSpacing(10);
         //Btn styles
 //        addUserBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //        viewDBBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");

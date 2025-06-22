@@ -36,16 +36,17 @@ public class UserManagementScreen implements ChatIF {
 	private ChatClient client;
 
 	private TableView<ParkingRow> table = new TableView<>();
-	
+
 	private MainApp main;
 
 	public UserManagementScreen() {
 		client = sg.getInstance(this);
 	}
+
 	public void setMain(MainApp main) {
 		this.main = main;
 	}
-	
+
 	/**
 	 * Search for a order accessing DB without being a listener
 	 */
@@ -61,6 +62,7 @@ public class UserManagementScreen implements ChatIF {
 		client.handleMessageFromClientUI("SEARCH_ORDER " + order);
 		logArea.appendText("Searching for order: " + order + "\n");
 	}
+
 	/**
 	 * Search for a user by ID Demonstrates accessing DB without being a listener
 	 */
@@ -129,32 +131,30 @@ public class UserManagementScreen implements ChatIF {
 
 					table.setItems(items);
 				});
-				logArea.appendText("Completed!"+ "\n");
-			}
-		 else if (message.startsWith("id")) {
-			Platform.runLater(() -> {
-				String[] str = message.split(" ");
-				table.setEditable(true);
-				table.getColumns().clear();
-				TableColumn<ParkingRow, String> a = new TableColumn<>(str[0]);
-				a.setCellValueFactory(new PropertyValueFactory<>("col1"));
-				TableColumn<ParkingRow, String> b = new TableColumn<>(str[1]);
-				b.setCellValueFactory(new PropertyValueFactory<>("col2"));
-				TableColumn<ParkingRow, String> c = new TableColumn<>(str[2]);
-				c.setCellValueFactory(new PropertyValueFactory<>("col3"));
-				table.getColumns().addAll(a, b, c);
-				ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-				for (int i = 3; i + 2 < str.length; i += 3) {
-					ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2]);
-					items.add(row);
-				}
+				logArea.appendText("Completed!" + "\n");
+			} else if (message.startsWith("id")) {
+				Platform.runLater(() -> {
+					String[] str = message.split(" ");
+					table.setEditable(true);
+					table.getColumns().clear();
+					TableColumn<ParkingRow, String> a = new TableColumn<>(str[0]);
+					a.setCellValueFactory(new PropertyValueFactory<>("col1"));
+					TableColumn<ParkingRow, String> b = new TableColumn<>(str[1]);
+					b.setCellValueFactory(new PropertyValueFactory<>("col2"));
+					TableColumn<ParkingRow, String> c = new TableColumn<>(str[2]);
+					c.setCellValueFactory(new PropertyValueFactory<>("col3"));
+					table.getColumns().addAll(a, b, c);
+					ObservableList<ParkingRow> items = FXCollections.observableArrayList();
+					for (int i = 3; i + 2 < str.length; i += 3) {
+						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2]);
+						items.add(row);
+					}
 
-				table.setItems(items);
-			});
-			logArea.appendText("Completed!"+ "\n");
-		}
-			else {
-				logArea.appendText(message+"\n");
+					table.setItems(items);
+				});
+				logArea.appendText("Completed!" + "\n");
+			} else {
+				logArea.appendText(message + "\n");
 			}
 		});
 
@@ -172,19 +172,21 @@ public class UserManagementScreen implements ChatIF {
 		searchBtn.setOnAction(e -> searchOrder());
 		Button searchUserBtn = new Button("Search User");
 		searchUserBtn.setOnAction(e -> searchUser());
-		VBox userS = new VBox(10,new Label("User ID:"), userF);
-		VBox orderS = new VBox(10,new Label("Order number:"), orderF);
-		HBox searchBox = new HBox(orderS,userS);
+		VBox userS = new VBox(10, new Label("User ID:"), userF);
+		VBox orderS = new VBox(10, new Label("Order number:"), orderF);
+		HBox searchBox = new HBox(orderS, userS);
 		searchBox.setSpacing(5);
 		Button viewOrderBtn = new Button("View orders");
 		viewOrderBtn.setOnAction(e -> {
-			logArea.setText("Showing orders..."+ "\n");
-			client.handleMessageFromClientUI("VIEW_DATABASE");});
+			logArea.setText("Showing orders..." + "\n");
+			client.handleMessageFromClientUI("VIEW_DATABASE");
+		});
 		Button reportBtn = new Button("Generate Report");
 		reportBtn.setOnAction(e -> generateReport());
 		Button logOutBtn = new Button("LogOut");
 		logOutBtn.setId("logOutBtn");
-		//.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;");
+		// .setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor:
+		// hand;");
 		logOutBtn.setOnAction(e -> {
 			try {
 				main.showLoginScreen();
@@ -193,14 +195,13 @@ public class UserManagementScreen implements ChatIF {
 				e1.printStackTrace();
 			}
 		});
-		//Btn styles
+		// Btn styles
 //		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-		HBox btns = new HBox(viewOrderBtn,searchBtn,searchUserBtn,reportBtn,logOutBtn);
+		HBox btns = new HBox(viewOrderBtn, searchBtn, searchUserBtn, reportBtn, logOutBtn);
 		btns.setSpacing(10);
-		VBox Interior = new VBox(10, searchBox,btns,
-				 logArea, table);
+		VBox Interior = new VBox(10, searchBox, btns, logArea, table);
 		root.setMargin(Interior, new Insets(15));
 		root.getChildren().add(Interior);
 		root.setPrefWidth(400);
