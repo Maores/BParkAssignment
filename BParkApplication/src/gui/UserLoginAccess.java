@@ -35,6 +35,7 @@ public class UserLoginAccess  {
 	   	Parent root = loader.load();
 	   	OnSiteScreen controller = loader.getController();
 	    controller.setPrimaryStage(primaryStage);
+	    controller.setMainApp(mainApp);
 	    Scene s = new Scene(root, 500, 300);
         s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 	    Platform.runLater(() -> {
@@ -57,6 +58,7 @@ public class UserLoginAccess  {
 	@FXML
 	void loadRemoteScreen(ActionEvent event) {
 		RemoteScreen OffSite = new RemoteScreen();
+		OffSite.setMain(mainApp);
 		Parent root = OffSite.buildRoot();
 		Scene s = new Scene(root, 700, 600);
         s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());

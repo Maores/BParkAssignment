@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import client.ChatClient;
 import client.singletoneClient;
@@ -36,7 +37,7 @@ public class RemoteScreen implements ChatIF {
 	private singletoneClient sg = new singletoneClient();
 	private TableView<ParkingRow> table = new TableView<>();
 	private DatePicker datepic;
-
+	private MainApp main;
 	private Stage primary;
 	private String id = MainApp.getUserId();
 	private String name = MainApp.getUserName();
@@ -57,6 +58,9 @@ public class RemoteScreen implements ChatIF {
 //		dbDisplay.setStyle(
 //				"-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
 		client = sg.getInstance(this);
+	}
+	public void setMain(MainApp main) {
+		this.main = main;
 	}
 
 	public StackPane buildRoot() {
@@ -90,8 +94,21 @@ public class RemoteScreen implements ChatIF {
 
 		Button insertBtn = new Button("New Order");
 		insertBtn.setOnAction(e -> {
-			
+			/*
+			 * Implementing 7 days -> 24 days prior limit
+			 */
+
 			if (datepic.getValue() != null) {
+				LocalDate selectedDate = datepic.getValue();
+				LocalDate today = LocalDate.now();
+				LocalDate minDate = today.plusDays(1);
+				LocalDate maxDate = today.plusDays(7);
+				
+				if (selectedDate.isBefore(minDate) || selectedDate.isAfter(maxDate)) {
+					displayMessage("Error! Reservation must be between 1 and 7 days from today.");
+					return;
+				}
+				
 				String date = datepic.getValue().toString();
 				client.handleMessageFromClientUI("ADD_ORDER " + id + " " + date);
 			} else {
@@ -120,18 +137,25 @@ public class RemoteScreen implements ChatIF {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
-			
-
 		});
-
+		Button logOutBtn = new Button("LogOut");
+		logOutBtn.setId("logOutBtn");
+		//.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;");
+		logOutBtn.setOnAction(e -> {
+			try {
+				main.showLoginScreen();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 //		// Styles
 //		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
 //		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
 //		insertBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
 		VBox orderDate = new VBox(new Label("Order Date:"), datepic);
-		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn,updateUserBtn);
+		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn,updateUserBtn,logOutBtn);
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
 		buttons.setSpacing(10);

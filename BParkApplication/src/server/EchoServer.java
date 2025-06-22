@@ -239,7 +239,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String orderDate = parts[2];
-				String succes =  db.insertResToDB(orderDate, id);
+				String succes =  db.insertOrderToDB(orderDate, id);
 				client.sendToClient(succes);//Send the role to client
 			}
 			else if (message.startsWith("VIEW_DATABASE_ID")) {
