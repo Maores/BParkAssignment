@@ -400,10 +400,9 @@ public class DBController {
 	}
 
 	/**
-	 * Insert user to the database.(order_number, parking_space, order_date,
-	 * confirmation_code, subscriber_id, date_of_placing_an_order)
+	 * Insert user to the database.
 	 */
-	public String insertResToDB(String order_date, String id) {
+	public String insertOrderToDB(String order_date, String id) {
 		orderNumber = this.getMaxOrderNumber();
 		orderNumber++;
 		String sql = "INSERT INTO `table_order` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
