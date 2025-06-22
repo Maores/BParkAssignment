@@ -75,6 +75,7 @@ public class MainApp extends Application {
 			Scene s = new Scene(root, 550, 350);
 			s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 			controller.setPrimaryStage(primaryStage);
+			controller.setMainApp(this);
 			Platform.runLater(() -> {
 				primaryStage.setScene(s);
 				primaryStage.setTitle("BPark - Customer Access");
@@ -83,6 +84,7 @@ public class MainApp extends Application {
 			// STAFF
 		} else if (roleLower.contains("staff")) {
 			StaffGui Staff = new StaffGui();
+			Staff.setMain(this);
 			Parent root = Staff.buildRoot();
 			Scene s = new Scene(root, 600, 400);
 			s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());

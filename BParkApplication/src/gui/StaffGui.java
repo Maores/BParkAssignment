@@ -30,11 +30,15 @@ public class StaffGui implements ChatIF {
     private TableView<ParkingRow> table = new TableView<>();
     private singletoneClient sg = new singletoneClient();
     private ChatClient client;
-
+    private MainApp main;
+    
     public void start() {
         client = sg.getInstance(this);
         handleMessageFromServer("Connected to server!");
     }
+    public void setMain(MainApp main) {
+		this.main = main;
+	}
 
     @FXML
     void ViewDB() {
@@ -149,9 +153,20 @@ public class StaffGui implements ChatIF {
 
         Button viewDBBtn = new Button("View Database");
         viewDBBtn.setOnAction(e -> ViewDB());
-        
+        Button logOutBtn = new Button("LogOut");
+		logOutBtn.setId("logOutBtn");
+		//.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;");
+		logOutBtn.setOnAction(e -> {
+			try {
+				main.showLoginScreen();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
         VBox emptyAddBox = new VBox(new Label(""),addUserBtn);
         HBox phoneEmailAddBox = new HBox(emailBox,phoneBox,emptyAddBox);
+        HBox viewlogBox = new HBox(viewDBBtn,logOutBtn);
         phoneEmailAddBox.setSpacing(10);
         //Btn styles
 //        addUserBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
@@ -159,7 +174,7 @@ public class StaffGui implements ChatIF {
         VBox Interior = new VBox(10,
         		nameIdBox ,
         		phoneEmailAddBox,
-        		viewDBBtn,
+        		viewlogBox,
             outputDisplay,
             table
         );

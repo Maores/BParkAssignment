@@ -20,6 +20,9 @@ public class loginController implements ChatIF {
 
 	@FXML
 	private TextField name;
+	
+	@FXML
+	private Button fgBtn;
 
 	private singletoneClient sg = new singletoneClient();
 	private static ChatClient client;
@@ -49,6 +52,10 @@ public class loginController implements ChatIF {
 
 	public ChatClient getClient() {
 		return client;
+	}
+	@FXML
+	public void forgotPass() {
+		
 	}
 
 	// Get message from the server!!!
