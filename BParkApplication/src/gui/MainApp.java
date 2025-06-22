@@ -38,6 +38,8 @@ public class MainApp extends Application {
 	}
 
 	public void showLoginScreen() throws Exception {
+		this.userId = null;
+		this.userName = null;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/userLogin.fxml"));
 		Parent root = loader.load();
 		loginController controller = loader.getController();
@@ -92,6 +94,7 @@ public class MainApp extends Application {
 			// MANAGER
 		} else if (roleLower.contains("manager")) {
 			UserManagementScreen userManagementScreen = new UserManagementScreen();
+			userManagementScreen.setMain(this);
 			Parent root = userManagementScreen.buildRoot();
 			Scene s = new Scene(root, 600, 400);
 			s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());

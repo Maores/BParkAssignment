@@ -213,7 +213,7 @@ public class DBController {
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true",
 					"root", // MySql //
 					// username
-					"Aa12345" // MySql password
+					"Aa123456" // MySql password
 
 			);
 

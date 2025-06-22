@@ -36,11 +36,16 @@ public class UserManagementScreen implements ChatIF {
 	private ChatClient client;
 
 	private TableView<ParkingRow> table = new TableView<>();
+	
+	private MainApp main;
 
 	public UserManagementScreen() {
 		client = sg.getInstance(this);
 	}
-
+	public void setMain(MainApp main) {
+		this.main = main;
+	}
+	
 	/**
 	 * Search for a order accessing DB without being a listener
 	 */
@@ -177,11 +182,21 @@ public class UserManagementScreen implements ChatIF {
 			client.handleMessageFromClientUI("VIEW_DATABASE");});
 		Button reportBtn = new Button("Generate Report");
 		reportBtn.setOnAction(e -> generateReport());
+		Button logOutBtn = new Button("LogOut");
+		logOutBtn.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;");
+		logOutBtn.setOnAction(e -> {
+			try {
+				main.showLoginScreen();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 		//Btn styles
 //		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-		HBox btns = new HBox(viewOrderBtn,searchBtn,searchUserBtn,reportBtn);
+		HBox btns = new HBox(viewOrderBtn,searchBtn,searchUserBtn,reportBtn,logOutBtn);
 		btns.setSpacing(10);
 		VBox Interior = new VBox(10, searchBox,btns,
 				 logArea, table);

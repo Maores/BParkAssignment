@@ -90,7 +90,7 @@ public class RemoteScreen implements ChatIF {
 
 		Button insertBtn = new Button("New Order");
 		insertBtn.setOnAction(e -> {
-
+			
 			if (datepic.getValue() != null) {
 				String date = datepic.getValue().toString();
 				client.handleMessageFromClientUI("ADD_ORDER " + id + " " + date);
