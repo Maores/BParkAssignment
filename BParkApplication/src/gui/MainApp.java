@@ -45,6 +45,7 @@ public class MainApp extends Application {
 		loginController controller = loader.getController();
 		controller.setMainApp(this);
 		Scene s = new Scene(root);
+		primaryStage.setResizable(false);
 		s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 		primaryStage.setScene(s);
 		primaryStage.setTitle("BPark - Login");

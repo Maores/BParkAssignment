@@ -41,7 +41,8 @@ public class UserUpdate implements ChatIF {
 	@FXML
 	void updateUser(ActionEvent event) {
 		if (email.getText().isEmpty() && phone.getText().isEmpty()) {
-			new Alert(Alert.AlertType.WARNING, "At least one field\n need to be filled.");
+			Alert a = new Alert(Alert.AlertType.WARNING, "At least one field\n need to be filled.");
+			a.show();
 		} else {
 			client.handleMessageFromClientUI("UPDATE_USER_INFO "+phone.getText()+" "+email.getText()+" "+id);
 		}

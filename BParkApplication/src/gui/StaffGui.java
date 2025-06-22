@@ -43,7 +43,7 @@ public class StaffGui implements ChatIF {
     @FXML
     void ViewDB() {
         String command = "VIEW_DATABASE";
-        outputDisplay.appendText("Fetching data from DataBase...");
+        outputDisplay.appendText("Fetching data from DataBase...\n");
         try {
             client.handleMessageFromClientUI(command);
             handleMessageFromServer("Requesting database contents...");
@@ -109,10 +109,10 @@ public class StaffGui implements ChatIF {
         		});
             }
         	else if (message.startsWith("User")) {
-        		outputDisplay.setText(message);
+        		outputDisplay.setText(message+"\n");
         	}
         	else {
-        		outputDisplay.appendText(message);
+        		outputDisplay.appendText(message+"\n");
         	}
         });
     }
