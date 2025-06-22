@@ -35,6 +35,26 @@
     -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
     -fx-transition: background-color 0.3s ease;
 }
+#fgBtn{
+	-fx-background-color: grey;
+    -fx-text-fill: black;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+#fgBtn:hover{
+	-fx-background-color: white;
+    -fx-text-fill: grey;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
 .button:hover {
     -fx-background-color: #fafafa;
     -fx-text-fill: #815854;

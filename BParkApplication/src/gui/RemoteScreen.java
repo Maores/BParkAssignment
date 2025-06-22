@@ -103,7 +103,6 @@ public class RemoteScreen implements ChatIF {
 				LocalDate today = LocalDate.now();
 				LocalDate minDate = today.plusDays(1);
 				LocalDate maxDate = today.plusDays(7);
-				
 				if (selectedDate.isBefore(minDate) || selectedDate.isAfter(maxDate)) {
 					displayMessage("Error! Reservation must be between 1 and 7 days from today.");
 					return;
@@ -114,9 +113,7 @@ public class RemoteScreen implements ChatIF {
 			} else {
 				displayMessage("Please fill date field.");
 			}
-
 		});
-
 		Button updateUserBtn = new Button("Update user information");
 		updateUserBtn.setOnAction(e -> {
 			Stage updateScreen = new Stage();
@@ -168,6 +165,7 @@ public class RemoteScreen implements ChatIF {
 		interior.getChildren().addAll(inter, dbDisplay, table);
 		root.getChildren().add(interior);
 		return root;
+		
 		// not available for now/at all
 //		Button tryBtn = new Button("Reconnect");
 //		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");

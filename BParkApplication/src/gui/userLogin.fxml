@@ -80,7 +80,7 @@
                         </HBox>
                         <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Button fx:id="fgBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#forgotPass" prefHeight="25.0" prefWidth="122.0" text="forgot password" />
+                              <Button fx:id="fgBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#forgotPass" prefHeight="25.0" prefWidth="122.0" text="forgot password" underline="true" />
                               <Button fx:id="login" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" text="login" />
                            </children>
                            <opaqueInsets>
