@@ -23,26 +23,31 @@ public class StaffGui implements ChatIF {
 
     @FXML private TextField nameField;
     @FXML private TextField idField;
+    private TextField phoneField;
+    private TextField emailField;
     @FXML private TextArea outputDisplay;
     
     private TableView<ParkingRow> table = new TableView<>();
     private singletoneClient sg = new singletoneClient();
     private ChatClient client;
-
+    private MainApp main;
+    
     public void start() {
         client = sg.getInstance(this);
-        display("Connected to server!");
     }
+    public void setMain(MainApp main) {
+		this.main = main;
+	}
 
     @FXML
     void ViewDB() {
         String command = "VIEW_DATABASE";
-        outputDisplay.appendText("Fetching data from DataBase...");
+        outputDisplay.appendText("Fetching data from DataBase...\n");
         try {
             client.handleMessageFromClientUI(command);
-            display("Requesting database contents...");
+            handleMessageFromServer("Requesting database contents...");
         } catch (Exception e) {
-            display("Error sending request: " + e.getMessage());
+            handleMessageFromServer("Error sending request: " + e.getMessage());
         }
     }
 
@@ -50,30 +55,30 @@ public class StaffGui implements ChatIF {
     void addNewUser() {
         String name = nameField.getText();
         String id = idField.getText();
-
-        if (name == null || name.isEmpty() || id == null || id.isEmpty()) {
-            display("Please enter both name and ID.");
+        String email = emailField.getText();
+        String phone = phoneField.getText();
+        if (name == null || name.isEmpty() || id == null || id.isEmpty() || email == null || email.isEmpty() || phone == null || phone.isEmpty()) {
+            handleMessageFromServer("Please fill all fields.");
             return;
         }
 
-        String command = "ADD_USER " + id + " " + name;
+        String command = "ADD_USER " + id + " " + name + " " + phone + " " + email;
         try {
             client.handleMessageFromClientUI(command);
-            display("Request sent to add user: " + name + " (" + id + ")");
+            handleMessageFromServer("Request sent to add user: " + name + " (" + id + ")");
         } catch (Exception e) {
-            display("Error: " + e.getMessage());
+            handleMessageFromServer("Error: " + e.getMessage());
         }
     }
 
     @Override
-    public void display(String message) {
+    public void handleMessageFromServer(String message) {
         Platform.runLater(() -> {
             //outputDisplay.appendText(message + "\n");
         	if(message.startsWith("order_number")) {
         		Platform.runLater(() -> {
             	String[] str = message.split(" ");
                 table.setEditable(true);
-                
                 
                 table.getColumns().clear();
 
@@ -95,11 +100,13 @@ public class StaffGui implements ChatIF {
 					ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5]);
 					items.add(row);
 				}
+
                 table.setItems(items);  
         		});
             }
-        	else if (message.startsWith("User")) {
-        		outputDisplay.setText(message);
+      
+        	else {
+        		outputDisplay.appendText(message+"\n");
         	}
         });
     }
@@ -107,14 +114,30 @@ public class StaffGui implements ChatIF {
     public StackPane buildRoot() {
     	StackPane root = new StackPane();
     	root.setId("pane");
+    	
     	Label name =  new Label("User name:");
         nameField = new TextField();
         nameField.setPromptText("Enter user name");
         VBox nameBox = new VBox(name,nameField);
+        
         Label id =  new Label("User ID:");
         idField = new TextField();
         idField.setPromptText("Enter user ID");
         VBox idBox = new VBox(id ,idField);
+        
+        HBox nameIdBox = new HBox(nameBox,idBox);
+        nameIdBox.setSpacing(10);
+        
+        Label email =  new Label("E-Mail:");
+        emailField = new TextField();
+        VBox emailBox = new VBox(email,emailField);
+        
+        Label phone =  new Label("Phone:");
+        phoneField = new TextField();
+        VBox phoneBox = new VBox(phone,phoneField);
+        
+        
+        
         outputDisplay = new TextArea();
         outputDisplay.setPrefHeight(350);
         outputDisplay.setEditable(false);
@@ -124,16 +147,29 @@ public class StaffGui implements ChatIF {
 
         Button viewDBBtn = new Button("View Database");
         viewDBBtn.setOnAction(e -> ViewDB());
-        
+        Button logOutBtn = new Button("LogOut");
+		logOutBtn.setId("logOutBtn");
+		//.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;");
+		logOutBtn.setOnAction(e -> {
+			try {
+				main.showLoginScreen();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+        VBox emptyAddBox = new VBox(new Label(""),addUserBtn);
+        HBox phoneEmailAddBox = new HBox(emailBox,phoneBox,emptyAddBox);
+        HBox viewlogBox = new HBox(viewDBBtn,logOutBtn);
+        phoneEmailAddBox.setSpacing(10);
+        viewlogBox.setSpacing(10);
         //Btn styles
 //        addUserBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //        viewDBBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-        HBox btns = new HBox(viewDBBtn,addUserBtn);
-        btns.setSpacing(10);
         VBox Interior = new VBox(10,
-        	nameBox,
-            idBox,
-            btns,
+        		nameIdBox ,
+        		phoneEmailAddBox,
+        		viewlogBox,
             outputDisplay,
             table
         );

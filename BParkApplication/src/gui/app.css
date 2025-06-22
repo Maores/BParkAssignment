@@ -15,6 +15,34 @@
     -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
     -fx-transition: background-color 0.3s ease;
 }
+#logOutBtn{
+	-fx-background-color: #9e2f28;
+    -fx-text-fill: #F9EBDE;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+#logOutBtn:hover{
+	-fx-background-color: white;
+    -fx-text-fill: #9e2f28;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+#fgBtn{
+	-fx-background-color: grey;
+    -fx-text-fill: black;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
 
 .button:hover {
     -fx-background-color: #fafafa;

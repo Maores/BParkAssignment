@@ -41,6 +41,7 @@ public class OnSiteScreen {
     @FXML
     void Orders(ActionEvent event) {
     	RemoteScreen OffSite = new RemoteScreen();
+    	OffSite.setMain(mainApp);
 		Parent root = OffSite.buildRoot();
 		Scene s = new Scene(root, 700, 600);
         s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
@@ -52,5 +53,8 @@ public class OnSiteScreen {
     }
     public void setPrimaryStage(Stage primaryStage) {
 		this.primaryStage = primaryStage;
+	}
+    public void setMainApp(MainApp mainApp) {
+		this.mainApp = mainApp;
 	}
 }

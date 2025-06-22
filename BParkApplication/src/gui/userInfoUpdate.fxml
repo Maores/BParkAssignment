@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UserUpdate">
+   <children>
+      <BorderPane prefHeight="182.0" prefWidth="284.0">
+         <center>
+            <VBox prefHeight="220.0" prefWidth="315.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" prefWidth="370.0" text="User Information">
+                     <font>
+                        <Font name="Calibri" size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" top="20.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <VBox alignment="TOP_CENTER" prefHeight="130.0" prefWidth="342.0">
+                     <children>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="0.0">
+                           <children>
+                              <Label text="Name:">
+                                 <padding>
+                                    <Insets right="5.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="name" disable="true" editable="false" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="30.0" right="50.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="0.0">
+                           <children>
+                              <Label text="Phone:">
+                                 <padding>
+                                    <Insets right="5.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="phone" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="30.0" right="50.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="0.0">
+                           <children>
+                              <Label text="E-Mail:">
+                                 <padding>
+                                    <Insets right="5.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="email" />
+                           </children>
+                           <padding>
+                              <Insets left="22.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="30.0" right="50.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="cancel" alignment="CENTER" mnemonicParsing="false" onAction="#cancelUser" prefHeight="26.0" prefWidth="79.0" text="Cancel" />
+                              <Button fx:id="update" alignment="CENTER" mnemonicParsing="false" onAction="#updateUser" prefHeight="26.0" prefWidth="79.0" text="Update" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="20.0" right="50.0" top="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</StackPane>

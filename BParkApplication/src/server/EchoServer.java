@@ -118,6 +118,21 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					client.sendToClient("Invalid order number Try again...");
 				}
 			} 
+			else if (message.startsWith("UPDATE_USER_INFO")) {
+				guiController.appendMessage("["+roleConnected+"] Updating user database..");
+				//getting data from DB into parts
+				String[] parts = message.split(" ");
+				String phone = parts[1];
+				String email = parts[2];
+				String id = parts[3];
+				//updates the DB
+				if ((log = db.updateUserInfoDB(phone, email,id)) == "true") {
+					client.sendToClient("Update user information succeded");
+				} else {
+					client.sendToClient(log);
+				}
+				
+			} 
 			///SEARCH  parking orders by id
 			else if (message.startsWith("SEARCH_ORDER")) {
 				guiController.appendMessage("["+roleConnected+"] Searching order in database..");
@@ -157,12 +172,14 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String id  = parts[1];
 				String name = parts[2];
 				String role =db.getUserRoleById(id,name);
-				guiController.appendMessage("["+role+"] Login to the system");
+				
 				if(role.equals("null")) {
-					client.sendToClient("ERROR:UserName/id is wrong!");
+					client.sendToClient("ERROR:UserName/Password is wrong!");
 				}
 				else
 				{
+					String roleS =role.split(" ")[1];
+					guiController.appendMessage("["+roleS+"] Login to the system");
 					client.sendToClient("role " +role);//Send the role to client
 				}
 				
@@ -213,7 +230,9 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String name = parts[2];
-				String succes =  db.insertUserToDB(name, id);
+				String phone = parts[3];
+				String email = parts[4];
+				String succes =  db.insertUserToDB(name, id,phone,email);
 				client.sendToClient(succes);//Send the role to client
 			}
 			else if (message.startsWith("ADD_ORDER")) {
@@ -223,6 +242,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String orderDate = parts[2];
 				String orderHour = parts[3];
 				String succes =  db.insertResToDB(orderDate, id, orderHour );
+
 				client.sendToClient(succes);//Send the role to client
 			}
 			else if (message.startsWith("VIEW_DATABASE_ID")) {
@@ -246,6 +266,22 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					System.out.println("Host: " + parts[1] + "\nIP: " + client + "\nRole: "+parts[2]+"\nStatus: Connected");
 				}
 			}
+ 			else if (message.startsWith("#CheckEmailReset#")) {
+ 			    guiController.appendMessage("[SERVER] Checking if email exists in DB..");
+ 			    String email = message.replace("#CheckEmailReset#", "").trim();
+ 			    boolean exists = db.emailExists(email);
+
+ 			    try {
+ 			        if (exists) {
+ 			            client.sendToClient("EMAIL_EXISTS");
+ 			        } else {
+ 			            client.sendToClient("EMAIL_NOT_FOUND");
+ 			        }
+ 			    } catch (Exception e) {
+ 			        e.printStackTrace();
+ 			    }
+ 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

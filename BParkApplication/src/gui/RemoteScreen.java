@@ -1,13 +1,19 @@
 package gui;
 
+import java.io.IOException;
+import java.time.LocalDate;
+
 import client.ChatClient;
 import client.singletoneClient;
 import common.ChatIF;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -21,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class RemoteScreen implements ChatIF {
 	/**
@@ -31,9 +38,12 @@ public class RemoteScreen implements ChatIF {
 	private ChatClient client;
 	private singletoneClient sg = new singletoneClient();
 	private TableView<ParkingRow> table = new TableView<>();
-	private DatePicker datePick;
+
 	private Spinner<Integer> hourSpinner;
-	
+
+	private DatePicker datePick;
+	private MainApp main;
+	private Stage primary;
 	private String id = MainApp.getUserId();
 	private String name = MainApp.getUserName();
 
@@ -54,6 +64,9 @@ public class RemoteScreen implements ChatIF {
 //				"-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
 		client = sg.getInstance(this);
 	}
+	public void setMain(MainApp main) {
+		this.main = main;
+	}
 
 	public StackPane buildRoot() {
 //		Image icon = new Image(getClass().getResourceAsStream("logo.png"));
@@ -73,7 +86,8 @@ public class RemoteScreen implements ChatIF {
 
 		viewBtn.setOnAction(e -> {
 			dbDisplay.setText("Fetching data...\n");
-			client.handleMessageFromClientUI("VIEW_DATABASE_ID " + id);});
+			client.handleMessageFromClientUI("VIEW_DATABASE_ID " + id);
+		});
 
 		Button updateBtn = new Button("Update Reservation");
 
@@ -82,22 +96,68 @@ public class RemoteScreen implements ChatIF {
 				String date = datePick.getValue().toString();
 				String hour = hourSpinner.getValue().toString();
 				String updateMsg = "UPDATE_ORDER " + orderField.getText() + " " + date + " " + hour;
+
 				client.handleMessageFromClientUI(updateMsg);
 			} else {
 				displayMessage("Please fill order number AND date fields.");
 			}
 		});
-		Button insertBtn = new Button("New Order");
-		
+
+		Button insertBtn = new Button("New Order");	
+
 		insertBtn.setOnAction(e -> {
+			/*
+			 * Implementing 7 days -> 24 days prior limit
+			 */
+
 
 			if (datePick.getValue() != null) {
+				LocalDate selectedDate = datePick.getValue();
+				LocalDate today = LocalDate.now();
+				LocalDate minDate = today.plusDays(1);
+				LocalDate maxDate = today.plusDays(7);
+				if (selectedDate.isBefore(minDate) || selectedDate.isAfter(maxDate)) {
+					displayMessage("Error! Reservation must be between 1 and 7 days from today.");
+					return;
+				}
+				
 				String date = datePick.getValue().toString();
-				client.handleMessageFromClientUI("ADD_ORDER " + orderField.getText() + " " + date + " " +  hourSpinner.getValue().toString());
+				client.handleMessageFromClientUI("ADD_ORDER " + id + " " + date+ " " +  hourSpinner.getValue().toString());
 			} else {
 				displayMessage("Please fill date field.");
 			}
-
+		});
+		Button updateUserBtn = new Button("Update user information");
+		updateUserBtn.setOnAction(e -> {
+			Stage updateScreen = new Stage();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/userInfoUpdate.fxml"));
+			Parent pop;
+			try {
+				pop = loader.load();
+				Scene s = new Scene(pop,300,210);
+				s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+				UserUpdate controller = loader.getController();
+				controller.setPopWindow(updateScreen);
+				controller.name.setText(name);
+				updateScreen.setScene(s);
+				updateScreen.setResizable(false);
+				updateScreen.setTitle("Update Information");	
+				updateScreen.show();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		Button logOutBtn = new Button("LogOut");
+		logOutBtn.setId("logOutBtn");
+		//.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;");
+		logOutBtn.setOnAction(e -> {
+			try {
+				main.showLoginScreen();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		
 		
@@ -109,7 +169,8 @@ public class RemoteScreen implements ChatIF {
 		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
 		VBox orderDate = new VBox(new Label("Order Date:"), datePick);
 		VBox orderHour = new VBox(new Label("Order Hour:"), hourSpinner);
-		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn);
+		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn,updateUserBtn,logOutBtn);
+
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
 		buttons.setSpacing(10);
@@ -122,6 +183,7 @@ public class RemoteScreen implements ChatIF {
 		interior.getChildren().addAll(inter, dbDisplay, table);
 		root.getChildren().add(interior);
 		return root;
+		
 		// not available for now/at all
 //		Button tryBtn = new Button("Reconnect");
 //		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
@@ -166,7 +228,7 @@ public class RemoteScreen implements ChatIF {
 	}
 
 	@Override
-	public void display(String message) {
+	public void handleMessageFromServer(String message) {
 		displayMessage(message);
 	}
 
