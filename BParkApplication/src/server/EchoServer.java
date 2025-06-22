@@ -106,9 +106,10 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
 				String orderDate = parts[2];
+				String orderHour = parts[3];
 				if (db.checkDB(orderNumber)) {
 					//updates the DB
-					if ((log = db.updateDB(orderDate, orderNumber)) == "true") {
+					if ((log = db.updateDB(orderNumber, orderDate, orderHour)) == "true") {
 						client.sendToClient("Update successful for order number " + orderNumber);
 					} else {
 						client.sendToClient(log.substring(0, log.length() - 9) + ".");
@@ -220,7 +221,8 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String orderDate = parts[2];
-				String succes =  db.insertResToDB(orderDate, id);
+				String orderHour = parts[3];
+				String succes =  db.insertResToDB(orderDate, id, orderHour );
 				client.sendToClient(succes);//Send the role to client
 			}
 			else if (message.startsWith("VIEW_DATABASE_ID")) {

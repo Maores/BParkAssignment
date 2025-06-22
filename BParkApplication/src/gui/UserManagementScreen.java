@@ -115,13 +115,14 @@ public class UserManagementScreen implements ChatIF {
 					d.setCellValueFactory(new PropertyValueFactory<>("col4"));
 					TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
 					e.setCellValueFactory(new PropertyValueFactory<>("col5"));
-					table.getColumns().addAll(a, b, c, d, e);
+					TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
+					f.setCellValueFactory(new PropertyValueFactory<>("col6"));
+					table.getColumns().addAll(a, b, c, d, e, f);
 					ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-					for (int i = 5; i + 4 < str.length; i += 5) {
-						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4]);
+					for (int i = 6; i + 5 < str.length; i += 6) {
+						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5]);
 						items.add(row);
 					}
-
 					table.setItems(items);
 				});
 				logArea.appendText("Completed!"+ "\n");

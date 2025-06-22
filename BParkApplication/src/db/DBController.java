@@ -208,7 +208,7 @@ public class DBController {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true", "root", // MySql //
 																											// username
-					"Aa12345" // MySql password
+					"Aa123456" // MySql password
 					
 			);
 			
@@ -232,6 +232,7 @@ public class DBController {
 	 */
 
 	public boolean checkDB(String order) {
+		System.out.println("order:" + order);
 		String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
 
 		try {
@@ -278,8 +279,8 @@ public class DBController {
 	/**
 	 * Update a specific order (change the date)
 	 */
-	public String updateDB( String order_date, String id) {
-		String sql = "UPDATE `table_order` SET  order_date = ? WHERE order_number = ?;";
+	public String updateDB( String order_number, String order_date, String hour_date) {
+		String sql = "UPDATE `table_order` SET  order_date = ?, order_hour = ? WHERE order_number = ?;";
 		if(!AvailableSpots(order_date)) {
 			return "Not enough space at this date!";
 		}
@@ -287,7 +288,8 @@ public class DBController {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, order_date);
-			ps.setInt(2, Integer.parseInt(id));
+			ps.setInt(2, Integer.parseInt(hour_date));
+			ps.setInt(3, Integer.parseInt(order_number));
 
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
@@ -330,12 +332,13 @@ public class DBController {
 	/**
 	 * inserting a new order to DB
 	 */
-	public String insertResToDB(String order_date, String id) {
+	public String insertResToDB(String order_date, String id, String order_hour) {
 		orderNumber = this.getMaxOrderNumber();
 		orderNumber++;
-		String sql = "INSERT INTO `table_order` (order_number, order_date, confirmation_code, subscriber_id, date_of_placing_an_order) "
-				+ "VALUES (?,?,?,?,?);";
-		//checks if an order was alreadt placed in the same date by the given user
+		System.out.println("spinner hour:" + order_hour);
+		String sql = "INSERT INTO `table_order` (order_number, order_date, order_hour, confirmation_code, subscriber_id, date_of_placing_an_order) "
+				+ "VALUES (?,?,?,?,?,?);";
+		//checks if an order was already placed in the same date by the given user
 		if (orderByDateExists(id, order_date))
 			return "Order Already exists for the given date, choose another date.";
 		if (!AvailableSpots(order_date)) {
@@ -348,9 +351,10 @@ public class DBController {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, orderNumber);
 			ps.setString(2, order_date);
-			ps.setInt(3, confirCode);
-			ps.setInt(4, Integer.parseInt(id));
-			ps.setString(5, date.toString());
+			ps.setInt(3, Integer.parseInt(order_hour));
+			ps.setInt(4, confirCode);
+			ps.setInt(5, Integer.parseInt(id));
+			ps.setString(6, date.toString());
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
 			if (listener != null) {

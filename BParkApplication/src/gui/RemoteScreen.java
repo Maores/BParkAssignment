@@ -11,6 +11,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -29,8 +31,9 @@ public class RemoteScreen implements ChatIF {
 	private ChatClient client;
 	private singletoneClient sg = new singletoneClient();
 	private TableView<ParkingRow> table = new TableView<>();
-	private DatePicker datepic;
-
+	private DatePicker datePick;
+	private Spinner<Integer> hourSpinner;
+	
 	private String id = MainApp.getUserId();
 	private String name = MainApp.getUserName();
 
@@ -42,9 +45,9 @@ public class RemoteScreen implements ChatIF {
 //		srcField = new TextField();
 //		srcField.setPromptText("Search order number");
 		dbDisplay = new TextArea();
-		datepic = new DatePicker();
-		datepic.setPromptText("Enter order date");
-		datepic.setMaxWidth(170);
+		datePick = new DatePicker();
+		datePick.setPromptText("Enter order date");
+		datePick.setMaxWidth(170);
 		dbDisplay.setPrefHeight(200);
 		dbDisplay.setEditable(false);
 //		dbDisplay.setStyle(
@@ -60,7 +63,12 @@ public class RemoteScreen implements ChatIF {
 //		iv1.setFitWidth(icon.getWidth() / 10);
 		StackPane root = new StackPane();
 		// root.setId("pane");
-
+		
+		hourSpinner = new Spinner<>();
+        SpinnerValueFactory<Integer> valueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(9, 17, 9); // min, max, initial
+        hourSpinner.setValueFactory(valueFactory);
+		
 		Button viewBtn = new Button("View order History");
 
 		viewBtn.setOnAction(e -> {
@@ -70,32 +78,37 @@ public class RemoteScreen implements ChatIF {
 		Button updateBtn = new Button("Update Reservation");
 
 		updateBtn.setOnAction(e -> {
-			if (!orderField.getText().isEmpty() && datepic.getValue() != null) {
-				String date = datepic.getValue().toString();
-				String updateMsg = "UPDATE_ORDER " + id + " " + date;
+			if (!orderField.getText().isEmpty() && datePick.getValue() != null) {
+				String date = datePick.getValue().toString();
+				String hour = hourSpinner.getValue().toString();
+				String updateMsg = "UPDATE_ORDER " + orderField.getText() + " " + date + " " + hour;
 				client.handleMessageFromClientUI(updateMsg);
 			} else {
 				displayMessage("Please fill order number AND date fields.");
 			}
 		});
 		Button insertBtn = new Button("New Order");
-
+		
 		insertBtn.setOnAction(e -> {
 
-			if (datepic.getValue() != null) {
-				String date = datepic.getValue().toString();
-				client.handleMessageFromClientUI("ADD_ORDER " + id + " " + date);
+			if (datePick.getValue() != null) {
+				String date = datePick.getValue().toString();
+				client.handleMessageFromClientUI("ADD_ORDER " + orderField.getText() + " " + date + " " +  hourSpinner.getValue().toString());
 			} else {
 				displayMessage("Please fill date field.");
 			}
 
 		});
+		
+		
+		
 //		// Styles
 //		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
 //		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
 //		insertBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
-		VBox orderDate = new VBox(new Label("Order Date:"), datepic);
+		VBox orderDate = new VBox(new Label("Order Date:"), datePick);
+		VBox orderHour = new VBox(new Label("Order Hour:"), hourSpinner);
 		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn);
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
@@ -103,7 +116,7 @@ public class RemoteScreen implements ChatIF {
 		VBox interior = new VBox(10);
 		root.setPadding(new Insets(15));
 		root.setAlignment(Pos.TOP_CENTER);
-		HBox fields = new HBox(orderNumber, orderDate);
+		HBox fields = new HBox(orderNumber, orderDate, orderHour );
 		fields.setSpacing(10);
 		VBox inter = new VBox(10, fields, buttons);
 		interior.getChildren().addAll(inter, dbDisplay, table);
@@ -136,10 +149,12 @@ public class RemoteScreen implements ChatIF {
 				d.setCellValueFactory(new PropertyValueFactory<>("col4"));
 				TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
 				e.setCellValueFactory(new PropertyValueFactory<>("col5"));
-				table.getColumns().addAll(a, b, c, d, e);
+				TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
+				f.setCellValueFactory(new PropertyValueFactory<>("col6"));
+				table.getColumns().addAll(a, b, c, d, e, f);
 				ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-				for (int i = 5; i + 4 < str.length; i += 5) {
-					ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4]);
+				for (int i = 6; i + 5 < str.length; i += 6) {
+					ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5]);
 					items.add(row);
 				}
 				table.setItems(items);
