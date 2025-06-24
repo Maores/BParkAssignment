@@ -31,7 +31,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 	 */
 	final public static int DEFAULT_PORT = 5555;
 	private serverGuiController guiController;
-	private DBController dbController = null;  // Store reference to singleton
+	private DBController dbController = null; // Store reference to singleton
 	private String roleConnected;
 
 	// Constructors ****************************************************
@@ -100,6 +100,12 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				//gather data from DB
 				String data = db.getDatabaseAsString();
 				client.sendToClient(data);
+			}
+			else if (message.equals("VIEW_USERDATABASE")) {
+					guiController.appendMessage("["+roleConnected+"] Fetching user data from database..");
+					//gather data from DB
+					String userData = db.getUserDatabaseAsString();
+					client.sendToClient(userData);
 			} else if (message.startsWith("UPDATE_ORDER")) {
 				guiController.appendMessage("["+roleConnected+"] Updating database..");
 				//getting data from DB into parts
@@ -297,7 +303,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 		if (guiController != null) {
 			guiController.appendMessage("[Server] Server listening for connections on port " + getPort());
 		}
-		
+
 		// Initialize database connection once when server starts
 		// Pass 'this' as the listener to receive database notifications
 		dbController = DBController.getInstance(this);

@@ -100,12 +100,45 @@ public class DBController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		// returns the string
 		return str.toString();
 
 	}
+	/*
+	 * Get data base result as string
+	 */
+	public String getUserDatabaseAsString() {
 
+		StringBuilder str = new StringBuilder();
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE role = 'user';");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnSize = rsmd.getColumnCount();
+			// Build string for database - column names
+			for (int i = 1; i <= columnSize; i++) {
+				String s = new String();
+				s = String.format("%s ", rsmd.getColumnName(i));
+				str.append(s);
+			}
+
+			// Build string for database - rows
+			while (rs.next()) {
+				for (int i = 1; i <= columnSize; i++) {
+					String columnValue = String.format("%s ", rs.getString(i));
+					str.append(columnValue);
+
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// returns the string
+		return str.toString();
+
+	}
 	// Search Specific ID
 	public String SearchOrder(String order) {
 

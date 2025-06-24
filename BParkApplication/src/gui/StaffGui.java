@@ -103,8 +103,34 @@ public class StaffGui implements ChatIF {
 
                 table.setItems(items);  
         		});
-            }
-      
+            }else if (message.startsWith("id")) {
+				Platform.runLater(() -> {
+					String[] str = message.split(" ");
+					table.setEditable(true);
+					table.getColumns().clear();
+					TableColumn<ParkingRow, String> a = new TableColumn<>(str[0]);
+					a.setCellValueFactory(new PropertyValueFactory<>("col1"));
+					TableColumn<ParkingRow, String> b = new TableColumn<>(str[1]);
+					b.setCellValueFactory(new PropertyValueFactory<>("col2"));
+					TableColumn<ParkingRow, String> c = new TableColumn<>(str[2]);
+					c.setCellValueFactory(new PropertyValueFactory<>("col3"));
+					TableColumn<ParkingRow, String> d = new TableColumn<>(str[3]);
+					d.setCellValueFactory(new PropertyValueFactory<>("col4"));
+					TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
+					e.setCellValueFactory(new PropertyValueFactory<>("col5"));
+					TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
+					f.setCellValueFactory(new PropertyValueFactory<>("col6"));
+					table.getColumns().addAll(a, b, c,d,e,f);
+					ObservableList<ParkingRow> items = FXCollections.observableArrayList();
+					for (int i = 6; i + 5 < str.length; i += 6) {
+						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2],str[i + 3],str[i + 4],str[i + 5]);
+						items.add(row);
+					}
+
+					table.setItems(items);
+				});
+				outputDisplay.appendText("Completed!" + "\n");
+			}
         	else {
         		outputDisplay.appendText(message+"\n");
         	}
@@ -147,6 +173,11 @@ public class StaffGui implements ChatIF {
 
         Button viewDBBtn = new Button("View Database");
         viewDBBtn.setOnAction(e -> ViewDB());
+        Button viewUserBtn = new Button("View users");
+		viewUserBtn.setOnAction(e -> {
+			outputDisplay.setText("Showing users..." + "\n");
+			client.handleMessageFromClientUI("VIEW_USERDATABASE");
+		});
         Button logOutBtn = new Button("LogOut");
 		logOutBtn.setId("logOutBtn");
 		//.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;");
@@ -160,7 +191,7 @@ public class StaffGui implements ChatIF {
 		});
         VBox emptyAddBox = new VBox(new Label(""),addUserBtn);
         HBox phoneEmailAddBox = new HBox(emailBox,phoneBox,emptyAddBox);
-        HBox viewlogBox = new HBox(viewDBBtn,logOutBtn);
+        HBox viewlogBox = new HBox(viewDBBtn,viewUserBtn,logOutBtn);
         phoneEmailAddBox.setSpacing(10);
         viewlogBox.setSpacing(10);
         //Btn styles

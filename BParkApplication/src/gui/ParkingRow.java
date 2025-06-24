@@ -14,9 +14,24 @@ public class ParkingRow {
         this.col1 = new SimpleStringProperty(c1);
         this.col2 = new SimpleStringProperty(c2);
         this.col3 = new SimpleStringProperty(c3);
-        this.col4 = new SimpleStringProperty(c4);
-        this.col5 = new SimpleStringProperty(c5);
-        this.col6 = new SimpleStringProperty(c6);
+        if(c4.equals("null")) {
+        	this.col4 = new SimpleStringProperty("");
+        }
+        else {
+        	this.col4 = new SimpleStringProperty(c4);
+        }
+        if(c5.equals("null")) {
+        	this.col5 = new SimpleStringProperty("");
+        }
+        else {
+        	this.col5 = new SimpleStringProperty(c5);
+        }
+        if(c6.equals("null")) {
+        	this.col6 = new SimpleStringProperty("");
+        }
+        else {
+        	this.col6 = new SimpleStringProperty(c6);
+        }
     }
     public ParkingRow(String c1, String c2, String c3) {
         this.col1 = new SimpleStringProperty(c1);

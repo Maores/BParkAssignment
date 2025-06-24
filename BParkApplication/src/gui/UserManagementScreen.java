@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+
 /**
  * Example screen showing how to access the database after the GUI/DB
  * separation. This screen doesn't need to receive database notifications, so it
@@ -144,10 +145,16 @@ public class UserManagementScreen implements ChatIF {
 					b.setCellValueFactory(new PropertyValueFactory<>("col2"));
 					TableColumn<ParkingRow, String> c = new TableColumn<>(str[2]);
 					c.setCellValueFactory(new PropertyValueFactory<>("col3"));
-					table.getColumns().addAll(a, b, c);
+					TableColumn<ParkingRow, String> d = new TableColumn<>(str[3]);
+					d.setCellValueFactory(new PropertyValueFactory<>("col4"));
+					TableColumn<ParkingRow, String> e = new TableColumn<>(str[4]);
+					e.setCellValueFactory(new PropertyValueFactory<>("col5"));
+					TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
+					f.setCellValueFactory(new PropertyValueFactory<>("col6"));
+					table.getColumns().addAll(a, b, c,d,e,f);
 					ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-					for (int i = 3; i + 2 < str.length; i += 3) {
-						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2]);
+					for (int i = 6; i + 5 < str.length; i += 6) {
+						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5]);
 						items.add(row);
 					}
 
@@ -182,6 +189,11 @@ public class UserManagementScreen implements ChatIF {
 			logArea.setText("Showing orders..." + "\n");
 			client.handleMessageFromClientUI("VIEW_DATABASE");
 		});
+		Button viewUserBtn = new Button("View users");
+		viewUserBtn.setOnAction(e -> {
+			logArea.setText("Showing users..." + "\n");
+			client.handleMessageFromClientUI("VIEW_USERDATABASE");
+		});
 		Button reportBtn = new Button("Generate Report");
 		reportBtn.setOnAction(e -> generateReport());
 		Button logOutBtn = new Button("LogOut");
@@ -200,7 +212,7 @@ public class UserManagementScreen implements ChatIF {
 //		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-		HBox btns = new HBox(viewOrderBtn, searchBtn, searchUserBtn, reportBtn, logOutBtn);
+		HBox btns = new HBox(viewOrderBtn,viewUserBtn, searchBtn, searchUserBtn, reportBtn, logOutBtn);
 		btns.setSpacing(10);
 		VBox Interior = new VBox(10, searchBox, btns, logArea, table);
 		root.setMargin(Interior, new Insets(15));
