@@ -317,7 +317,7 @@ public class DBController {
 	 * Update a specific order (change the date)
 	 */
 	public String updateDB( String order_number, String order_date, String hour_date) {
-		String sql = "UPDATE `table_order` SET  order_date = ?, order_hour = ? WHERE order_number = ?;";
+		String sql = "UPDATE `table_order` SET  order_date = ?, order_time = ? WHERE order_number = ?;";
 		if(!AvailableSpots(order_date)) {
 
 			return "Not enough space at this date!";
@@ -326,7 +326,7 @@ public class DBController {
 			PreparedStatement ps = conn.prepareStatement(sql);
 
 			ps.setString(1, order_date);
-			ps.setInt(2, Integer.parseInt(hour_date));
+			ps.setString(2, hour_date);
 			ps.setInt(3, Integer.parseInt(order_number));
 
 			ps.executeUpdate();
@@ -442,8 +442,7 @@ public class DBController {
 
 		orderNumber = this.getMaxOrderNumber();
 		orderNumber++;
-		System.out.println("spinner hour:" + order_hour);
-		String sql = "INSERT INTO `table_order` (order_number, order_date, order_hour, confirmation_code, subscriber_id, date_of_placing_an_order) "
+		String sql = "INSERT INTO `table_order` (order_number, order_date, order_time, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?,?);";
 		//checks if an order was already placed in the same date by the given user
 
@@ -460,7 +459,7 @@ public class DBController {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, orderNumber);
 			ps.setString(2, order_date);
-			ps.setInt(3, Integer.parseInt(order_hour));
+			ps.setString(3, order_hour);
 			ps.setInt(4, confirCode);
 			ps.setInt(5, Integer.parseInt(id));
 			ps.setString(6, date.toString());

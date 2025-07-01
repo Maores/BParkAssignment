@@ -2,6 +2,10 @@ package gui;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import client.ChatClient;
 import client.singletoneClient;
@@ -39,7 +43,7 @@ public class RemoteScreen implements ChatIF {
 	private singletoneClient sg = new singletoneClient();
 	private TableView<ParkingRow> table = new TableView<>();
 
-	private Spinner<Integer> hourSpinner;
+	private Spinner<String> hourSpinner;
 
 	private DatePicker datePick;
 	private MainApp main;
@@ -77,11 +81,28 @@ public class RemoteScreen implements ChatIF {
 		StackPane root = new StackPane();
 		// root.setId("pane");
 		
-		hourSpinner = new Spinner<>();
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(9, 17, 9); // min, max, initial
+//		hourSpinner = new Spinner<>();
+//        SpinnerValueFactory<Integer> valueFactory =
+//                new SpinnerValueFactory.IntegerSpinnerValueFactory(9, 17, 9); // min, max, initial
+//        hourSpinner.setValueFactory(valueFactory);
+		Spinner<String> hourSpinner = new Spinner<>();
+		hourSpinner.setEditable(false); // prevent manual input
+
+        // Generate time values from 09:00 to 17:00 in 15-minute intervals
+        List<String> timeOptions = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime startTime = LocalTime.of(9, 0);
+        LocalTime endTime = LocalTime.of(17, 0);
+
+        while (!startTime.isAfter(endTime)) {
+            timeOptions.add(startTime.format(formatter));
+            startTime = startTime.plusMinutes(15);
+        }
+
+        // Set value factory
+        SpinnerValueFactory<String> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(javafx.collections.FXCollections.observableArrayList(timeOptions));
+        valueFactory.setValue(timeOptions.get(0)); // default to first time (09:00)
         hourSpinner.setValueFactory(valueFactory);
-		
 		Button viewBtn = new Button("View order History");
 
 		viewBtn.setOnAction(e -> {
