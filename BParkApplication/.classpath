@@ -8,7 +8,7 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/OCSF"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rafi1/Desktop/JARS/jakarta.activation-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rafi1/Desktop/JARS/jakarta.mail-2.0.1.jar"/>
+	<classpathentry kind="lib" path="src/common/jakarta.activation-2.0.1.jar"/>
+	<classpathentry kind="lib" path="src/common/jakarta.mail-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
