@@ -8,8 +8,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import common.DatabaseListener;
+import common.MailSender;
 import db.DBController;
 import gui.serverGuiController;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -187,7 +190,20 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					client.sendToClient("role " +role);//Send the role to client
 				}
 				
-			}
+			}else if (message.startsWith("RESET_PASSWORD")) {
+				String[] parts = message.split(" ");
+				String email = parts[1];
+				String mailMessage="";
+				if(db.emailExists(email)) {
+					// Simulate sending reset email
+		            System.out.println("Password reset email sent to: " + email);
+		            String password = db.getPassword(email);
+		            if(!password.equals("")) {
+		            	mailMessage = MailSender.sendEmail(email, "BPark Password", "The Password: "+password);
+		            }
+				}
+				client.sendToClient(mailMessage);
+		}
 			// Handle new report generation command
 			else if (message.startsWith("GENERATE_REPORT")) {
 				String[] parts = message.split(" ");

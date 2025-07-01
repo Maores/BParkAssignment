@@ -5,6 +5,7 @@ import java.io.IOException;
 import client.ChatClient;
 import client.singletoneClient;
 import common.ChatIF;
+import common.MailSender;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

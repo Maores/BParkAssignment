@@ -542,6 +542,24 @@ public class DBController {
 		}
 		return false;
 	}
+	
+	// get password of user by email
+		public String getPassword(String email) {
+			String sql = "SELECT password FROM users WHERE email = ?;";
+			try {
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.setString(1, email);
+
+				ResultSet rs = ps.executeQuery();
+				if (rs.next())
+					return rs.getString(1);
+				else
+					return "";
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return "";
+		}
 
 	/**
 	 * Close the database connection.
