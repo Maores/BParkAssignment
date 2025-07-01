@@ -111,11 +111,9 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				//getting data from DB into parts
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
-				String orderDate = parts[2];
-				String orderHour = parts[3];
 				if (db.checkDB(orderNumber)) {
 					//updates the DB
-					if ((log = db.updateDB(orderNumber, orderDate, orderHour)) == "true") {
+					if ((log = db.updateDB(orderNumber)) == "true") {
 						client.sendToClient("Update successful for order number " + orderNumber);
 					} else {
 						client.sendToClient(log.substring(0, log.length() - 9) + ".");

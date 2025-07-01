@@ -43,7 +43,7 @@ public class OnSiteScreen {
     	RemoteScreen OffSite = new RemoteScreen();
     	OffSite.setMain(mainApp);
 		Parent root = OffSite.buildRoot();
-		Scene s = new Scene(root, 700, 600);
+		Scene s = new Scene(root, 800, 600);
         s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 		Platform.runLater(() -> {
 			primaryStage.setScene(s);

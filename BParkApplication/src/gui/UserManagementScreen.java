@@ -125,10 +125,13 @@ public class UserManagementScreen implements ChatIF {
 					e.setCellValueFactory(new PropertyValueFactory<>("col5"));
 					TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
 					f.setCellValueFactory(new PropertyValueFactory<>("col6"));
-					table.getColumns().addAll(a, b, c, d, e, f);
+					TableColumn<ParkingRow, String> g = new TableColumn<>(str[6]);
+					g.setCellValueFactory(new PropertyValueFactory<>("col7"));
+					table.getColumns().addAll(a, b, c, d, e, f, g);
 					ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-					for (int i = 6; i + 5 < str.length; i += 6) {
-						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5]);
+					for (int i = 7; i + 6 < str.length; i += 7) {
+						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5],
+								str[i + 6]);
 						items.add(row);
 					}
 					table.setItems(items);
@@ -151,10 +154,13 @@ public class UserManagementScreen implements ChatIF {
 					e.setCellValueFactory(new PropertyValueFactory<>("col5"));
 					TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
 					f.setCellValueFactory(new PropertyValueFactory<>("col6"));
-					table.getColumns().addAll(a, b, c,d,e,f);
+					TableColumn<ParkingRow, String> g = new TableColumn<>(str[6]);
+					g.setCellValueFactory(new PropertyValueFactory<>("col7"));
+					table.getColumns().addAll(a, b, c, d, e, f, g);
 					ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-					for (int i = 6; i + 5 < str.length; i += 6) {
-						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5]);
+					for (int i = 7; i + 6 < str.length; i += 7) {
+						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5],
+								str[i + 6]);
 						items.add(row);
 					}
 

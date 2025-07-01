@@ -68,6 +68,7 @@ public class RemoteScreen implements ChatIF {
 //				"-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
 		client = sg.getInstance(this);
 	}
+
 	public void setMain(MainApp main) {
 		this.main = main;
 	}
@@ -80,7 +81,7 @@ public class RemoteScreen implements ChatIF {
 //		iv1.setFitWidth(icon.getWidth() / 10);
 		StackPane root = new StackPane();
 		// root.setId("pane");
-		
+
 //		hourSpinner = new Spinner<>();
 //        SpinnerValueFactory<Integer> valueFactory =
 //                new SpinnerValueFactory.IntegerSpinnerValueFactory(9, 17, 9); // min, max, initial
@@ -88,21 +89,22 @@ public class RemoteScreen implements ChatIF {
 		Spinner<String> hourSpinner = new Spinner<>();
 		hourSpinner.setEditable(false); // prevent manual input
 
-        // Generate time values from 09:00 to 17:00 in 15-minute intervals
-        List<String> timeOptions = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime startTime = LocalTime.of(9, 0);
-        LocalTime endTime = LocalTime.of(17, 0);
+		// Generate time values from 09:00 to 17:00 in 15-minute intervals
+		List<String> timeOptions = new ArrayList<>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		LocalTime startTime = LocalTime.of(9, 0);
+		LocalTime endTime = LocalTime.of(17, 0);
 
-        while (!startTime.isAfter(endTime)) {
-            timeOptions.add(startTime.format(formatter));
-            startTime = startTime.plusMinutes(15);
-        }
+		while (!startTime.isAfter(endTime)) {
+			timeOptions.add(startTime.format(formatter));
+			startTime = startTime.plusMinutes(15);
+		}
 
-        // Set value factory
-        SpinnerValueFactory<String> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(javafx.collections.FXCollections.observableArrayList(timeOptions));
-        valueFactory.setValue(timeOptions.get(0)); // default to first time (09:00)
-        hourSpinner.setValueFactory(valueFactory);
+		// Set value factory
+		SpinnerValueFactory<String> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(
+				javafx.collections.FXCollections.observableArrayList(timeOptions));
+		valueFactory.setValue(timeOptions.get(0)); // default to first time (09:00)
+		hourSpinner.setValueFactory(valueFactory);
 		Button viewBtn = new Button("View order History");
 
 		viewBtn.setOnAction(e -> {
@@ -110,27 +112,23 @@ public class RemoteScreen implements ChatIF {
 			client.handleMessageFromClientUI("VIEW_DATABASE_ID " + id);
 		});
 
-		Button updateBtn = new Button("Update Reservation");
+		Button updateBtn = new Button("Extend Reservation");
 
 		updateBtn.setOnAction(e -> {
-			if (!orderField.getText().isEmpty() && datePick.getValue() != null) {
-				String date = datePick.getValue().toString();
-				String hour = hourSpinner.getValue().toString();
-				String updateMsg = "UPDATE_ORDER " + orderField.getText() + " " + date + " " + hour;
-
+			if (!orderField.getText().isEmpty()) {
+				String updateMsg = "UPDATE_ORDER " + orderField.getText();
 				client.handleMessageFromClientUI(updateMsg);
 			} else {
 				displayMessage("Please fill order number AND date fields.");
 			}
 		});
 
-		Button insertBtn = new Button("New Order");	
+		Button insertBtn = new Button("New Order");
 
 		insertBtn.setOnAction(e -> {
 			/*
 			 * Implementing 7 days -> 24 days prior limit
 			 */
-
 
 			if (datePick.getValue() != null) {
 				LocalDate selectedDate = datePick.getValue();
@@ -141,9 +139,10 @@ public class RemoteScreen implements ChatIF {
 					displayMessage("Error! Reservation must be between 1 and 7 days from today.");
 					return;
 				}
-				
+
 				String date = datePick.getValue().toString();
-				client.handleMessageFromClientUI("ADD_ORDER " + id + " " + date+ " " +  hourSpinner.getValue().toString());
+				client.handleMessageFromClientUI(
+						"ADD_ORDER " + id + " " + date + " " + hourSpinner.getValue().toString());
 			} else {
 				displayMessage("Please fill date field.");
 			}
@@ -155,14 +154,14 @@ public class RemoteScreen implements ChatIF {
 			Parent pop;
 			try {
 				pop = loader.load();
-				Scene s = new Scene(pop,300,210);
+				Scene s = new Scene(pop, 300, 210);
 				s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 				UserUpdate controller = loader.getController();
 				controller.setPopWindow(updateScreen);
 				controller.name.setText(name);
 				updateScreen.setScene(s);
 				updateScreen.setResizable(false);
-				updateScreen.setTitle("Update Information");	
+				updateScreen.setTitle("Update Information");
 				updateScreen.show();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -171,7 +170,8 @@ public class RemoteScreen implements ChatIF {
 		});
 		Button logOutBtn = new Button("LogOut");
 		logOutBtn.setId("logOutBtn");
-		//.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;");
+		// .setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor:
+		// hand;");
 		logOutBtn.setOnAction(e -> {
 			try {
 				main.showLoginScreen();
@@ -180,9 +180,7 @@ public class RemoteScreen implements ChatIF {
 				e1.printStackTrace();
 			}
 		});
-		
-		
-		
+
 //		// Styles
 //		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
 //		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
@@ -190,7 +188,7 @@ public class RemoteScreen implements ChatIF {
 		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
 		VBox orderDate = new VBox(new Label("Order Date:"), datePick);
 		VBox orderHour = new VBox(new Label("Order Hour:"), hourSpinner);
-		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn,updateUserBtn,logOutBtn);
+		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn, updateUserBtn, logOutBtn);
 
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
@@ -198,13 +196,13 @@ public class RemoteScreen implements ChatIF {
 		VBox interior = new VBox(10);
 		root.setPadding(new Insets(15));
 		root.setAlignment(Pos.TOP_CENTER);
-		HBox fields = new HBox(orderNumber, orderDate, orderHour );
+		HBox fields = new HBox(orderNumber, orderDate, orderHour);
 		fields.setSpacing(10);
 		VBox inter = new VBox(10, fields, buttons);
 		interior.getChildren().addAll(inter, dbDisplay, table);
 		root.getChildren().add(interior);
 		return root;
-		
+
 		// not available for now/at all
 //		Button tryBtn = new Button("Reconnect");
 //		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
@@ -234,10 +232,13 @@ public class RemoteScreen implements ChatIF {
 				e.setCellValueFactory(new PropertyValueFactory<>("col5"));
 				TableColumn<ParkingRow, String> f = new TableColumn<>(str[5]);
 				f.setCellValueFactory(new PropertyValueFactory<>("col6"));
-				table.getColumns().addAll(a, b, c, d, e, f);
+				TableColumn<ParkingRow, String> g = new TableColumn<>(str[6]);
+				g.setCellValueFactory(new PropertyValueFactory<>("col7"));
+				table.getColumns().addAll(a, b, c, d, e, f, g);
 				ObservableList<ParkingRow> items = FXCollections.observableArrayList();
-				for (int i = 6; i + 5 < str.length; i += 6) {
-					ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5]);
+				for (int i = 7; i + 6 < str.length; i += 7) {
+					ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5],
+							str[i + 6]);
 					items.add(row);
 				}
 				table.setItems(items);

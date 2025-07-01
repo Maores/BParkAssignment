@@ -87,7 +87,7 @@ public class MainApp extends Application {
 			StaffGui Staff = new StaffGui();
 			Staff.setMain(this);
 			Parent root = Staff.buildRoot();
-			Scene s = new Scene(root, 700, 400);
+			Scene s = new Scene(root, 800, 400);
 			s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 			Staff.start();
 			Platform.runLater(() -> {
@@ -99,7 +99,7 @@ public class MainApp extends Application {
 			UserManagementScreen userManagementScreen = new UserManagementScreen();
 			userManagementScreen.setMain(this);
 			Parent root = userManagementScreen.buildRoot();
-			Scene s = new Scene(root, 700, 400);
+			Scene s = new Scene(root, 800, 400);
 			s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 			Platform.runLater(() -> {
 				primaryStage.setScene(s);

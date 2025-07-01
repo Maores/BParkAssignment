@@ -316,18 +316,27 @@ public class DBController {
 	/**
 	 * Update a specific order (change the date)
 	 */
-	public String updateDB( String order_number, String order_date, String hour_date) {
-		String sql = "UPDATE `table_order` SET  order_date = ?, order_time = ? WHERE order_number = ?;";
-		if(!AvailableSpots(order_date)) {
-
-			return "Not enough space at this date!";
-		}
+	public String updateDB( String order_number) {
+		String sqlGet = "SELECT finish_time FROM `table_order` WHERE order_number = ?;";
+		String hour_date="";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sqlGet);
+			ps.setString(1, order_number);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				hour_date = rs.getString(1);
+			}
+				
+		}catch(Exception e) {}
+		String[] time = hour_date.split(":");
+		int newTime = Integer.parseInt(time[0]) + 4;	
+		hour_date = String.format("%d:%s",newTime,time[1]);
+		String sql = "UPDATE `table_order` SET  finish_time = ? WHERE order_number = ?;";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 
-			ps.setString(1, order_date);
-			ps.setString(2, hour_date);
-			ps.setInt(3, Integer.parseInt(order_number));
+			ps.setString(1, hour_date);
+			ps.setInt(2, Integer.parseInt(order_number));
 
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
@@ -442,8 +451,11 @@ public class DBController {
 
 		orderNumber = this.getMaxOrderNumber();
 		orderNumber++;
-		String sql = "INSERT INTO `table_order` (order_number, order_date, order_time, confirmation_code, subscriber_id, date_of_placing_an_order) "
-				+ "VALUES (?,?,?,?,?,?);";
+		String[] time = order_hour.split(":");
+		int newTime = Integer.parseInt(time[0]) + 4;	
+		String finish_time = String.format("%d:%s",newTime,time[1]);
+		String sql = "INSERT INTO `table_order` (order_number, order_date, order_time,finish_time, confirmation_code, subscriber_id, date_of_placing_an_order) "
+				+ "VALUES (?,?,?,?,?,?,?);";
 		//checks if an order was already placed in the same date by the given user
 
 		if (orderByDateExists(id, order_date))
@@ -460,9 +472,10 @@ public class DBController {
 			ps.setInt(1, orderNumber);
 			ps.setString(2, order_date);
 			ps.setString(3, order_hour);
-			ps.setInt(4, confirCode);
-			ps.setInt(5, Integer.parseInt(id));
-			ps.setString(6, date.toString());
+			ps.setString(4, finish_time);
+			ps.setInt(5, confirCode);
+			ps.setInt(6, Integer.parseInt(id));
+			ps.setString(7, date.toString());
 			ps.executeUpdate();
 			System.out.println("Database updated successfully.");
 			if (listener != null) {
