@@ -330,7 +330,12 @@ public class DBController {
 		}catch(Exception e) {}
 		String[] time = hour_date.split(":");
 		int newTime = Integer.parseInt(time[0]) + 4;	
-		hour_date = String.format("%d:%s",newTime,time[1]);
+		if(newTime>=21) {
+			hour_date = "21:00";
+		}else {
+			hour_date = String.format("%d:%s",newTime,time[1]);
+		}
+		
 		String sql = "UPDATE `table_order` SET  finish_time = ? WHERE order_number = ?;";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
