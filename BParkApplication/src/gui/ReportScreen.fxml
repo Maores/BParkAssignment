@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="gui.ReportController" prefWidth="800" prefHeight="600">
+    
+    <top>
+        <ToolBar>
+            <Label text="Select Month:"/>
+            <ComboBox fx:id="monthComboBox"/>
+            <Label text="Year:"/>
+            <ComboBox fx:id="yearComboBox"/>
+            <Button text="Load Report" onAction="#onLoadReportClicked"/>
+            <Button text="Export CSV" onAction="#onExportCsvClicked"/>
+        </ToolBar>
+    </top>
+
+    <center>
+        <BarChart fx:id="barChart" title="Daily Parking Usage" prefWidth="700" prefHeight="500">
+            <xAxis>
+                <CategoryAxis label="Day of Month"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis label="Number of Parkings"/>
+            </yAxis>
+        </BarChart>
+    </center>
+</BorderPane>
