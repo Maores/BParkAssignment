@@ -256,8 +256,8 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String[] parts = message.split(" ");
 				String date = parts[1];
 				// Connection is already established in singleton
-				//String data = ;
-				//client.sendToClient(data);
+				String data =db.checkSpaceAvailability(date);
+				client.sendToClient(data);
 			}
 			// CONNECTION host_name role
 			else if (message.startsWith("CONNECTION")) {

@@ -352,6 +352,30 @@ public class DBController {
 	}
 
 	/**
+    
+	Returns either the number of free parking spots for the given date
+	or the string "No space available" when less than 40 % of the lot is free.*
+	@param orderDate date in format "yyyy-MM-dd" – must match the DB column format
+	@return String  – number of free spots, or "No space available"*/
+	public String checkSpaceAvailability(String orderDate) {// 1. How many spots are still free on this date?
+	    int freeSpots = AvailableSpaces(orderDate);      // existing helper
+
+	        // If DB error occurred – propagate a generic failure message
+	        if (freeSpots < 0) {
+	            return "Database error – please try again";
+	        }
+
+	        // 2. Decide according to 40 % rule
+	        float ratio = (float) freeSpots / maxSpace;      // maxSpace == 100
+	        if (ratio >= 0.40f) {
+	            // Enough space – tell the GUI exactly how many are free
+	            return Integer.toString(freeSpots);
+	        } else {
+	            // Less than 40 % free – tell the GUI there is no space
+	            return "No space available";
+	        }
+	    }
+	/**
 	 * Update a specific order (change the date)
 	 */
 	public String updateDB(String order_number) {

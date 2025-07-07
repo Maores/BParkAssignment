@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="326.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginController">
+<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="366.0" prefWidth="436.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginController">
    <children>
       <BorderPane prefHeight="350.0" prefWidth="560.0">
          <center>
@@ -58,7 +58,7 @@
                               <Insets bottom="10.0" />
                            </padding>
                            <VBox.margin>
-                              <Insets right="60.0" />
+                              <Insets right="120.0" />
                            </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="0.0">
@@ -77,7 +77,7 @@
                               <Insets bottom="10.0" />
                            </padding>
                            <VBox.margin>
-                              <Insets right="60.0" />
+                              <Insets right="120.0" />
                            </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="33.0" prefWidth="274.0" spacing="10.0">
@@ -89,7 +89,7 @@
                               <Insets />
                            </opaqueInsets>
                            <VBox.margin>
-                              <Insets bottom="5.0" />
+                              <Insets bottom="10.0" />
                            </VBox.margin>
                         </HBox>
                         <Button fx:id="qrBtn" alignment="CENTER" maxHeight="25.0" mnemonicParsing="false" onAction="#showQR" prefHeight="25.0" prefWidth="206.0" text="login via QR">
@@ -99,7 +99,7 @@
                         </Button>
                         <Separator prefWidth="200.0">
                            <VBox.margin>
-                              <Insets bottom="5.0" top="5.0" />
+                              <Insets bottom="15.0" top="15.0" />
                            </VBox.margin>
                         </Separator>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
