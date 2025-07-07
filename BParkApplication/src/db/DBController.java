@@ -783,6 +783,7 @@ public class DBController {
 
 		return dailyData;
 	}
+	//
 
 	/**
 	 * Close connection and reset singleton instance
