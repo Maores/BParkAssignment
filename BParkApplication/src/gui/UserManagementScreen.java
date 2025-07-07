@@ -7,8 +7,14 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -18,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 
 /**
@@ -79,15 +86,52 @@ public class UserManagementScreen implements ChatIF {
 		client.handleMessageFromClientUI("SEARCH_USER " + userId);
 		logArea.appendText("Searching for user: " + userId + "\n");
 	}
+	
+	private void openSubscriberStatusReport() {
+	    try {
+	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReportScreen.fxml"));
+	        Parent root = loader.load();
+	        Stage stage = new Stage();
+	        stage.setTitle("Subscriber Status Report");
+	        stage.setScene(new Scene(root));
+	        stage.show();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
 
+	
+	private void openParkingDurationReport() {
+		System.out.println("report");
+	}
 	/**
 	 * Example of a more complex operation
 	 */
 	@FXML
-	void generateReport() {
-		client.handleMessageFromClientUI("GENERATE_REPORT");
-		logArea.setText("Generating report...\n");
+	private void generateReport() {
+	    Dialog<Void> dialog = new Dialog<>();
+	    dialog.setTitle("Select Report Type");
+	    dialog.setHeaderText("Please choose a report to view:");
+
+	    ButtonType usageButtonType = new ButtonType("Parking Duration Report");
+	    ButtonType statusButtonType = new ButtonType("Subscriber Status Report");
+	    ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+	    dialog.getDialogPane().getButtonTypes().addAll(usageButtonType, statusButtonType, cancelButtonType);
+
+	    dialog.setResultConverter(dialogButton -> {
+	        if (dialogButton == usageButtonType) {
+	            openParkingDurationReport(); 
+	        } else if (dialogButton == statusButtonType) {
+	            openSubscriberStatusReport();
+	        }
+	        return null;
+	    });
+
+	    dialog.showAndWait();
 	}
+	
+	
 
 	// Get message from the server
 	@Override

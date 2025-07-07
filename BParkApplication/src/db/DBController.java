@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
 import common.DatabaseListener;
 
@@ -651,6 +653,35 @@ public class DBController {
 	        e.printStackTrace();
 	        return false;
 	    }
+	}
+	
+	public Map<Integer, Integer> getDailyParkingUsage(int month, int year) {
+	    Map<Integer, Integer> dailyData = new TreeMap<>();
+
+	    try {
+	        if (conn == null || conn.isClosed()) {
+	            connectToDB();
+	        }
+
+	        String sql = "SELECT DAY(order_date) AS day_of_month, COUNT(*) AS total_orders " +
+	                     "FROM table_order t JOIN users u ON t.subscriber_id = u.id " +
+	                     "WHERE u.role = 'user' AND MONTH(order_date) = ? AND YEAR(order_date) = ? " +
+	                     "GROUP BY DAY(order_date) ORDER BY DAY(order_date)";
+
+	        PreparedStatement stmt = conn.prepareStatement(sql);
+	        stmt.setInt(1, month);
+	        stmt.setInt(2, year);
+	        ResultSet rs = stmt.executeQuery();
+
+	        while (rs.next()) {
+	            dailyData.put(rs.getInt("day_of_month"), rs.getInt("total_orders"));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return dailyData;
 	}
 
 	/**
