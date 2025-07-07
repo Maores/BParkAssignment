@@ -11,8 +11,6 @@ import common.DatabaseListener;
 import common.MailSender;
 import db.DBController;
 import gui.serverGuiController;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -116,16 +114,16 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				client.sendToClient("INFO "+userInfo);
 				
 			} else if (message.startsWith("UPDATE_ORDER")) {
-				guiController.appendMessage("[" + roleConnected + "] Updating database..");
+				guiController.appendMessage("[" + roleConnected + "] Updating order database..");
 				// getting data from DB into parts
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
 				if (db.checkDB(orderNumber)) {
 					// updates the DB
 					if ((log = db.updateDB(orderNumber)) == "true") {
-						client.sendToClient("Update successful for order number " + orderNumber);
+						client.sendToClient("order number: " + orderNumber + " - Your request for an extension has been approved.");
 					} else {
-						client.sendToClient(log.substring(0, log.length() - 9) + ".");
+						client.sendToClient("order number: " + orderNumber + " - Your request for an extension has been rejected.");
 					}
 				} else {
 					client.sendToClient("Invalid order number Try again...");
@@ -187,7 +185,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				if (role.equals("null")) {
 					client.sendToClient("ERROR:UserName/Password is wrong!");
 				} else {
-					String roleS = role.split(" ")[1];
+					String roleS = role.split(" ")[0];
 					guiController.appendMessage("[" + roleS + "] Login to the system");
 					client.sendToClient("role " + role);// Send the role to client
 				}
@@ -225,24 +223,6 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				String formattedDateTime = LocalDateTime.now().format(formatter);
 				reportData += "Report generated at: " + formattedDateTime;
-
-//				switch (reportType) {
-//					case "DAILY_REPORT":
-//						reportData = "=== DAILY PARKING REPORT ===\n";
-//						reportData += db.getDatabaseAsString();
-//						reportData += "\nGenerated at: " + new java.util.Date();
-//						break;
-//					case "PARKING_USAGE_REPORT":
-//						// Count occupied spaces
-//						String allData = db.getDatabaseAsString();
-//						int totalSpaces = allData.split("\n").length - 1;
-//						reportData = "=== PARKING USAGE REPORT ===\n";
-//						reportData += "Total occupied spaces: " + totalSpaces + "\n";
-//						reportData += "Report generated at: " + new java.util.Date();
-//						break;
-//					default:
-//						reportData = "Report type not implemented: " + reportType;
-//				}
 
 				client.sendToClient(reportData);
 			} else if (message.startsWith("ADD_USER")) {

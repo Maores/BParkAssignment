@@ -27,6 +27,7 @@
 }
 #qrBtn{
 	-fx-background-color: #4045a1;
+	-fx-text-fill: white;
 }
 #qrBtn:hover{
 	-fx-background-color: white;

@@ -56,16 +56,14 @@ public class RemoteScreen implements ChatIF {
 		orderField = new TextField();
 		orderField.setPromptText("Enter order number");
 		orderField.setMaxWidth(170);
-//		srcField = new TextField();
-//		srcField.setPromptText("Search order number");
+
 		dbDisplay = new TextArea();
 		datePick = new DatePicker();
 		datePick.setPromptText("Enter order date");
 		datePick.setMaxWidth(170);
 		dbDisplay.setPrefHeight(200);
 		dbDisplay.setEditable(false);
-//		dbDisplay.setStyle(
-//				"-fx-border-color: gray; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-family: monospace;");
+
 		client = sg.getInstance(this);
 	}
 
@@ -74,18 +72,8 @@ public class RemoteScreen implements ChatIF {
 	}
 
 	public StackPane buildRoot() {
-//		Image icon = new Image(getClass().getResourceAsStream("logo.png"));
-//		ImageView iv1 = new ImageView();
-//		iv1.setImage(icon);
-//		iv1.setFitHeight(icon.getHeight() / 10);
-//		iv1.setFitWidth(icon.getWidth() / 10);
 		StackPane root = new StackPane();
-		// root.setId("pane");
 
-//		hourSpinner = new Spinner<>();
-//        SpinnerValueFactory<Integer> valueFactory =
-//                new SpinnerValueFactory.IntegerSpinnerValueFactory(9, 17, 9); // min, max, initial
-//        hourSpinner.setValueFactory(valueFactory);
 		Spinner<String> hourSpinner = new Spinner<>();
 		hourSpinner.setEditable(false); // prevent manual input
 
@@ -119,7 +107,7 @@ public class RemoteScreen implements ChatIF {
 				String updateMsg = "UPDATE_ORDER " + orderField.getText();
 				client.handleMessageFromClientUI(updateMsg);
 			} else {
-				displayMessage("Please fill order number AND date fields.");
+				displayMessage("Please fill order number that you want to extend.");
 			}
 		});
 
@@ -170,8 +158,6 @@ public class RemoteScreen implements ChatIF {
 		});
 		Button logOutBtn = new Button("LogOut");
 		logOutBtn.setId("logOutBtn");
-		// .setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor:
-		// hand;");
 		logOutBtn.setOnAction(e -> {
 			try {
 				main.showLoginScreen();
@@ -181,10 +167,6 @@ public class RemoteScreen implements ChatIF {
 			}
 		});
 
-//		// Styles
-//		updateBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
-//		viewBtn.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-cursor: hand;");
-//		insertBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
 		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
 		VBox orderDate = new VBox(new Label("Order Date:"), datePick);
 		VBox orderHour = new VBox(new Label("Order Hour:"), hourSpinner);
@@ -202,14 +184,6 @@ public class RemoteScreen implements ChatIF {
 		interior.getChildren().addAll(inter, dbDisplay, table);
 		root.getChildren().add(interior);
 		return root;
-
-		// not available for now/at all
-//		Button tryBtn = new Button("Reconnect");
-//		tryBtn.setStyle("-fx-background-color: #5a6f7d; -fx-text-fill: white; -fx-cursor: hand;");
-//		tryBtn.setOnAction(e -> guiClient.connect(DEFAULT_HOST, DEFAULT_PORT));
-//		Button srcBtn = new Button("Search");
-//		srcBtn.setStyle("-fx-background-color: #5c5a5a; -fx-text-fill: white; -fx-cursor: hand;");
-//		srcBtn.setOnAction(e -> guiClient.search(srcField.getText()));
 	}
 
 	@SuppressWarnings("unchecked")
