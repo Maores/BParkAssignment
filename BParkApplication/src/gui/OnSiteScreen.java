@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -43,6 +44,7 @@ public class OnSiteScreen implements ChatIF{
 	
     private Stage primaryStage;
     private MainApp mainApp;
+    private Stage checkCode;
     private String code;
     
 
@@ -50,14 +52,20 @@ public class OnSiteScreen implements ChatIF{
     @FXML
     void Delivery(ActionEvent event) {
     	ShowCodeScreen();
-    	Terminal.appendText("Car is about to be taken by the lift, dont step over the line!\n");
-    	client.handleMessageFromClientUI(
-				"CAR_INSERT " + code);
     }
     void ShowCodeScreen() {
-    	Stage checkCode = new Stage();
+    	checkCode = new Stage();
     	TextField code = new TextField();
     	Button codeBtn = new Button("check");
+    	codeBtn.setOnAction(e -> {
+    		if(code.getText().isEmpty()) {
+    			Alert alert = new Alert(Alert.AlertType.ERROR,"Fill the field!");
+    			alert.show();
+    		}
+    		else {
+    			client.handleMessageFromClientUI("CAR_INSERT " + code);
+    		}
+    	});
 		VBox root = new VBox(new Label("Enter confirmation code:"),code,codeBtn);
 		root.setAlignment(Pos.CENTER);
 		checkCode.setScene(new Scene(root,300, 100));
@@ -92,13 +100,18 @@ public class OnSiteScreen implements ChatIF{
 		this.mainApp = mainApp;
 	}
 
-    @SuppressWarnings("unchecked")
-	public void displayMessage(String message) {
-    	
-    }
+
     
     @Override
 	public void handleMessageFromServer(String message) {
-		displayMessage(message);
+    	Alert alert = null;
+    	if(message.equals("CAR_INSERTED")) {
+			alert = new Alert(Alert.AlertType.INFORMATION,"Car inserted successfully!");
+			alert.show();
+		}else if(message.equals("CAR_NOT_INSERTED")) {
+			alert = new Alert(Alert.AlertType.ERROR,"Failed Code is wrong!");
+			alert.show();
+		}
+    	
 	}
 }
