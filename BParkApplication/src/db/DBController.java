@@ -375,7 +375,7 @@ public class DBController {
 			hour_date = String.format("%d:%s", newTime, time[1]);
 		}
 
-		String sql = "UPDATE `table_order` SET  finish_time = ? WHERE order_number = ?;";
+		String sql = "UPDATE table_order SET finish_time = ?, was_extended = TRUE WHERE order_number = ?;";		
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -674,7 +674,46 @@ public class DBController {
 			return 0;
 		}
 	}
+	
+	//Car inserted, change boolean car_inserted for specific code order
+	public boolean CarInserted(String Code) {
+	    String selectSQL = "SELECT car_inserted FROM table_order WHERE confirmation_code = ?";
+	    String updateSQL = "UPDATE table_order SET car_inserted = 1 WHERE confirmation_code = ?";
 
+	    try {
+	        int codeInt = Integer.parseInt(Code); // convert string to int
+	        PreparedStatement selectStmt = conn.prepareStatement(selectSQL);
+	        selectStmt.setInt(1, codeInt);
+	        ResultSet rs = selectStmt.executeQuery();
+	        if (rs.next()) {
+	            int carInserted = rs.getInt("car_inserted");
+	            if (carInserted == 0) {
+	                // Set car_inserted to 1
+	                try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
+	                    updateStmt.setInt(1, codeInt);
+	                    updateStmt.executeUpdate();
+	                    return true;
+	                } catch(Exception e) {
+	                    e.printStackTrace();
+	                    return false;
+	                }
+	            } else {
+	                // Already inserted
+	                return false;
+	            }
+	        } else {
+	            // No such confirmation_code found
+	            return false;
+	        }
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+
+	
+	
 	public boolean emailExists(String email) {
 		try {
 			if (conn == null || conn.isClosed()) {

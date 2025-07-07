@@ -51,23 +51,12 @@ public class OnSiteScreen implements ChatIF{
     
     @FXML
     void Delivery(ActionEvent event) {
-    	ShowCodeScreen();
+        	ShowCodeScreen();
     }
     void ShowCodeScreen() {
+    	ShowCodeScreenController obj = new ShowCodeScreenController();
+    	Parent root = obj.buildRoot();
     	checkCode = new Stage();
-    	TextField code = new TextField();
-    	Button codeBtn = new Button("check");
-    	codeBtn.setOnAction(e -> {
-    		if(code.getText().isEmpty()) {
-    			Alert alert = new Alert(Alert.AlertType.ERROR,"Fill the field!");
-    			alert.show();
-    		}
-    		else {
-    			client.handleMessageFromClientUI("CAR_INSERT " + code);
-    		}
-    	});
-		VBox root = new VBox(new Label("Enter confirmation code:"),code,codeBtn);
-		root.setAlignment(Pos.CENTER);
 		checkCode.setScene(new Scene(root,300, 100));
 		checkCode.setAlwaysOnTop(true);
 		checkCode.setResizable(false);
@@ -104,14 +93,5 @@ public class OnSiteScreen implements ChatIF{
     
     @Override
 	public void handleMessageFromServer(String message) {
-    	Alert alert = null;
-    	if(message.equals("CAR_INSERTED")) {
-			alert = new Alert(Alert.AlertType.INFORMATION,"Car inserted successfully!");
-			alert.show();
-		}else if(message.equals("CAR_NOT_INSERTED")) {
-			alert = new Alert(Alert.AlertType.ERROR,"Failed Code is wrong!");
-			alert.show();
-		}
-    	
 	}
 }
