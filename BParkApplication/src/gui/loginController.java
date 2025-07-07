@@ -150,7 +150,7 @@ public class loginController implements ChatIF {
 	}
 	@FXML
 	public void checkAvailability() {
-		if(date.getValue().toString().isEmpty()) {
+		if(date.getValue() == null || date.getValue().toString().isEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR,"Fill the date field.");
 			alert.show();
 		}else {

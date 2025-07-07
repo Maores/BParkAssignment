@@ -290,7 +290,6 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 			else if (message.startsWith("CAR_INSERT")) {
 				String[] parts = message.split(" ");
 				String ConfirmationCode = parts[1];
-				System.out.println(ConfirmationCode);
 				boolean inserted = db.CarInserted(ConfirmationCode);
 				
 				try {

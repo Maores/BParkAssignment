@@ -54,9 +54,9 @@ public class OnSiteScreen implements ChatIF{
         	ShowCodeScreen();
     }
     void ShowCodeScreen() {
-    	ShowCodeScreenController obj = new ShowCodeScreenController();
-    	Parent root = obj.buildRoot();
     	checkCode = new Stage();
+    	ShowCodeScreenController obj = new ShowCodeScreenController(checkCode);
+    	Parent root = obj.buildRoot();
 		checkCode.setScene(new Scene(root,300, 100));
 		checkCode.setAlwaysOnTop(true);
 		checkCode.setResizable(false);

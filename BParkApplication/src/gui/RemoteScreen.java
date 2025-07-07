@@ -149,6 +149,7 @@ public class RemoteScreen implements ChatIF {
 				controller.name.setText(name);
 				updateScreen.setScene(s);
 				updateScreen.setResizable(false);
+				updateScreen.setAlwaysOnTop(true);
 				updateScreen.setTitle("Update Information");
 				updateScreen.show();
 			} catch (IOException e1) {

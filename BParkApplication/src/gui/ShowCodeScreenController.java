@@ -10,14 +10,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class ShowCodeScreenController implements ChatIF {
 	
 	private ChatClient client;
 	private singletoneClient sg = new singletoneClient();
+	private Stage window;
 	
-	public ShowCodeScreenController() {
+	public ShowCodeScreenController(Stage window) {
 		client = sg.getInstance(this);
+		this.window = window;
 	}
 
 	public VBox buildRoot() {
@@ -44,8 +47,10 @@ public class ShowCodeScreenController implements ChatIF {
 	        if(message.equals("CAR_INSERTED")) {
 	            alert = new Alert(Alert.AlertType.INFORMATION,"Car inserted successfully!");
 	            alert.show();
+	            window.close();
 	        }else if(message.equals("CAR_NOT_INSERTED")) {
 	            alert = new Alert(Alert.AlertType.ERROR,"Failed Code is wrong!");
+	            window.setAlwaysOnTop(false);
 	            alert.show();
 	        }
 		});	
