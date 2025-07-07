@@ -27,6 +27,11 @@ public class UserUpdate implements ChatIF {
 	private ChatClient client = (new singletoneClient()).getInstance(this);
 	private Stage popWindow;
 
+	// Constructor
+	public UserUpdate() {
+		client.handleMessageFromClientUI("GET_USER_INFO " + id);
+	}
+
 	public void setPopWindow(Stage popWindow) {
 		this.popWindow = popWindow;
 	}
@@ -44,23 +49,36 @@ public class UserUpdate implements ChatIF {
 			Alert a = new Alert(Alert.AlertType.WARNING, "At least one field\n need to be filled.");
 			a.show();
 		} else {
-			client.handleMessageFromClientUI("UPDATE_USER_INFO "+phone.getText()+" "+email.getText()+" "+id);
+			client.handleMessageFromClientUI("UPDATE_USER_INFO " + phone.getText() + " " + email.getText() + " " + id);
 		}
 	}
 
 	@Override
 	public void handleMessageFromServer(String message) {
 		Platform.runLater(() -> {
-		if(message.equals("ERROR_UPDATE_USER")) {
-			Alert al = new Alert(Alert.AlertType.ERROR);
-			al.show();
-		}else {
-			Alert al = new Alert(Alert.AlertType.INFORMATION,message);
-			al.show();
-			popWindow.close();
-			
-		}
-		});
+			if (message.equals("ERROR_UPDATE_USER")) {
+				Alert al = new Alert(Alert.AlertType.ERROR);
+				al.show();
+			} else if (message.startsWith("INFO")) {
+				String[] parts = message.split(" ");
+				
+				if (parts.length >= 3) { // "INFO <phone> <email>"
+					String phoneStr = parts[1];
+					String emailStr = parts[2];
+					phone.setText(phoneStr);
+					email.setText(emailStr);
+				}
+				
+			} else {
+				Alert al = new Alert(Alert.AlertType.INFORMATION, message);
+				al.show();
+				popWindow.close();
 
+			}
+			
+		});
+		System.out.println(message);
 	}
+
+
 }

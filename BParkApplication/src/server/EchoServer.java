@@ -91,31 +91,37 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 //			guiController.appendMessage("Message received: " + msg.toString());
 //		}
 		String message = msg.toString();
-		String log;//Log message from DB 
+		String log;// Log message from DB
 		// System.out.println("Message received: " + msg + " from " + client);
-		
+
 		// Get singleton instance - Server passes itself as listener
 		DBController db = DBController.getInstance(this);
 		try {
 			// Handling "View database"
 			if (message.equals("VIEW_DATABASE")) {
-				guiController.appendMessage("["+roleConnected+"] Fetching data from database..");
-				//gather data from DB
+				guiController.appendMessage("[" + roleConnected + "] Fetching data from database..");
+				// gather data from DB
 				String data = db.getDatabaseAsString();
 				client.sendToClient(data);
-			}
-			else if (message.equals("VIEW_USERDATABASE")) {
-					guiController.appendMessage("["+roleConnected+"] Fetching user data from database..");
-					//gather data from DB
-					String userData = db.getUserDatabaseAsString();
-					client.sendToClient(userData);
+			} else if (message.equals("VIEW_USERDATABASE")) {
+				guiController.appendMessage("[" + roleConnected + "] Fetching user data from database..");
+				// gather data from DB
+				String userData = db.getUserDatabaseAsString();
+				client.sendToClient(userData);
+				// gather mail and pass info from DB
+			} else if (message.startsWith("GET_USER_INFO")) {
+				String[] parts = message.split(" ");
+				String id = parts[1];
+				String userInfo = db.getMailPhoneDatabaseAsString(id);
+				client.sendToClient("INFO "+userInfo);
+				
 			} else if (message.startsWith("UPDATE_ORDER")) {
-				guiController.appendMessage("["+roleConnected+"] Updating database..");
-				//getting data from DB into parts
+				guiController.appendMessage("[" + roleConnected + "] Updating database..");
+				// getting data from DB into parts
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
 				if (db.checkDB(orderNumber)) {
-					//updates the DB
+					// updates the DB
 					if ((log = db.updateDB(orderNumber)) == "true") {
 						client.sendToClient("Update successful for order number " + orderNumber);
 					} else {
@@ -124,96 +130,92 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				} else {
 					client.sendToClient("Invalid order number Try again...");
 				}
-			} 
-			else if (message.startsWith("UPDATE_USER_INFO")) {
-				guiController.appendMessage("["+roleConnected+"] Updating user database..");
-				//getting data from DB into parts
+			} else if (message.startsWith("UPDATE_USER_INFO")) {
+				guiController.appendMessage("[" + roleConnected + "] Updating user database..");
+				// getting data from DB into parts
 				String[] parts = message.split(" ");
 				String phone = parts[1];
 				String email = parts[2];
 				String id = parts[3];
-				//updates the DB
-				if ((log = db.updateUserInfoDB(phone, email,id)) == "true") {
+				// updates the DB
+				if ((log = db.updateUserInfoDB(phone, email, id)) == "true") {
 					client.sendToClient("Update user information succeded");
 				} else {
 					client.sendToClient(log);
 				}
-				
-			} 
-			///SEARCH  parking orders by id
+
+			}
+			/// SEARCH parking orders by id
 			else if (message.startsWith("SEARCH_ORDER")) {
-				guiController.appendMessage("["+roleConnected+"] Searching order in database..");
-				//get id from the message
+				guiController.appendMessage("[" + roleConnected + "] Searching order in database..");
+				// get id from the message
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
-				//check if ID exists in DB
+				// check if ID exists in DB
 				if (db.checkDB(orderNumber)) {
 					String data = db.SearchOrder(orderNumber);
 					client.sendToClient(data);
 				}
-				//ID not found in DB
+				// ID not found in DB
 				else {
 					client.sendToClient("Order not found in database.");
 				}
 			}
-			///SEARCH  parking orders by id
+			/// SEARCH parking orders by id
 			else if (message.startsWith("SEARCH_USER")) {
-				guiController.appendMessage("["+roleConnected+"] Searching user in database..");
-				//get id from the message
+				guiController.appendMessage("[" + roleConnected + "] Searching user in database..");
+				// get id from the message
 				String[] parts = message.split(" ");
 				String userID = parts[1];
-				//check if ID exists in DB
+				// check if ID exists in DB
 				if (db.checkUserDB(userID)) {
 					String data = db.SearchID(userID);
 					client.sendToClient(data);
 				}
-				//ID not found in DB
+				// ID not found in DB
 				else {
 					client.sendToClient("User not found in database.\n");
 				}
-			}
-			else if (message.startsWith("LOGIN")) {
-				
-				//get id from the message
+			} else if (message.startsWith("LOGIN")) {
+
+				// get id from the message
 				String[] parts = message.split(" ");
-				String id  = parts[1];
+				String id = parts[1];
 				String name = parts[2];
-				String role =db.getUserRoleById(id,name);
-				
-				if(role.equals("null")) {
+				String role = db.getUserRoleById(id, name);
+
+				if (role.equals("null")) {
 					client.sendToClient("ERROR:UserName/Password is wrong!");
+				} else {
+					String roleS = role.split(" ")[1];
+					guiController.appendMessage("[" + roleS + "] Login to the system");
+					client.sendToClient("role " + role);// Send the role to client
 				}
-				else
-				{
-					String roleS =role.split(" ")[1];
-					guiController.appendMessage("["+roleS+"] Login to the system");
-					client.sendToClient("role " +role);//Send the role to client
-				}
-				
-			}else if (message.startsWith("RESET_PASSWORD")) {
+
+			} else if (message.startsWith("RESET_PASSWORD")) {
 				String[] parts = message.split(" ");
 				String email = parts[1];
-				String mailMessage="";
-				if(db.emailExists(email)) {
+				String mailMessage = "";
+				if (db.emailExists(email)) {
 					// Simulate sending reset email
-		            System.out.println("Password reset email sent to: " + email);
-		            String password = db.getPassword(email);
-		            if(!password.equals("")) {
-		            	mailMessage = MailSender.sendEmail(email, "BPark Password", "The Password: "+password);
-		            }
+					System.out.println("Password reset email sent to: " + email);
+					String password = db.getPassword(email);
+					if (!password.equals("")) {
+						mailMessage = MailSender.sendEmail(email, "BPark Password", "The Password: " + password);
+					}
 				}
 				client.sendToClient(mailMessage);
-		}
+			}
 			// Handle new report generation command
 			else if (message.startsWith("GENERATE_REPORT")) {
 				String[] parts = message.split(" ");
 				String reportType = parts.length > 1 ? parts[1] : "DEFAULT";
-				
+
 				// Log the request
 				if (guiController != null) {
 					guiController.appendMessage("Report requested: " + reportType + " from " + client.getInetAddress());
 				}
-				
+
 				// Generate report based on type
 				String reportData = "";
 				int totalSpaces = db.Count();
@@ -223,8 +225,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				String formattedDateTime = LocalDateTime.now().format(formatter);
 				reportData += "Report generated at: " + formattedDateTime;
-				
-				
+
 //				switch (reportType) {
 //					case "DAILY_REPORT":
 //						reportData = "=== DAILY PARKING REPORT ===\n";
@@ -242,66 +243,64 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 //					default:
 //						reportData = "Report type not implemented: " + reportType;
 //				}
-				
+
 				client.sendToClient(reportData);
-			}
-			else if (message.startsWith("ADD_USER")) {
-				guiController.appendMessage("["+roleConnected+"] Add new user");
+			} else if (message.startsWith("ADD_USER")) {
+				guiController.appendMessage("[" + roleConnected + "] Add new user");
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String name = parts[2];
 				String phone = parts[3];
 				String email = parts[4];
-				String succes =  db.insertUserToDB(name, id,phone,email);
-				client.sendToClient(succes);//Send the role to client
-			}
-			else if (message.startsWith("ADD_ORDER")) {
-				guiController.appendMessage("["+roleConnected+"] Add new order");
+				String succes = db.insertUserToDB(name, id, phone, email);
+				client.sendToClient(succes);// Send the role to client
+			} else if (message.startsWith("ADD_ORDER")) {
+				guiController.appendMessage("[" + roleConnected + "] Add new order");
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String orderDate = parts[2];
 				String orderHour = parts[3];
-				String succes =  db.insertResToDB(orderDate, id, orderHour );
+				String succes = db.insertResToDB(orderDate, id, orderHour);
 
-				client.sendToClient(succes);//Send the role to client
-			}
-			else if (message.startsWith("VIEW_DATABASE_ID")) {
-				guiController.appendMessage("["+roleConnected+"] View user order");
-				//gather data from DB
+				client.sendToClient(succes);// Send the role to client
+			} else if (message.startsWith("VIEW_DATABASE_ID")) {
+				guiController.appendMessage("[" + roleConnected + "] View user order");
+				// gather data from DB
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				// Connection is already established in singleton
 				String data = db.getDatabaseByIDAsString(id);
 				client.sendToClient(data);
 			}
-			//CONNECTION host_name role
- 			else if(message.startsWith("CONNECTION")){
+			// CONNECTION host_name role
+			else if (message.startsWith("CONNECTION")) {
 				String[] parts = message.split(" ");
 				if (guiController != null) {
 					roleConnected = parts[2];
-					//sends the message to the gui
+					// sends the message to the gui
 					guiController.appendMessage("+++++++++++++++++++++++++++++++++++");
-					guiController.appendMessage("Host: " + parts[1] + "\nIP: " + client +"\nRole: "+parts[2]+"\nStatus: Connected");
+					guiController.appendMessage(
+							"Host: " + parts[1] + "\nIP: " + client + "\nRole: " + parts[2] + "\nStatus: Connected");
 					guiController.appendMessage("+++++++++++++++++++++++++++++++++++");
-					System.out.println("Host: " + parts[1] + "\nIP: " + client + "\nRole: "+parts[2]+"\nStatus: Connected");
+					System.out.println(
+							"Host: " + parts[1] + "\nIP: " + client + "\nRole: " + parts[2] + "\nStatus: Connected");
+				}
+			} else if (message.startsWith("#CheckEmailReset#")) {
+				guiController.appendMessage("[SERVER] Checking if email exists in DB..");
+				String email = message.replace("#CheckEmailReset#", "").trim();
+				boolean exists = db.emailExists(email);
+
+				try {
+					if (exists) {
+						client.sendToClient("EMAIL_EXISTS");
+					} else {
+						client.sendToClient("EMAIL_NOT_FOUND");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
- 			else if (message.startsWith("#CheckEmailReset#")) {
- 			    guiController.appendMessage("[SERVER] Checking if email exists in DB..");
- 			    String email = message.replace("#CheckEmailReset#", "").trim();
- 			    boolean exists = db.emailExists(email);
 
- 			    try {
- 			        if (exists) {
- 			            client.sendToClient("EMAIL_EXISTS");
- 			        } else {
- 			            client.sendToClient("EMAIL_NOT_FOUND");
- 			        }
- 			    } catch (Exception e) {
- 			        e.printStackTrace();
- 			    }
- 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

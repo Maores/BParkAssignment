@@ -39,6 +39,40 @@ public class DBController {
 		return instance;
 	}
 
+	/**
+	 * Get phone + email for the requested user-id. Returned format: "<phone>
+	 * <email>"
+	 */
+	public String getMailPhoneDatabaseAsString(String id) {
+		// Make sure we have a DB connection
+		if (conn == null) {
+			connectToDB();
+		}
+
+		String sql = "SELECT phone, email FROM users WHERE id = ?;";
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, Integer.parseInt(id));
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) { // user found
+				String phone = rs.getString("phone");
+				String email = rs.getString("email");
+				// Avoid nulls so they won't break the split() בצד-הלקוח
+				if (phone == null)
+					phone = "";
+				if (email == null)
+					email = "";
+				return phone + " " + email; // same order the GUI מצפה
+			} else {
+				return ""; // user not found
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return ""; // error case
+		}
+	}
+
 	/*
 	 * Get data base result as string
 	 */
@@ -102,11 +136,12 @@ public class DBController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		// returns the string
 		return str.toString();
 
 	}
+
 	/*
 	 * Get data base result as string
 	 */
@@ -141,6 +176,7 @@ public class DBController {
 		return str.toString();
 
 	}
+
 	// Search Specific ID
 	public String SearchOrder(String order) {
 
@@ -244,10 +280,10 @@ public class DBController {
 
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
-					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true", "root", // MySql //
-																											// username
+					"jdbc:mysql://127.0.0.1:3306/bparkprototype?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true",
+					"root", // MySql //
+					// username
 					"Aa123456" // MySql password
-					
 
 			);
 
@@ -318,9 +354,9 @@ public class DBController {
 	/**
 	 * Update a specific order (change the date)
 	 */
-	public String updateDB( String order_number) {
+	public String updateDB(String order_number) {
 		String sqlGet = "SELECT finish_time FROM `table_order` WHERE order_number = ?;";
-		String hour_date="";
+		String hour_date = "";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sqlGet);
 			ps.setString(1, order_number);
@@ -328,16 +364,17 @@ public class DBController {
 			if (rs.next()) {
 				hour_date = rs.getString(1);
 			}
-				
-		}catch(Exception e) {}
-		String[] time = hour_date.split(":");
-		int newTime = Integer.parseInt(time[0]) + 4;	
-		if(newTime>=21) {
-			hour_date = "21:00";
-		}else {
-			hour_date = String.format("%d:%s",newTime,time[1]);
+
+		} catch (Exception e) {
 		}
-		
+		String[] time = hour_date.split(":");
+		int newTime = Integer.parseInt(time[0]) + 4;
+		if (newTime >= 21) {
+			hour_date = "21:00";
+		} else {
+			hour_date = String.format("%d:%s", newTime, time[1]);
+		}
+
 		String sql = "UPDATE `table_order` SET  finish_time = ? WHERE order_number = ?;";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -366,10 +403,10 @@ public class DBController {
 	 * Update a user info (change the date)
 	 */
 	public String updateUserInfoDB(String phone, String email, String id) {
-		if(email.isEmpty())
-			email=null;
-		if(phone.isEmpty())
-			phone=null;
+		if (email.isEmpty())
+			email = null;
+		if (phone.isEmpty())
+			phone = null;
 		String sql = "UPDATE `users` SET  phone = COALESCE(?, phone),email = COALESCE(?, email) WHERE id = ?;";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -459,11 +496,11 @@ public class DBController {
 		orderNumber = this.getMaxOrderNumber();
 		orderNumber++;
 		String[] time = order_hour.split(":");
-		int newTime = Integer.parseInt(time[0]) + 4;	
-		String finish_time = String.format("%d:%s",newTime,time[1]);
+		int newTime = Integer.parseInt(time[0]) + 4;
+		String finish_time = String.format("%d:%s", newTime, time[1]);
 		String sql = "INSERT INTO `table_order` (order_number, order_date, order_time,finish_time, confirmation_code, subscriber_id, date_of_placing_an_order) "
 				+ "VALUES (?,?,?,?,?,?,?);";
-		//checks if an order was already placed in the same date by the given user
+		// checks if an order was already placed in the same date by the given user
 
 		if (orderByDateExists(id, order_date))
 			return "Order Already exists for the given date, choose another date.";
@@ -544,24 +581,24 @@ public class DBController {
 		}
 		return false;
 	}
-	
-	// get password of user by email
-		public String getPassword(String email) {
-			String sql = "SELECT password FROM users WHERE email = ?;";
-			try {
-				PreparedStatement ps = conn.prepareStatement(sql);
-				ps.setString(1, email);
 
-				ResultSet rs = ps.executeQuery();
-				if (rs.next())
-					return rs.getString(1);
-				else
-					return "";
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			return "";
+	// get password of user by email
+	public String getPassword(String email) {
+		String sql = "SELECT password FROM users WHERE email = ?;";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, email);
+
+			ResultSet rs = ps.executeQuery();
+			if (rs.next())
+				return rs.getString(1);
+			else
+				return "";
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		return "";
+	}
 
 	/**
 	 * Close the database connection.
@@ -637,51 +674,51 @@ public class DBController {
 			return 0;
 		}
 	}
-	
+
 	public boolean emailExists(String email) {
-	    try {
-	        if (conn == null || conn.isClosed()) {
-	            connectToDB();
-	        }
+		try {
+			if (conn == null || conn.isClosed()) {
+				connectToDB();
+			}
 
-	        String sql = "SELECT 1 FROM users WHERE email = ?";
-	        PreparedStatement stmt = conn.prepareStatement(sql);
-	        stmt.setString(1, email.trim().toLowerCase());
-	        ResultSet rs = stmt.executeQuery();
-	        return rs.next(); // true if a match is found
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+			String sql = "SELECT 1 FROM users WHERE email = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, email.trim().toLowerCase());
+			ResultSet rs = stmt.executeQuery();
+			return rs.next(); // true if a match is found
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
+
 	public Map<Integer, Integer> getDailyParkingUsage(int month, int year) {
-	    Map<Integer, Integer> dailyData = new TreeMap<>();
+		Map<Integer, Integer> dailyData = new TreeMap<>();
 
-	    try {
-	        if (conn == null || conn.isClosed()) {
-	            connectToDB();
-	        }
+		try {
+			if (conn == null || conn.isClosed()) {
+				connectToDB();
+			}
 
-	        String sql = "SELECT DAY(order_date) AS day_of_month, COUNT(*) AS total_orders " +
-	                     "FROM table_order t JOIN users u ON t.subscriber_id = u.id " +
-	                     "WHERE u.role = 'user' AND MONTH(order_date) = ? AND YEAR(order_date) = ? " +
-	                     "GROUP BY DAY(order_date) ORDER BY DAY(order_date)";
+			String sql = "SELECT DAY(order_date) AS day_of_month, COUNT(*) AS total_orders "
+					+ "FROM table_order t JOIN users u ON t.subscriber_id = u.id "
+					+ "WHERE u.role = 'user' AND MONTH(order_date) = ? AND YEAR(order_date) = ? "
+					+ "GROUP BY DAY(order_date) ORDER BY DAY(order_date)";
 
-	        PreparedStatement stmt = conn.prepareStatement(sql);
-	        stmt.setInt(1, month);
-	        stmt.setInt(2, year);
-	        ResultSet rs = stmt.executeQuery();
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, month);
+			stmt.setInt(2, year);
+			ResultSet rs = stmt.executeQuery();
 
-	        while (rs.next()) {
-	            dailyData.put(rs.getInt("day_of_month"), rs.getInt("total_orders"));
-	        }
+			while (rs.next()) {
+				dailyData.put(rs.getInt("day_of_month"), rs.getInt("total_orders"));
+			}
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-	    return dailyData;
+		return dailyData;
 	}
 
 	/**
