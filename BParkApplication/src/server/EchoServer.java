@@ -280,6 +280,9 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					e.printStackTrace();
 				}
 			}
+			else if (message.startsWith("#CAR_INSERT#")) {
+				
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

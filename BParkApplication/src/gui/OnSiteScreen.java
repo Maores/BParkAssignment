@@ -1,5 +1,8 @@
 package gui;
 
+import client.ChatClient;
+import client.singletoneClient;
+import common.ChatIF;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +13,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class OnSiteScreen {
+public class OnSiteScreen implements ChatIF{
 
-    @FXML
+    public OnSiteScreen() {
+    	client = sg.getInstance(this);
+	}
+
+	@FXML
     private Button OrdersMenu;
 
     @FXML
@@ -25,12 +32,20 @@ public class OnSiteScreen {
     @FXML
     private StackPane pane;
     
+	private ChatClient client;
+	private singletoneClient sg = new singletoneClient();
+	
     private Stage primaryStage;
     private MainApp mainApp;
+    private String code;
+    
+
     
     @FXML
     void Delivery(ActionEvent event) {
     	Terminal.appendText("Car is about to be taken by the lift, dont step over the line!\n");
+    	client.handleMessageFromClientUI(
+				"CAR_INSERT " + code);
     }
 
     @FXML
@@ -56,5 +71,15 @@ public class OnSiteScreen {
 	}
     public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	}
+
+    @SuppressWarnings("unchecked")
+	public void displayMessage(String message) {
+    	
+    }
+    
+    @Override
+	public void handleMessageFromServer(String message) {
+		displayMessage(message);
 	}
 }
