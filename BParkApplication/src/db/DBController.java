@@ -21,7 +21,7 @@ public class DBController {
 	private Connection conn;
 	private DatabaseListener listener;
 	private int orderNumber;
-	private int maxSpace = 10;
+	private int maxSpace = 100;
 
 	// Private constructor to prevent direct instantiation
 	private DBController() {

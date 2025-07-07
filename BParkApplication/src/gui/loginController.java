@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -36,12 +37,21 @@ public class loginController implements ChatIF {
 	
 	@FXML
 	private Button fgBtn;
+	
+	@FXML
+	private DatePicker date;
 
+	@FXML
+	private Button checkAvailBtn;
+	
 	private singletoneClient sg = new singletoneClient();
 	private static ChatClient client;
 
 	private MainApp mainApp;
-
+	
+	public loginController() {
+		client = sg.getInstance(this);
+	}
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 
@@ -133,6 +143,14 @@ public class loginController implements ChatIF {
 		qrStage.setResizable(false);
 		qrStage.setTitle("Login via QR code");
 		qrStage.show();
+	}
+	@FXML
+	public void checkAvailability() {
+		client = sg.getInstance(this);
+		if (client != null) {
+			client.handleMessageFromClientUI("CONNECTION " + client.getHost() + " Guest");
+		}
+		client.handleMessageFromClientUI("AVAILABLE_SPOTS " + date.getValue().toString());
 	}
 	
 }
