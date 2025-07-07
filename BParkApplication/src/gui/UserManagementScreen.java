@@ -245,8 +245,6 @@ public class UserManagementScreen implements ChatIF {
 		reportBtn.setOnAction(e -> generateReport());
 		Button logOutBtn = new Button("LogOut");
 		logOutBtn.setId("logOutBtn");
-		// .setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-cursor:
-		// hand;");
 		logOutBtn.setOnAction(e -> {
 			try {
 				main.showLoginScreen();

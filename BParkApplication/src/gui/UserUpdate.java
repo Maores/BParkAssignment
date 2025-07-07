@@ -51,15 +51,15 @@ public class UserUpdate implements ChatIF {
 	@Override
 	public void handleMessageFromServer(String message) {
 		Platform.runLater(() -> {
-		if(message.equals("ERROR_UPDATE_USER")) {
-			Alert al = new Alert(Alert.AlertType.ERROR);
-			al.show();
-		}else {
-			Alert al = new Alert(Alert.AlertType.INFORMATION,message);
-			al.show();
-			popWindow.close();
-			
-		}
+			if(message.equals("ERROR_UPDATE_USER")) {
+				Alert al = new Alert(Alert.AlertType.ERROR);
+				al.show();
+			}else {
+				Alert al = new Alert(Alert.AlertType.INFORMATION,message);
+				al.show();
+				popWindow.close();
+				
+			}
 		});
 
 	}

@@ -10,11 +10,17 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class loginController implements ChatIF {
@@ -100,6 +106,7 @@ public class loginController implements ChatIF {
 	        ForgotPasswordController controller = loader.getController();
 	        controller.setPopWindow(forgotPasswordStage);
 	        forgotPasswordStage.setScene(s);
+	        forgotPasswordStage.setAlwaysOnTop(true);
 	        forgotPasswordStage.setResizable(false);
 	        forgotPasswordStage.setTitle("Reset Password");
 	        forgotPasswordStage.show();
@@ -108,5 +115,24 @@ public class loginController implements ChatIF {
 	    }
 	}
 	
+	@FXML
+	public void showQR() {
+		Stage qrStage = new Stage();
+		StackPane root = new StackPane();
+		ImageView view = new ImageView();
+		Image image =new Image(getClass().getResource("/gui/QR_code.png").toExternalForm());
+		view.setImage(image);
+		view.setFitWidth(150);
+		view.setFitHeight(150);
+		view.setPreserveRatio(true);
+		VBox inside = new VBox(new Label("Scan QR to login:"),view);
+		inside.setAlignment(Pos.CENTER);
+		root.getChildren().add(inside);
+		qrStage.setScene(new Scene(root,200, 200));
+		qrStage.setAlwaysOnTop(true);
+		qrStage.setResizable(false);
+		qrStage.setTitle("Login via QR code");
+		qrStage.show();
+	}
 	
 }

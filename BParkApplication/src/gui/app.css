@@ -25,6 +25,13 @@
     -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
     -fx-transition: background-color 0.3s ease;
 }
+#qrBtn{
+	-fx-background-color: #4045a1;
+}
+#qrBtn:hover{
+	-fx-background-color: white;
+	 -fx-text-fill: #4045a1;
+}
 #logOutBtn:hover{
 	-fx-background-color: white;
     -fx-text-fill: #9e2f28;
