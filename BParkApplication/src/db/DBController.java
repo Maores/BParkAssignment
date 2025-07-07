@@ -81,7 +81,7 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order;");
+			ResultSet rs = stmt.executeQuery("SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM table_order;");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnSize = rsmd.getColumnCount();
 			// Build string for database - column names
@@ -114,7 +114,7 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE subscriber_id =" + id + ";");
+			ResultSet rs = stmt.executeQuery("SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM table_order WHERE subscriber_id =" + id + ";");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnSize = rsmd.getColumnCount();
 			// Build string for database - column names
@@ -150,7 +150,7 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE role = 'user';");
+			ResultSet rs = stmt.executeQuery("SELECT id, name, role, phone, email, password FROM users WHERE role = 'user';");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnSize = rsmd.getColumnCount();
 			// Build string for database - column names
@@ -187,7 +187,7 @@ public class DBController {
 //			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE order_number = ?;");
 //			ResultSetMetaData rsmd = rs.getMetaData();
 
-			String sql = "SELECT * FROM `table_order` WHERE order_number = ?;";
+			String sql = "SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM `table_order` WHERE order_number = ?;";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(order));
 			ResultSet rs = ps.executeQuery();
@@ -229,7 +229,7 @@ public class DBController {
 //				ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE order_number = ?;");
 //				ResultSetMetaData rsmd = rs.getMetaData();
 
-			String sql = "SELECT * FROM `users` WHERE id = ?;";
+			String sql = "SELECT id, name, role, phone, email, password FROM `users` WHERE id = ?;";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(id));
 			ResultSet rs = ps.executeQuery();
@@ -369,7 +369,7 @@ public class DBController {
 	        float ratio = (float) freeSpots / maxSpace;      // maxSpace == 100
 	        if (ratio >= 0.40f) {
 	            // Enough space – tell the GUI exactly how many are free
-	            return Integer.toString(freeSpots);
+	            return "Available spots: " + freeSpots;
 	        } else {
 	            // Less than 40 % free – tell the GUI there is no space
 	            return "No space available";

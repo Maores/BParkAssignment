@@ -95,12 +95,16 @@ public class loginController implements ChatIF {
 					alert.showAndWait();
 				}
 			} 
-		} else {
+		} else if(message.startsWith("No")){
 			Platform.runLater(() -> {
 				Alert alert = new Alert(Alert.AlertType.ERROR, message);
 				alert.showAndWait();
 			});
-
+		}else {
+			Platform.runLater(() -> {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
+				alert.showAndWait();
+			});
 		}
 	}
 	
@@ -146,11 +150,16 @@ public class loginController implements ChatIF {
 	}
 	@FXML
 	public void checkAvailability() {
-		client = sg.getInstance(this);
-		if (client != null) {
-			client.handleMessageFromClientUI("CONNECTION " + client.getHost() + " Guest");
+		if(date.getValue().toString().isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR,"Fill the date field.");
+			alert.show();
+		}else {
+			client = sg.getInstance(this);
+			if (client != null) {
+				client.handleMessageFromClientUI("CONNECTION " + client.getHost() + " Guest");
+			}
+			client.handleMessageFromClientUI("AVAILABLE_SPOTS " + date.getValue().toString());
 		}
-		client.handleMessageFromClientUI("AVAILABLE_SPOTS " + date.getValue().toString());
 	}
 	
 }
