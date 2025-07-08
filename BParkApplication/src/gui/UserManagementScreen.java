@@ -102,7 +102,16 @@ public class UserManagementScreen implements ChatIF {
 
 	
 	private void openParkingDurationReport() {
-		System.out.println("report");
+		  try {
+		        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/parking_timing_report.fxml"));
+		        Parent root = loader.load();
+		        Stage stage = new Stage();
+		        stage.setTitle("Subscriber Status Report");
+		        stage.setScene(new Scene(root));
+		        stage.show();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
 	}
 	/**
 	 * Example of a more complex operation
