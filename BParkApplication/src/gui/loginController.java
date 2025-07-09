@@ -120,7 +120,6 @@ public class loginController implements ChatIF {
 	        ForgotPasswordController controller = loader.getController();
 	        controller.setPopWindow(forgotPasswordStage);
 	        forgotPasswordStage.setScene(s);
-	        forgotPasswordStage.setAlwaysOnTop(true);
 	        forgotPasswordStage.setResizable(false);
 	        forgotPasswordStage.setTitle("Reset Password");
 	        forgotPasswordStage.show();

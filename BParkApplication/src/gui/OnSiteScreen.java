@@ -6,25 +6,14 @@ import common.ChatIF;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class OnSiteScreen implements ChatIF{
-
-    public OnSiteScreen() {
-    	client = sg.getInstance(this);
-	}
 
 	@FXML
     private Button OrdersMenu;
@@ -38,14 +27,11 @@ public class OnSiteScreen implements ChatIF{
     private TextArea Terminal;
     @FXML
     private StackPane pane;
-    
-	private ChatClient client;
-	private singletoneClient sg = new singletoneClient();
 	
     private Stage primaryStage;
     private MainApp mainApp;
     private Stage checkCode;
-    private String code;
+
     
 
     

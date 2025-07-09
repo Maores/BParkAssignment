@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -467,7 +469,6 @@ public class DBController {
 		}
 		String password = generatePassword();
 		String sql = "INSERT INTO `users` (id, name, role,phone,email,password) VALUES (?, ?, 'user',?,?,?);";
-		System.out.println(password);
 		if (password.equals("ERROR")) {
 			return "User couldnt be added!";
 		}
@@ -704,8 +705,8 @@ public class DBController {
 	
 	//Car inserted, change boolean car_inserted for specific code order
 	public boolean CarInserted(String Code) {
-	    String selectSQL = "SELECT car_inserted FROM table_order WHERE confirmation_code = ?";
-	    String updateSQL = "UPDATE table_order SET car_inserted = 1 WHERE confirmation_code = ?";
+	    String selectSQL = "SELECT car_inserted FROM table_order WHERE confirmation_code = ? ";
+	    String updateSQL = "UPDATE table_order SET car_inserted = 1 WHERE confirmation_code = ? AND order_date = ? AND order_time BETWEEN ? AND ? ";
 
 	    try {
 	        int codeInt = Integer.parseInt(Code); // convert string to int
@@ -717,8 +718,39 @@ public class DBController {
 	            if (carInserted == 0) {
 	                // Set car_inserted to 1
 	                try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
+	                	LocalTime now = LocalTime.now();
+	                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+	                    String formattedTime = now.format(formatter);
+	                    String timeBefore = null;
+	                    String timeAfter = null;
+	                    String Time[] = formattedTime.split(":");
+	                    if(Integer.parseInt(Time[1])==0) {
+	                    	if(Integer.parseInt(Time[0])>9)
+	                    		timeBefore = String.format("%d:%s", Integer.parseInt(Time[0])-1,"45");
+	                    	else
+	                    		timeBefore = String.format("09:00");
+	                    	timeAfter =String.format("%s:%s", Time[0],"15");
+	                    }else if(Integer.parseInt(Time[1])==45) {
+	                    	timeBefore =String.format("%s:%s", Time[0],"30");
+	                    	if(Integer.parseInt(Time[0])<21)
+	                    		timeAfter =String.format("%d:%s", Integer.parseInt(Time[0])+1,"00");
+	                    	else
+	                    		timeAfter = String.format("21:00");
+	                    }else {
+	                    	if(Integer.parseInt(Time[1])==15)
+	                    		timeBefore =String.format("%s:00", Time[0]);
+	                    	else
+	                    		timeBefore =String.format("%s:%d", Time[0],Integer.parseInt(Time[1])-15);
+	                    	timeAfter = String.format("%s:%d",Time[0],Integer.parseInt(Time[1])+15);
+	                    }
+	                    
 	                    updateStmt.setInt(1, codeInt);
-	                    updateStmt.executeUpdate();
+	                    updateStmt.setString(2, LocalDate.now().toString());
+	                    updateStmt.setString(3, timeBefore);
+	                    updateStmt.setString(4, timeAfter);
+	                    int g = updateStmt.executeUpdate();
+	                    if(g==0)
+	                    	return false;
 	                    return true;
 	                } catch(Exception e) {
 	                    e.printStackTrace();

@@ -64,6 +64,7 @@ public class ForgotPasswordController implements ChatIF {
 	public void handleMessageFromServer(String message) {
 		if(message.startsWith("Email")) {
 			showAlert(AlertType.INFORMATION, message);
+			popWindow.close();
 		}
 		else if(message.startsWith("Failed")) {
 			showAlert(AlertType.ERROR, message);

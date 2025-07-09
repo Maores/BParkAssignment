@@ -32,10 +32,10 @@ public class ShowCodeScreenController implements ChatIF {
 	    			alert.show();
 	    		}
 	    		else {
-	    			client.handleMessageFromClientUI("CAR_INSERT" + " " + code.getText());
+	    			client.handleMessageFromClientUI("CAR_INSERT " + code.getText());
 	    		}
 	    	});
-			VBox root = new VBox(new Label("Enter confirmation code:"),code,codeBtn);
+			VBox root = new VBox(new Label("Scan tag or Enter confirmation code:"),code,codeBtn);
 			root.setAlignment(Pos.CENTER);
 			return root;
 	}
@@ -49,7 +49,7 @@ public class ShowCodeScreenController implements ChatIF {
 	            alert.show();
 	            window.close();
 	        }else if(message.equals("CAR_NOT_INSERTED")) {
-	            alert = new Alert(Alert.AlertType.ERROR,"Failed Code is wrong!");
+	            alert = new Alert(Alert.AlertType.ERROR,"Car insert rejected.");
 	            window.setAlwaysOnTop(false);
 	            alert.show();
 	        }
