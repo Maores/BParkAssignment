@@ -13,6 +13,7 @@ import common.ParkingReportWrapper;
 import common.ParkingTimingStats;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.PieChart;
@@ -21,6 +22,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -128,8 +130,8 @@ public class ParkingTimingReportController implements ChatIF {
 
                     // Look for legend items and update their text to show the name
                     latePieChart.lookupAll(".chart-legend-item").forEach(item -> {
-                        if (item instanceof javafx.scene.Node node) {
-                            if (node.lookup(".label") instanceof javafx.scene.control.Label label 
+                        if (item instanceof Node node) {
+                            if (node.lookup(".label") instanceof Label label 
                                     && label.getText().equals(String.valueOf(count))) {
                                 label.setText(userName); // Replace the number with the name in the legend
                             }
