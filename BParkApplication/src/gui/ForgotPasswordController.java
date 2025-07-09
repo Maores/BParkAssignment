@@ -61,6 +61,7 @@ public class ForgotPasswordController implements ChatIF {
 			return;
 		}
 		showAlert(AlertType.INFORMATION, "A password reset email has been sent to your address.");
+		popWindow.close();
 		client.sendToServer("RESET_PASSWORD " + email);
 	}
 
@@ -99,10 +100,8 @@ public class ForgotPasswordController implements ChatIF {
 	public void handleMessageFromServer(String message) {
 		if (message.startsWith("Email")) {
 			showAlert(AlertType.INFORMATION, message);
-			popWindow.close();
 		} else if (message.startsWith("Failed")) {
 			showAlert(AlertType.ERROR, message);
 		}
-		popWindow.close();
 	}
 }
