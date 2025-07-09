@@ -1,6 +1,7 @@
 package gui;
 
 import client.ChatClient;
+
 import client.singletoneClient;
 import common.ChatIF;
 import javafx.application.Platform;
@@ -8,6 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos; 
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -18,6 +21,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 /**
  * GUI controller for staff users in the BPark system.
  * <p>
@@ -180,8 +185,12 @@ public class StaffGui implements ChatIF {
         idField.setPromptText("Enter user ID");
         VBox idBox = new VBox(id ,idField);
         
-        HBox nameIdBox = new HBox(nameBox,idBox);
-        nameIdBox.setSpacing(10);
+        Region spacer = new Region();             
+        HBox.setHgrow(spacer, Priority.ALWAYS);    
+
+        
+//        HBox nameIdBox = new HBox(nameBox,idBox);
+//        nameIdBox.setSpacing(10);
         
         Label email =  new Label("E-Mail:");
         emailField = new TextField();
@@ -218,9 +227,20 @@ public class StaffGui implements ChatIF {
 				e1.printStackTrace();
 			}
 		});
+		
+		HBox nameIdBox = new HBox(
+		        10,               
+		        nameBox,
+		        idBox,
+		        spacer,           
+		        logOutBtn         
+		);
+		nameIdBox.setAlignment(Pos.TOP_LEFT);     
+
+		
         VBox emptyAddBox = new VBox(new Label(""),addUserBtn);
         HBox phoneEmailAddBox = new HBox(emailBox,phoneBox,emptyAddBox);
-        HBox viewlogBox = new HBox(viewDBBtn,viewUserBtn,logOutBtn);
+        HBox viewlogBox = new HBox(viewDBBtn,viewUserBtn);
         phoneEmailAddBox.setSpacing(10);
         viewlogBox.setSpacing(10);
 
