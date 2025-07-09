@@ -36,9 +36,9 @@ public class ParkingTimingReportController implements ChatIF{
 
 
 	@FXML
-
 	private Button backBtn;
-
+	
+	@FXML
 	private ComboBox<Integer> monthComboBox; //ComboBox for selecting the report month
 
 	@FXML
@@ -47,21 +47,15 @@ public class ParkingTimingReportController implements ChatIF{
 	@FXML
 	private BarChart<String, Number> barChart; //Bar chart for displaying daily parking extension data
 
-
 	@FXML
-
 	private PieChart latePieChart;//Pie chart for displaying late users' statistics
 	
 	private Dialog<Void> dialog;
 	private Stage reportStage;
-	
 	private ChatClient chatClient;
 	
 
-
-
 	/** Holds the currently loaded report data mapped by day of month. */
-
 	private Map<Integer, ParkingTimingStats> currentReportData = new TreeMap<>();
 
 	

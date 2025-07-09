@@ -132,7 +132,6 @@ public class UserManagementScreen implements ChatIF {
 		        Stage stage = new Stage();
 		        controller.setStage(stage);
 		        stage.setTitle("Subscriber Parking Duration Report");
-
 		        stage.setScene(new Scene(root));
 		        stage.setResizable(false);
 		        stage.show();
