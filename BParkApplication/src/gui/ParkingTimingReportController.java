@@ -23,7 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-//855
+
 public class ParkingTimingReportController implements ChatIF {
 
     @FXML
@@ -99,9 +99,6 @@ public class ParkingTimingReportController implements ChatIF {
             XYChart.Series<String, Number> extendedSeries = new XYChart.Series<>();
             extendedSeries.setName("Extended");
             
-
-            XYChart.Series<String, Number> lateSeries = new XYChart.Series<>();
-            lateSeries.setName("Late");
             
             for (Map.Entry<Integer, ParkingTimingStats> entry : currentReportData.entrySet()) {
                 String day = String.valueOf(entry.getKey());
@@ -110,10 +107,9 @@ public class ParkingTimingReportController implements ChatIF {
                 xAxis.getCategories().add(day);
                 
                 extendedSeries.getData().add(new XYChart.Data<>(day, stats.extended));
-                lateSeries.getData().add(new XYChart.Data<>(day, stats.late));  
             }
             
-            barChart.getData().addAll(extendedSeries, lateSeries);
+            barChart.getData().addAll(extendedSeries);
 
             latePieChart.getData().clear();
             for (Map.Entry<String, Integer> entry : wrapper.lateUsers.entrySet()) {
