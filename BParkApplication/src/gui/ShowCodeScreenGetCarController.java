@@ -8,16 +8,36 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+/**
+ * GUI controller for retrieving a car by entering or scanning a confirmation code.
+ * <p>
+ * This class handles user input and sends a "CAR_GET" command to the server via the ChatClient.
+ * </p>
+ */
 public class ShowCodeScreenGetCarController {
+	/** The ChatClient used for communication with the server. */
 	private ChatClient client;
+	/** The stage (popup window) for code entry. */
 	private Stage window;
-	
+	/**
+     * Constructs the controller with the given window and ChatClient.
+     *
+     * @param window the stage where the code input UI is displayed
+     * @param client the client used to send messages to the server
+     */
 	public ShowCodeScreenGetCarController(Stage window,ChatClient client) {
 		this.client = client;
 		this.window = window;
 	}
-
+	/**
+     * Builds and returns the root layout containing the input field and check button.
+     * <p>
+     * The user is prompted to scan or enter a confirmation code, and upon clicking the button,
+     * the input is sent to the server. If the field is empty, an error alert is shown.
+     * </p>
+     *
+     * @return a VBox layout containing the label, input field, and button
+     */
 	public VBox buildRoot() {
 	    	TextField code = new TextField();
 	    	Button codeBtn = new Button("check");

@@ -1,16 +1,5 @@
 package gui;
 
-
-import javafx.fxml.FXML;
-import javafx.scene.chart.*;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
-
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -26,152 +15,181 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * Controller for the monthly parking usage report view.
+ * <p>
+ * This class provides functionality to:
+ * <ul>
+ * <li>Load and visualize daily parking usage data in a bar chart</li>
+ * <li>Export the data to a CSV file</li>
+ * </ul>
+ */
 public class ReportController implements ChatIF {
 
-    @FXML
-    private ComboBox<Integer> monthComboBox;
+	@FXML
+	private ComboBox<Integer> monthComboBox;
 
-    @FXML
-    private ComboBox<Integer> yearComboBox;
+	@FXML
+	private ComboBox<Integer> yearComboBox;
 
-    @FXML
-    private BarChart<String, Number> barChart;
+	@FXML
+	private BarChart<String, Number> barChart;
 
-    @FXML
+	@FXML
 	private Button backBtn;
-    
-    
-    private Dialog<Void> dialog;
 
-    private ChatClient chatClient;
+	private Dialog<Void> dialog;
 
-    private Map<Integer, Integer> currentReportData = new TreeMap<>();
+	private ChatClient chatClient;
 
-    private Stage reportStage;
-    
+	/** Stores the currently loaded report data (day → number of parkings). */
+
+	private Map<Integer, Integer> currentReportData = new TreeMap<>();
+
+	private Stage reportStage;
+
 	public void setStage(Stage stage) {
 		reportStage = stage;
 	}
-    public void setDialog(Dialog<Void> dialog) {
-   	 this.dialog = dialog;
-   	}
 
+	public void setDialog(Dialog<Void> dialog) {
+		this.dialog = dialog;
+	}
 
-    public void setChatClient(ChatClient client) {
-        this.chatClient = client;
-    }
+	public void setChatClient(ChatClient client) {
+		this.chatClient = client;
+	}
 
-    @FXML
-    public void initialize() {
-        for (int i = 1; i <= 12; i++) {
-            monthComboBox.getItems().add(i);
-        }
+	/**
+	 * Initializes the report screen with month/year dropdowns and default values.
+	 * Called automatically by JavaFX after FXML loading.
+	 */
 
-        int currentYear = LocalDate.now().getYear();
-        for (int y = currentYear - 5; y <= currentYear + 2; y++) {
-            yearComboBox.getItems().add(y);
-        }
+	@FXML
+	public void initialize() {
+		for (int i = 1; i <= 12; i++) {
+			monthComboBox.getItems().add(i);
+		}
 
-        monthComboBox.setValue(LocalDate.now().getMonthValue());
-        yearComboBox.setValue(currentYear);
-    }
+		int currentYear = LocalDate.now().getYear();
+		for (int y = currentYear - 5; y <= currentYear + 2; y++) {
+			yearComboBox.getItems().add(y);
+		}
 
-    @FXML
-    private void onLoadReportClicked() {
-        Integer month = monthComboBox.getValue();
-        Integer year = yearComboBox.getValue();
+		monthComboBox.setValue(LocalDate.now().getMonthValue());
+		yearComboBox.setValue(currentYear);
+	}
 
-        if (month == null || year == null) {
-            showAlert("Selection Error", "Please select both month and year.");
-            return;
-        }
+	/**
+	 * Loads parking usage data from the database and displays it in a bar chart.
+	 */
+	@FXML
+	private void onLoadReportClicked() {
+		Integer month = monthComboBox.getValue();
+		Integer year = yearComboBox.getValue();
 
-        String request = "GET_SUBSCRIBER_REPORT " + month + " " + year;
-        chatClient.handleMessageFromClientUI(request);
-    }
+		if (month == null || year == null) {
+			showAlert("Selection Error", "Please select both month and year.");
+			return;
+		}
 
-    public void loadReportFromServer(SubscriberReportWrapper wrapper) {
-        Platform.runLater(() -> {
-            currentReportData = wrapper.getReportData();
+		String request = "GET_SUBSCRIBER_REPORT " + month + " " + year;
+		chatClient.handleMessageFromClientUI(request);
+	}
 
-            barChart.getData().clear();
-            CategoryAxis xAxis = (CategoryAxis) barChart.getXAxis();
-            xAxis.getCategories().clear();
+	public void loadReportFromServer(SubscriberReportWrapper wrapper) {
+		Platform.runLater(() -> {
+			currentReportData = wrapper.getReportData();
 
-            for (int day = 1; day <= 31; day++) {
-                xAxis.getCategories().add(String.valueOf(day));
-            }
+			barChart.getData().clear();
+			CategoryAxis xAxis = (CategoryAxis) barChart.getXAxis();
+			xAxis.getCategories().clear();
 
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName("Parking Usage");
+			for (int day = 1; day <= 31; day++) {
+				xAxis.getCategories().add(String.valueOf(day));
+			}
 
-            for (Map.Entry<Integer, Integer> entry : currentReportData.entrySet()) {
-                series.getData().add(new XYChart.Data<>(String.valueOf(entry.getKey()), entry.getValue()));
-            }
+			XYChart.Series<String, Number> series = new XYChart.Series<>();
+			series.setName("Parking Usage");
 
-            barChart.getData().add(series);
-        });
-    }
+			for (Map.Entry<Integer, Integer> entry : currentReportData.entrySet()) {
+				series.getData().add(new XYChart.Data<>(String.valueOf(entry.getKey()), entry.getValue()));
+			}
 
-    @FXML
+			barChart.getData().add(series);
+		});
+	}
+
+	@FXML
 	private void backToDialog() {
-    	reportStage.close();
+		reportStage.close();
 		dialog.showAndWait();
 	}
 
+	/**
+	 * Exports the currently loaded report data to a CSV file.
+	 */
+	@FXML
+	private void onExportCsvClicked() {
+		if (currentReportData.isEmpty()) {
+			showAlert("No Data", "Please load a report first.");
+			return;
+		}
 
-    @FXML
-    private void onExportCsvClicked() {
-        if (currentReportData.isEmpty()) {
-            showAlert("No Data", "Please load a report first.");
-            return;
-        }
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save Report As CSV");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+		fileChooser.setInitialFileName("parking_report.csv");
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Report As CSV");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        fileChooser.setInitialFileName("parking_report.csv");
+		try {
+			Stage stage = new Stage();
+			java.io.File file = fileChooser.showSaveDialog(stage);
 
-        try {
-            Stage stage = new Stage();
-            java.io.File file = fileChooser.showSaveDialog(stage);
+			if (file != null) {
+				try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+					writer.println("Date,Number of Parkings");
 
-            if (file != null) {
-                try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-                    writer.println("Date,Number of Parkings");
+					int month = monthComboBox.getValue();
+					int year = yearComboBox.getValue();
 
-                    int month = monthComboBox.getValue();
-                    int year = yearComboBox.getValue();
+					for (Map.Entry<Integer, Integer> entry : currentReportData.entrySet()) {
+						int day = entry.getKey();
+						String fullDate = String.format("%04d-%02d-%02d", year, month, day);
+						writer.println(fullDate + "," + entry.getValue());
+					}
 
-                    for (Map.Entry<Integer, Integer> entry : currentReportData.entrySet()) {
-                        int day = entry.getKey();
-                        String fullDate = String.format("%04d-%02d-%02d", year, month, day);
-                        writer.println(fullDate + "," + entry.getValue());
-                    }
+					showAlert("Success", "Report exported successfully.");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			showAlert("Export Error", "Could not export file.");
+		}
+	}
 
-                    showAlert("Success", "Report exported successfully.");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Export Error", "Could not export file.");
-        }
-    }
+	/**
+	 * Utility method to show informational alerts.
+	 *
+	 * @param title   the title of the alert dialog
+	 * @param message the message to be shown
+	 */
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+	private void showAlert(String title, String message) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle(title);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 
 	@Override
 	public void handleMessageFromServer(String message) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -34,7 +34,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-
+/**
+ * GUI screen for remote users to manage parking orders in the BPark system.
+ * <p>
+ * Provides features to:
+ * <ul>
+ *   <li>View order history</li>
+ *   <li>Insert new orders within allowed date/time range</li>
+ *   <li>Extend existing reservations</li>
+ *   <li>Update user information</li>
+ *   <li>Logout</li>
+ * </ul>
+ */
 public class RemoteScreen implements ChatIF {
 	/**
 	 * The default port and host to connect on.
@@ -53,6 +64,9 @@ public class RemoteScreen implements ChatIF {
 	private String id = MainApp.getUserId();
 	private String name = MainApp.getUserName();
 
+    /**
+     * Initializes UI components and connects the client to the server.
+     */
 	public RemoteScreen() {
 		// Only initialize data fields here, not the scene or stage
 		orderField = new TextField();
@@ -68,11 +82,18 @@ public class RemoteScreen implements ChatIF {
 
 		client = sg.getInstance(this);
 	}
-
+    /**
+     * Sets the reference to the main application.
+     * 
+     * @param main the main application instance
+     */
 	public void setMain(MainApp main) {
 		this.main = main;
 	}
-
+    /**
+     * Builds and returns the root layout for the remote screen UI.
+     * @return the root layout for this screen
+     */
 	public StackPane buildRoot() {
 		StackPane root = new StackPane();
 
@@ -198,7 +219,11 @@ public class RemoteScreen implements ChatIF {
 		root.getChildren().add(interior);
 		return root;
 	}
-
+    /**
+     * Displays a server message in the text area or loads data into the table.
+     * 
+     * @param message the message received from the server
+     */
 	@SuppressWarnings("unchecked")
 	public void displayMessage(String message) {
 		if (message.startsWith("order_number")) {
@@ -235,7 +260,11 @@ public class RemoteScreen implements ChatIF {
 
 		}
 	}
-
+    /**
+     * Receives messages from the server and displays them in the appropriate UI section.
+     * 
+     * @param message the message received from the server
+     */
 	@Override
 	public void handleMessageFromServer(String message) {
 		displayMessage(message);

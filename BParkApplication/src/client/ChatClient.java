@@ -52,10 +52,7 @@ public class ChatClient extends AbstractClient {
 	 *
 	 * @param msg The message from the server.
 	 */
-//  public void handleMessageFromServer(Object msg) 
-//  {
-//    clientUI.display(msg.toString());
-//  }
+
 	@Override
 	public void handleMessageFromServer(Object msg) {
 	    lastServerResponse = msg.toString();

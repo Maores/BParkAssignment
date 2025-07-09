@@ -23,7 +23,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+/**
+ * Controller class for the login screen.
+ * <p>
+ * Handles user authentication, forgot password functionality,
+ * QR code login view, and availability check for guest users.
+ * </p>
+ */
 public class loginController implements ChatIF {
 
 	@FXML
@@ -44,19 +50,31 @@ public class loginController implements ChatIF {
 	@FXML
 	private Button checkAvailBtn;
 	
-	private singletoneClient sg = new singletoneClient();
-	private static ChatClient client;
+	private singletoneClient sg = new singletoneClient(); /** Singleton wrapper to access the ChatClient instance. */
+	private static ChatClient client;  /** Shared ChatClient instance for communication with the server. */
 
-	private MainApp mainApp;
+	private MainApp mainApp; //Reference to the main application instance
 	
+	//Constructs the controller and initializes the ChatClient instance.
 	public loginController() {
 		client = sg.getInstance(this);
 	}
+	/**
+     * Sets the reference to the main application, allowing this controller
+     * to switch scenes.
+     * @param mainApp the main application instance
+     */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 
 	}
-
+	
+    /**
+     * Handles the login button action.
+     * Validates user input and sends login credentials to the server.
+     *
+     * @param event the ActionEvent triggered by the button
+     */
 	@FXML
 	void loginUser(ActionEvent event) {
 		String userPass = password.getText();
@@ -70,14 +88,21 @@ public class loginController implements ChatIF {
 			client = sg.getInstance(this);
 			client.handleMessageFromClientUI("LOGIN " + userPass + " " + userName);
 
-		} catch (Exception e) {}
+		} catch (Exception e) {} // Silent fail – could log
 	}
-
+	/**
+     * Returns the ChatClient instance.
+     * @return the ChatClient used by this controller
+     */
 	public ChatClient getClient() {
 		return client;
 	}
 
-	// Get message from the server!!!
+    /**
+     * Handles messages received from the server.
+     * Responds to login result and navigates to the appropriate role screen.
+     * @param message the message received from the server
+     */
 	@Override
 	public void handleMessageFromServer(String message) {
 		if (message.startsWith("role ")) {
@@ -108,6 +133,7 @@ public class loginController implements ChatIF {
 		}
 	}
 	
+	//Opens the Forgot Password pop-up window and loads its controller.
 	@FXML
 	private void forgotPass() {
 	    Stage forgotPasswordStage = new Stage();
@@ -127,7 +153,9 @@ public class loginController implements ChatIF {
 	        e.printStackTrace();
 	    }
 	}
-	
+    /**
+     * Displays a popup window with a QR code for alternative login method.
+     */
 	@FXML
 	public void showQR() {
 		Stage qrStage = new Stage();
@@ -147,6 +175,10 @@ public class loginController implements ChatIF {
 		qrStage.setTitle("Login via QR code");
 		qrStage.show();
 	}
+	/**
+     * Sends a request to check parking availability for the selected date.
+     * Requires that a date is selected in the DatePicker.
+     */
 	@FXML
 	public void checkAvailability() {
 		if(date.getValue() == null || date.getValue().toString().isEmpty()) {

@@ -18,7 +18,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
+/**
+ * GUI controller for staff users in the BPark system.
+ * <p>
+ * Allows staff to add users, view user and parking databases, and log out.
+ * </p>
+ */
 public class StaffGui implements ChatIF {
 
     @FXML private TextField nameField;
@@ -31,14 +36,24 @@ public class StaffGui implements ChatIF {
     private singletoneClient sg = new singletoneClient();
     private ChatClient client;
     private MainApp main;
-    
+    /**
+     * Initializes the ChatClient instance using singleton pattern.
+     */
     public void start() {
         client = sg.getInstance(this);
     }
+    /**
+     * Sets the main application reference.
+     * @param main the MainApp instance
+     */
     public void setMain(MainApp main) {
 		this.main = main;
 	}
-
+    
+    /**
+     * Handles the action for viewing the parking database.
+     * Sends a request to the server and appends status to the UI.
+     */
     @FXML
     void ViewDB() {
         String command = "VIEW_DATABASE";
@@ -50,7 +65,10 @@ public class StaffGui implements ChatIF {
             handleMessageFromServer("Error sending request: " + e.getMessage());
         }
     }
-
+    /**
+     * Sends a command to the server to add a new user based on entered data.
+     * Validates the input fields before sending.
+     */
     @FXML
     void addNewUser() {
         String name = nameField.getText();
@@ -70,7 +88,11 @@ public class StaffGui implements ChatIF {
             handleMessageFromServer("Error: " + e.getMessage());
         }
     }
-
+    /**
+     * Receives messages from the server and handles how data is displayed.
+     *
+     * @param message the message received from the server
+     */
     @Override
     public void handleMessageFromServer(String message) {
         Platform.runLater(() -> {
@@ -139,7 +161,11 @@ public class StaffGui implements ChatIF {
         	}
         });
     }
-
+    /**
+     * Builds and returns the root layout for the staff GUI screen.
+     *
+     * @return a fully initialized StackPane layout
+     */
     public StackPane buildRoot() {
     	StackPane root = new StackPane();
     	root.setId("pane");
