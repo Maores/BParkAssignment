@@ -121,8 +121,8 @@ public class DBController {
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM table_order WHERE subscriber_id ="
-							+ id + ";");
+					"SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM table_order "
+					+ "WHERE subscriber_id ="+ id + ";");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnSize = rsmd.getColumnCount();
 			// Build string for database - column names
@@ -192,7 +192,8 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 
 		try {
-			String sql = "SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM `table_order` WHERE order_number = ?;";
+			String sql = "SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM `table_order`"
+					+ " WHERE order_number = ?;";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(order));
 			ResultSet rs = ps.executeQuery();
