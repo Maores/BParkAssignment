@@ -278,10 +278,6 @@ public class UserManagementScreen implements ChatIF {
 				e1.printStackTrace();
 			}
 		});
-		// Btn styles
-//		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-//		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-//		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 		Region spacer = new Region();                 // flexible blank area
 		HBox.setHgrow(spacer, Priority.ALWAYS);       // let it absorb all free width
 
