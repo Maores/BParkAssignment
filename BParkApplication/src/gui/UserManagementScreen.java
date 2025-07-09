@@ -148,7 +148,6 @@ public class UserManagementScreen implements ChatIF {
 	    dialog = new Dialog<>();
 	    dialog.setTitle("Select Report Type");
 	    dialog.setHeaderText("Please choose a report to view:");
-
 	    ButtonType usageButtonType = new ButtonType("Parking Duration Report");
 	    ButtonType statusButtonType = new ButtonType("Subscriber Status Report");
 	    ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
