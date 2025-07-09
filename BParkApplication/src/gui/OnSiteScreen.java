@@ -32,16 +32,20 @@ public class OnSiteScreen implements ChatIF{
     private MainApp mainApp;
     private Stage checkCode;
 
-    
+    private ChatClient client;
+	private singletoneClient sg = new singletoneClient();
 
-    
+	public OnSiteScreen() {
+		client = sg.getInstance(this);
+	}
+	 
     @FXML
     void Delivery(ActionEvent event) {
         	ShowCodeScreen();
     }
     void ShowCodeScreen() {
     	checkCode = new Stage();
-    	ShowCodeScreenController obj = new ShowCodeScreenController(checkCode);
+    	ShowCodeScreenDeliverController obj = new ShowCodeScreenDeliverController(checkCode,client);
     	Parent root = obj.buildRoot();
 		checkCode.setScene(new Scene(root,300, 100));
 		checkCode.setAlwaysOnTop(true);
@@ -50,9 +54,18 @@ public class OnSiteScreen implements ChatIF{
 		checkCode.show();
     }
 
-    @FXML
+   
+	@FXML
     void GetCar(ActionEvent event) {
-    	Terminal.appendText("Car is being delivered, it may take up to 3 minutes..\n");
+    	checkCode = new Stage();
+    	ShowCodeScreenGetCarController obj = new ShowCodeScreenGetCarController(checkCode,client);
+    	Parent root = obj.buildRoot();
+		checkCode.setScene(new Scene(root,300, 100));
+		checkCode.setAlwaysOnTop(true);
+		checkCode.setResizable(false);
+		checkCode.setTitle("Enter Code");
+		checkCode.show();
+    	
     }
 
     @FXML
@@ -79,5 +92,12 @@ public class OnSiteScreen implements ChatIF{
     
     @Override
 	public void handleMessageFromServer(String message) {
+    	if(message.equals("CAR_INSERTED")) {
+    		Terminal.appendText("Car is being delivered, it may take up to 3 minutes..\n");
+    	}
+    	if(message.equals("CAR_NOT_INSERTED")) {
+    		Terminal.appendText("Car is being delivered, it may take up to 3 minutes..\n");
+    	}
+    	
 	}
 }

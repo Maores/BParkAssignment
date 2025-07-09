@@ -312,7 +312,6 @@ public class DBController {
 	 */
 
 	public boolean checkDB(String order) {
-		System.out.println("order:" + order);
 		String sql = "SELECT order_number FROM `table_order` WHERE order_number = ?";
 
 		try {
@@ -384,49 +383,58 @@ public class DBController {
 	 * Update a specific order (change the date)
 	 */
 	public String updateDB(String order_number) {
-		String sqlGet = "SELECT finish_time FROM `table_order` WHERE order_number = ?;";
-		String hour_date = "";
-		try {
-			PreparedStatement ps = conn.prepareStatement(sqlGet);
-			ps.setString(1, order_number);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				hour_date = rs.getString(1);
-			}
+        String sqlGet = "SELECT finish_time FROM table_order WHERE order_number = ?;";
+        String hour_date = "";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sqlGet);
+            ps.setString(1, order_number);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                hour_date = rs.getString(1);
+            }
 
-		} catch (Exception e) {
-		}
-		String[] time = hour_date.split(":");
-		int newTime = Integer.parseInt(time[0]) + 4;
-		if (newTime >= 21) {
-			hour_date = "21:00";
-		} else {
-			hour_date = String.format("%d:%s", newTime, time[1]);
-		}
+        } catch (Exception e) {
+        }
+        String[] time = hour_date.split(":");
+        int newTime = Integer.parseInt(time[0]) + 4;
+        if (newTime >= 21) {
+            hour_date = "21:00";
+        } else {
+            hour_date = String.format("%d:%s", newTime, time[1]);
+        }
 
-		String sql = "UPDATE table_order SET finish_time = ?, was_extended = TRUE WHERE order_number = ?;";		
-		try {
-			PreparedStatement ps = conn.prepareStatement(sql);
+        String sql =
+                "UPDATE table_order " +
+                "SET finish_time = ?, was_extended = TRUE " +
+                "WHERE order_number = ? AND car_inserted = 1;";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
 
-			ps.setString(1, hour_date);
-			ps.setInt(2, Integer.parseInt(order_number));
+            ps.setString(1, hour_date);
+            ps.setInt(2, Integer.parseInt(order_number));
 
-			ps.executeUpdate();
-			System.out.println("Database updated successfully.");
-			if (listener != null) {
-				listener.onDatabaseMessage("Database updated successfully.");
-			}
-			return "true";
-		} catch (Exception e) {
-			System.out.println("Database updated Failed.");
-			System.out.println(e.getMessage());
-			if (listener != null) {
-				listener.onDatabaseError("Database update failed: " + e.getMessage());
-			}
-			return e.getMessage();
-		}
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                // nothing was updated , either wrong number or the car isn’t inside
+                return "Car is not in the parking lot – cannot extend";
+            }
+            return "true";
+//            ps.executeUpdate();
+//            System.out.println("Database updated successfully.");
+//            if (listener != null) {
+//                listener.onDatabaseMessage("Database updated successfully.");
+//            }
+//            return "true";
+        } catch (Exception e) {
+            System.out.println("Database updated Failed.");
+            System.out.println(e.getMessage());
+            if (listener != null) {
+                listener.onDatabaseError("Database update failed: " + e.getMessage());
+            }
+            return e.getMessage();
+        }
 
-	}
+    }
 
 	/**
 	 * Update a user info (change the date)

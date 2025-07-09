@@ -123,7 +123,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					if ((log = db.updateDB(orderNumber)) == "true") {
 						client.sendToClient("order number: " + orderNumber + " - Your request for an extension has been approved.");
 					} else {
-						client.sendToClient("order number: " + orderNumber + " - Your request for an extension has been rejected.");
+						client.sendToClient("order number: " + orderNumber + " - Your request for an extension has been rejected.\n"+log);
 					}
 				} else {
 					client.sendToClient("Invalid order number Try again...");
