@@ -2,6 +2,7 @@ package client;
 
 import common.ChatIF;
 import javafx.scene.control.Alert;
+
 /**
  * Provides a singleton access point for the {@link ChatClient} instance.
  * <p>
@@ -13,22 +14,21 @@ import javafx.scene.control.Alert;
 public class singletoneClient {
 	/** The default port number used to connect to the server. */
 	final public static int DEFAULT_PORT = 5555;
-	 /** The default host address used to connect to the server. */
+	/** The default host address used to connect to the server. */
 	final public static String DEFAULT_HOST = "localhost";
-	 /** Singleton instance of {@link ChatClient}. */
+	/** Singleton instance of {@link ChatClient}. */
 	private ChatClient instance;
 
-	
-    /**
-     * Returns the singleton {@link ChatClient} instance.
-     * If it doesn't exist, a new one is created using default host and port values.
-     * <p>
-     * If the instance already exists, it simply updates the client UI reference.
-     * </p>
-     *
-     * @param clientUI the UI handler that receives messages from the server
-     * @return the {@code ChatClient} instance
-     */
+	/**
+	 * Returns the singleton {@link ChatClient} instance. If it doesn't exist, a new
+	 * one is created using default host and port values.
+	 * <p>
+	 * If the instance already exists, it simply updates the client UI reference.
+	 * </p>
+	 *
+	 * @param clientUI the UI handler that receives messages from the server
+	 * @return the {@code ChatClient} instance
+	 */
 	public ChatClient getInstance(ChatIF clientUI) {
 		if (instance == null) {
 			try {
@@ -44,18 +44,18 @@ public class singletoneClient {
 		return instance;
 	}
 
-	
-    /**
-     * Manually creates and returns a new {@link ChatClient} instance using the given host and port.
-     * <p>
-     * This will override any existing client instance.
-     * </p>
-     *
-     * @param PORT     the port number to connect to
-     * @param HOST     the hostname or IP address of the server
-     * @param clientUI the UI handler that receives messages from the server
-     * @return a new {@code ChatClient} instance
-     */
+	/**
+	 * Manually creates and returns a new {@link ChatClient} instance using the
+	 * given host and port.
+	 * <p>
+	 * This will override any existing client instance.
+	 * </p>
+	 *
+	 * @param PORT     the port number to connect to
+	 * @param HOST     the hostname or IP address of the server
+	 * @param clientUI the UI handler that receives messages from the server
+	 * @return a new {@code ChatClient} instance
+	 */
 	public ChatClient setManualConnection(int PORT, String HOST, ChatIF clientUI) {
 		try {
 			instance = new ChatClient(HOST, PORT, clientUI);

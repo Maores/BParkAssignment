@@ -62,12 +62,12 @@ public class DBController {
 			if (rs.next()) { // user found
 				String phone = rs.getString("phone");
 				String email = rs.getString("email");
-				// Avoid nulls so they won't break the split() 
+				// Avoid nulls so they won't break the split()
 				if (phone == null)
 					phone = "";
 				if (email == null)
 					email = "";
-				return phone + " " + email; // same order the GUI 
+				return phone + " " + email; // same order the GUI
 			} else {
 				return ""; // user not found
 			}
@@ -86,7 +86,8 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM table_order;");
+			ResultSet rs = stmt.executeQuery(
+					"SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM table_order;");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnSize = rsmd.getColumnCount();
 			// Build string for database - column names
@@ -119,7 +120,9 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM table_order WHERE subscriber_id =" + id + ";");
+			ResultSet rs = stmt.executeQuery(
+					"SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM table_order WHERE subscriber_id ="
+							+ id + ";");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnSize = rsmd.getColumnCount();
 			// Build string for database - column names
@@ -155,7 +158,8 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT id, name, role, phone, email, password FROM users WHERE role = 'user';");
+			ResultSet rs = stmt
+					.executeQuery("SELECT id, name, role, phone, email, password FROM users WHERE role = 'user';");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnSize = rsmd.getColumnCount();
 			// Build string for database - column names
@@ -188,16 +192,13 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 
 		try {
-//			Statement stmt = conn.createStatement();
-//			ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE order_number = ?;");
-//			ResultSetMetaData rsmd = rs.getMetaData();
-
 			String sql = "SELECT order_number, order_date, order_time, finish_time, confirmation_code, subscriber_id, date_of_placing_an_order FROM `table_order` WHERE order_number = ?;";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(order));
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnSize = rsmd.getColumnCount();
+
 			// Build string for database - column names
 			for (int i = 1; i <= columnSize; i++) {
 				String s = new String();
@@ -230,10 +231,6 @@ public class DBController {
 		StringBuilder str = new StringBuilder();
 
 		try {
-//				Statement stmt = conn.createStatement();
-//				ResultSet rs = stmt.executeQuery("SELECT * FROM table_order WHERE order_number = ?;");
-//				ResultSetMetaData rsmd = rs.getMetaData();
-
 			String sql = "SELECT id, name, role, phone, email, password FROM `users` WHERE id = ?;";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(id));
@@ -356,85 +353,82 @@ public class DBController {
 	}
 
 	/**
-    
-	Returns either the number of free parking spots for the given date
-	or the string "No space available" when less than 40 % of the lot is free.*
-	@param orderDate date in format "yyyy-MM-dd" - must match the DB column format
-	@return String  - number of free spots, or "No space available"*/
-	public String checkSpaceAvailability(String orderDate) {// 1. How many spots are still free on this date?
-	    int freeSpots = AvailableSpaces(orderDate);      // existing helper
+	 * 
+	 * Returns either the number of free parking spots for the given date or the
+	 * string "No space available" when less than 40 % of the lot is free.*
+	 * 
+	 * @param orderDate date in format "yyyy-MM-dd" - must match the DB column
+	 *                  format
+	 * @return String - number of free spots, or "No space available"
+	 */
+	public String checkSpaceAvailability(String orderDate) {
+		// 1. How many spots are still free on this date?
+		int freeSpots = AvailableSpaces(orderDate); // existing helper
 
-	        // If DB error occurred - propagate a generic failure message
-	        if (freeSpots < 0) {
-	            return "Database error - please try again";
-	        }
+		// If DB error occurred - propagate a generic failure message
+		if (freeSpots < 0) {
+			return "Database error - please try again";
+		}
 
-	        // 2. Decide according to 40 % rule
-	        float ratio = (float) freeSpots / maxSpace;      // maxSpace == 100
-	        if (ratio >= 0.40f) {
-	            // Enough space - tell the GUI exactly how many are free
-	            return "Available spots: " + freeSpots;
-	        } else {
-	            // Less than 40 % free - tell the GUI there is no space
-	            return "No space available";
-	        }
-	    }
+		// 2. Decide according to 40 % rule
+		float ratio = (float) freeSpots / maxSpace; // maxSpace == 100
+		if (ratio >= 0.40f) {
+			// Enough space - tell the GUI exactly how many are free
+			return "Available spots: " + freeSpots;
+		} else {
+			// Less than 40 % free - tell the GUI there is no space
+			return "No space available";
+		}
+	}
+
 	/**
 	 * Update a specific order (change the date)
 	 */
 	public String updateDB(String order_number) {
-        String sqlGet = "SELECT finish_time FROM table_order WHERE order_number = ?;";
-        String hour_date = "";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sqlGet);
-            ps.setString(1, order_number);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                hour_date = rs.getString(1);
-            }
+		String sqlGet = "SELECT finish_time FROM table_order WHERE order_number = ?;";
+		String hour_date = "";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sqlGet);
+			ps.setString(1, order_number);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				hour_date = rs.getString(1);
+			}
 
-        } catch (Exception e) {
-        }
-        String[] time = hour_date.split(":");
-        int newTime = Integer.parseInt(time[0]) + 4;
-        if (newTime >= 21) {
-            hour_date = "21:00";
-        } else {
-            hour_date = String.format("%d:%s", newTime, time[1]);
-        }
+		} catch (Exception e) {
+		}
+		String[] time = hour_date.split(":");
+		int newTime = Integer.parseInt(time[0]) + 4;
+		if (newTime >= 21) {
+			hour_date = "21:00";
+		} else {
+			hour_date = String.format("%d:%s", newTime, time[1]);
+		}
 
-        String sql =
-                "UPDATE table_order " +
-                "SET finish_time = ?, was_extended = TRUE " +
-                "WHERE order_number = ? AND car_inserted = 1;";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+		String sql = "UPDATE table_order " + "SET finish_time = ?, was_extended = TRUE "
+				+ "WHERE order_number = ? AND car_inserted = 1;";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setString(1, hour_date);
-            ps.setInt(2, Integer.parseInt(order_number));
+			ps.setString(1, hour_date);
+			ps.setInt(2, Integer.parseInt(order_number));
 
-            int rows = ps.executeUpdate();
-            if (rows == 0) {
-                // nothing was updated , either wrong number or the car isn’t inside
-                return "Car is not in the parking lot – cannot extend";
-            }
-            return "true";
-//            ps.executeUpdate();
-//            System.out.println("Database updated successfully.");
-//            if (listener != null) {
-//                listener.onDatabaseMessage("Database updated successfully.");
-//            }
-//            return "true";
-        } catch (Exception e) {
-            System.out.println("Database updated Failed.");
-            System.out.println(e.getMessage());
-            if (listener != null) {
-                listener.onDatabaseError("Database update failed: " + e.getMessage());
-            }
-            return e.getMessage();
-        }
+			int rows = ps.executeUpdate();
+			if (rows == 0) {
+				// nothing was updated , either wrong number or the car isn’t inside
+				return "Car is not in the parking lot – cannot extend";
+			}
+			return "true";
+		} catch (Exception e) {
+			System.out.println("Database updated Failed.");
+			System.out.println(e.getMessage());
+			if (listener != null) {
+				listener.onDatabaseError("Database update failed: " + e.getMessage());
+			}
+			return e.getMessage();
+		}
 
-    }
+	}
 
 	/**
 	 * Update a user info (change the date)
@@ -710,113 +704,112 @@ public class DBController {
 			return 0;
 		}
 	}
-	
-	//Car inserted, change boolean car_inserted for specific code order
+
+	// Car inserted, change boolean car_inserted for specific code order
 	public boolean CarInserted(String Code) {
-	    String selectSQL = "SELECT car_inserted FROM table_order WHERE confirmation_code = ? ";
-	    String updateSQL = "UPDATE table_order SET car_inserted = 1 WHERE confirmation_code = ? AND order_date = ? AND order_time BETWEEN ? AND ? ";
+		String selectSQL = "SELECT car_inserted FROM table_order WHERE confirmation_code = ? ";
+		String updateSQL = "UPDATE table_order SET car_inserted = 1 WHERE confirmation_code = ? AND order_date = ? AND order_time BETWEEN ? AND ? ";
 
-	    try {
-	        int codeInt = Integer.parseInt(Code); // convert string to int
-	        PreparedStatement selectStmt = conn.prepareStatement(selectSQL);
-	        selectStmt.setInt(1, codeInt);
-	        ResultSet rs = selectStmt.executeQuery();
-	        if (rs.next()) {
-	            int carInserted = rs.getInt("car_inserted");
-	            if (carInserted == 0) {
-	                // Set car_inserted to 1
-	                try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
-	                	LocalTime now = LocalTime.now();
-	                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-	                    String formattedTime = now.format(formatter);
-	                    String timeBefore = null;
-	                    String timeAfter = null;
-	                    String Time[] = formattedTime.split(":");
-	                    if(Integer.parseInt(Time[1])==0) {
-	                    	if(Integer.parseInt(Time[0])>9)
-	                    		timeBefore = String.format("%d:%s", Integer.parseInt(Time[0])-1,"45");
-	                    	else
-	                    		timeBefore = String.format("09:00");
-	                    	timeAfter =String.format("%s:%s", Time[0],"15");
-	                    }else if(Integer.parseInt(Time[1])==45) {
-	                    	timeBefore =String.format("%s:%s", Time[0],"30");
-	                    	if(Integer.parseInt(Time[0])<21)
-	                    		timeAfter =String.format("%d:%s", Integer.parseInt(Time[0])+1,"00");
-	                    	else
-	                    		timeAfter = String.format("21:00");
-	                    }else {
-	                    	if(Integer.parseInt(Time[1])==15)
-	                    		timeBefore =String.format("%s:00", Time[0]);
-	                    	else
-	                    		timeBefore =String.format("%s:%d", Time[0],Integer.parseInt(Time[1])-15);
-	                    	timeAfter = String.format("%s:%d",Time[0],Integer.parseInt(Time[1])+15);
-	                    }
-	                    
-	                    updateStmt.setInt(1, codeInt);
-	                    updateStmt.setString(2, LocalDate.now().toString());
-	                    updateStmt.setString(3, timeBefore);
-	                    updateStmt.setString(4, timeAfter);
-	                    int g = updateStmt.executeUpdate();
-	                    if(g==0)
-	                    	return false;
-	                    return true;
-	                } catch(Exception e) {
-	                    e.printStackTrace();
-	                    return false;
-	                }
-	            } else {
-	                // Already inserted
-	                return false;
-	            }
-	        } else {
-	            // No such confirmation_code found
-	            return false;
-	        }
-	    } catch(Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    }
-	}
-	//Car inserted, change boolean car_inserted for specific code order
-		public boolean getCar(String Code) {
-		    String selectSQL = "SELECT car_inserted FROM table_order WHERE confirmation_code = ? ";
-		    String updateSQL = "UPDATE table_order SET car_inserted = 0 WHERE confirmation_code = ? ";
+		try {
+			int codeInt = Integer.parseInt(Code); // convert string to int
+			PreparedStatement selectStmt = conn.prepareStatement(selectSQL);
+			selectStmt.setInt(1, codeInt);
+			ResultSet rs = selectStmt.executeQuery();
+			if (rs.next()) {
+				int carInserted = rs.getInt("car_inserted");
+				if (carInserted == 0) {
+					// Set car_inserted to 1
+					try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
+						LocalTime now = LocalTime.now();
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+						String formattedTime = now.format(formatter);
+						String timeBefore = null;
+						String timeAfter = null;
+						String Time[] = formattedTime.split(":");
+						if (Integer.parseInt(Time[1]) == 0) {
+							if (Integer.parseInt(Time[0]) > 9)
+								timeBefore = String.format("%d:%s", Integer.parseInt(Time[0]) - 1, "45");
+							else
+								timeBefore = String.format("09:00");
+							timeAfter = String.format("%s:%s", Time[0], "15");
+						} else if (Integer.parseInt(Time[1]) == 45) {
+							timeBefore = String.format("%s:%s", Time[0], "30");
+							if (Integer.parseInt(Time[0]) < 21)
+								timeAfter = String.format("%d:%s", Integer.parseInt(Time[0]) + 1, "00");
+							else
+								timeAfter = String.format("21:00");
+						} else {
+							if (Integer.parseInt(Time[1]) == 15)
+								timeBefore = String.format("%s:00", Time[0]);
+							else
+								timeBefore = String.format("%s:%d", Time[0], Integer.parseInt(Time[1]) - 15);
+							timeAfter = String.format("%s:%d", Time[0], Integer.parseInt(Time[1]) + 15);
+						}
 
-		    try {
-		        int codeInt = Integer.parseInt(Code); // convert string to int
-		        PreparedStatement selectStmt = conn.prepareStatement(selectSQL);
-		        selectStmt.setInt(1, codeInt);
-		        ResultSet rs = selectStmt.executeQuery();
-		        if (rs.next()) {
-		            int carInserted = rs.getInt("car_inserted");
-		            if (carInserted == 1) {
-		                // Set car_inserted to 1
-		                try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
-		                    updateStmt.setInt(1, codeInt);
-		                    int g = updateStmt.executeUpdate();
-		                    if(g==0)
-		                    	return false;
-		                    return true;
-		                } catch(Exception e) {
-		                    e.printStackTrace();
-		                    return false;
-		                }
-		            } else {
-		                // Not inserted
-		                return false;
-		            }
-		        } else {
-		            // No such confirmation_code found
-		            return false;
-		        }
-		    } catch(Exception e) {
-		        e.printStackTrace();
-		        return false;
-		    }
+						updateStmt.setInt(1, codeInt);
+						updateStmt.setString(2, LocalDate.now().toString());
+						updateStmt.setString(3, timeBefore);
+						updateStmt.setString(4, timeAfter);
+						int g = updateStmt.executeUpdate();
+						if (g == 0)
+							return false;
+						return true;
+					} catch (Exception e) {
+						e.printStackTrace();
+						return false;
+					}
+				} else {
+					// Already inserted
+					return false;
+				}
+			} else {
+				// No such confirmation_code found
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
+	}
 
-	
-	
+	// Car inserted, change boolean car_inserted for specific code order
+	public boolean getCar(String Code) {
+		String selectSQL = "SELECT car_inserted FROM table_order WHERE confirmation_code = ? ";
+		String updateSQL = "UPDATE table_order SET car_inserted = 0 WHERE confirmation_code = ? ";
+
+		try {
+			int codeInt = Integer.parseInt(Code); // convert string to int
+			PreparedStatement selectStmt = conn.prepareStatement(selectSQL);
+			selectStmt.setInt(1, codeInt);
+			ResultSet rs = selectStmt.executeQuery();
+			if (rs.next()) {
+				int carInserted = rs.getInt("car_inserted");
+				if (carInserted == 1) {
+					// Set car_inserted to 1
+					try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
+						updateStmt.setInt(1, codeInt);
+						int g = updateStmt.executeUpdate();
+						if (g == 0)
+							return false;
+						return true;
+					} catch (Exception e) {
+						e.printStackTrace();
+						return false;
+					}
+				} else {
+					// Not inserted
+					return false;
+				}
+			} else {
+				// No such confirmation_code found
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	public boolean emailExists(String email) {
 		try {
 			if (conn == null || conn.isClosed()) {
@@ -862,104 +855,91 @@ public class DBController {
 
 		return dailyData;
 	}
-	
-	
+
 	public Map<Integer, ParkingTimingStats> getDailyParkingTimingReport(int month, int year) {
-	    Map<Integer, ParkingTimingStats> result = new TreeMap<>();
-	    try {
-	        if (conn == null || conn.isClosed()) {
-	            connectToDB();
-	        }
+		Map<Integer, ParkingTimingStats> result = new TreeMap<>();
+		try {
+			if (conn == null || conn.isClosed()) {
+				connectToDB();
+			}
 
-	        String sql = "SELECT " +
-	                     "  DAY(STR_TO_DATE(o.order_date, '%Y-%m-%d')) AS day, " +
-	                     "  COUNT(CASE WHEN o.was_extended = 1 THEN 1 ELSE NULL END) AS extensions, " +
-	                     "  COUNT(CASE WHEN u.was_late = 1 THEN 1 ELSE NULL END) AS late_users " +
-	                     "FROM table_order o " +
-	                     "JOIN users u ON o.subscriber_id = u.id " +
-	                     "WHERE MONTH(STR_TO_DATE(o.order_date, '%Y-%m-%d')) = ? " +
-	                     "  AND YEAR(STR_TO_DATE(o.order_date, '%Y-%m-%d')) = ? " +
-	                     "GROUP BY day " +
-	                     "ORDER BY day;";
+			String sql = "SELECT " + "  DAY(STR_TO_DATE(o.order_date, '%Y-%m-%d')) AS day, "
+					+ "  COUNT(CASE WHEN o.was_extended = 1 THEN 1 ELSE NULL END) AS extensions, "
+					+ "  COUNT(CASE WHEN u.was_late = 1 THEN 1 ELSE NULL END) AS late_users " + "FROM table_order o "
+					+ "JOIN users u ON o.subscriber_id = u.id "
+					+ "WHERE MONTH(STR_TO_DATE(o.order_date, '%Y-%m-%d')) = ? "
+					+ "  AND YEAR(STR_TO_DATE(o.order_date, '%Y-%m-%d')) = ? " + "GROUP BY day " + "ORDER BY day;";
 
-	        PreparedStatement ps = conn.prepareStatement(sql);
-	        ps.setInt(1, month);
-	        ps.setInt(2, year);
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, month);
+			ps.setInt(2, year);
 
-	        ResultSet rs = ps.executeQuery();
-	        while (rs.next()) {
-	            int day = rs.getInt("day");
-	            int extensions = rs.getInt("extensions");
-	            int lates = rs.getInt("late_users");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int day = rs.getInt("day");
+				int extensions = rs.getInt("extensions");
+				int lates = rs.getInt("late_users");
 
-	            result.put(day, new ParkingTimingStats(extensions, lates));
-	        }
+				result.put(day, new ParkingTimingStats(extensions, lates));
+			}
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	    return result;
+		return result;
 	}
 
-
-
 	public Map<String, Integer> getLateUsersByName(int month, int year) {
-	    Map<String, Integer> result = new HashMap<>();
+		Map<String, Integer> result = new HashMap<>();
 
-	    try {
-	        if (conn == null || conn.isClosed()) {
-	            connectToDB();
-	        }
+		try {
+			if (conn == null || conn.isClosed()) {
+				connectToDB();
+			}
 
-	        String sql = "SELECT u.name, u.was_late " +
-	                     "FROM users u " +
-	                     "WHERE u.role = 'user' AND u.was_late > 0";
+			String sql = "SELECT u.name, u.was_late " + "FROM users u " + "WHERE u.role = 'user' AND u.was_late > 0";
 
-	        PreparedStatement ps = conn.prepareStatement(sql);
-	        ResultSet rs = ps.executeQuery();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
 
-	        while (rs.next()) {
-	            String name = rs.getString("name");
-	            int count = rs.getInt("was_late");
-	            result.put(name, count);
-	        }
+			while (rs.next()) {
+				String name = rs.getString("name");
+				int count = rs.getInt("was_late");
+				result.put(name, count);
+			}
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	    return result;
+		return result;
 	}
 
 	public Map<String, Integer> getLateUsersForMonth(int month, int year) {
-	    Map<String, Integer> lateMap = new LinkedHashMap<>();
-	    try {
-	        if (conn == null || conn.isClosed()) {
-	            connectToDB();
-	        }
+		Map<String, Integer> lateMap = new LinkedHashMap<>();
+		try {
+			if (conn == null || conn.isClosed()) {
+				connectToDB();
+			}
 
-	        String sql = "SELECT name, was_late " +
-	                     "FROM users " +
-	                     "WHERE role = 'user' AND was_late > 0";
+			String sql = "SELECT name, was_late " + "FROM users " + "WHERE role = 'user' AND was_late > 0";
 
-	        PreparedStatement ps = conn.prepareStatement(sql);
-	        ResultSet rs = ps.executeQuery();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
 
-	        while (rs.next()) {
-	            String name = rs.getString("name");
-	            int lateCount = rs.getInt("was_late");
-	            lateMap.put(name, lateCount);
-	        }
+			while (rs.next()) {
+				String name = rs.getString("name");
+				int lateCount = rs.getInt("was_late");
+				lateMap.put(name, lateCount);
+			}
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	    return lateMap;
+		return lateMap;
 	}
-
-
 
 	/**
 	 * Close connection and reset singleton instance

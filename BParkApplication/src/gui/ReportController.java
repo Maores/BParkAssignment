@@ -48,7 +48,7 @@ public class ReportController implements ChatIF {
 
 	private ChatClient chatClient;
 
-	/** Stores the currently loaded report data (day → number of parkings). */
+	// Stores the currently loaded report data (day → number of parkings)
 
 	private Map<Integer, Integer> currentReportData = new TreeMap<>();
 

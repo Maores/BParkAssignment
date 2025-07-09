@@ -89,12 +89,8 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 	 * @param client The connection from which the message originated.
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
-//		if (guiController != null) {
-//			guiController.appendMessage("Message received: " + msg.toString());
-//		}
 		String message = msg.toString();
 		String log;// Log message from DB
-		// System.out.println("Message received: " + msg + " from " + client);
 
 		// Get singleton instance - Server passes itself as listener
 		DBController db = DBController.getInstance(this);
@@ -102,32 +98,38 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 			// Handling "View database"
 			if (message.equals("VIEW_DATABASE")) {
 				guiController.appendMessage("[" + roleConnected + "] Fetching data from database..");
+
 				// gather data from DB
 				String data = db.getDatabaseAsString();
 				client.sendToClient(data);
 			} else if (message.equals("VIEW_USERDATABASE")) {
 				guiController.appendMessage("[" + roleConnected + "] Fetching user data from database..");
+
 				// gather data from DB
 				String userData = db.getUserDatabaseAsString();
 				client.sendToClient(userData);
+
 				// gather mail and pass info from DB
 			} else if (message.startsWith("GET_USER_INFO")) {
 				String[] parts = message.split(" ");
 				String id = parts[1];
 				String userInfo = db.getMailPhoneDatabaseAsString(id);
-				client.sendToClient("INFO "+userInfo);
-				
+				client.sendToClient("INFO " + userInfo);
+
 			} else if (message.startsWith("UPDATE_ORDER")) {
 				guiController.appendMessage("[" + roleConnected + "] Updating order database..");
+
 				// getting data from DB into parts
 				String[] parts = message.split(" ");
 				String orderNumber = parts[1];
 				if (db.checkDB(orderNumber)) {
 					// updates the DB
 					if ((log = db.updateDB(orderNumber)) == "true") {
-						client.sendToClient("order number: " + orderNumber + " - Your request for an extension has been approved.");
+						client.sendToClient(
+								"order number: " + orderNumber + " - Your request for an extension has been approved.");
 					} else {
-						client.sendToClient("order number: " + orderNumber + " - Your request for an extension has been rejected.\n"+log);
+						client.sendToClient("order number: " + orderNumber
+								+ " - Your request for an extension has been rejected.\n" + log);
 					}
 				} else {
 					client.sendToClient("Invalid order number Try again...");
@@ -229,6 +231,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				reportData += "Report generated at: " + formattedDateTime;
 
 				client.sendToClient(reportData);
+
 			} else if (message.startsWith("ADD_USER")) {
 				guiController.appendMessage("[" + roleConnected + "] Add new user");
 				String[] parts = message.split(" ");
@@ -238,6 +241,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String email = parts[4];
 				String succes = db.insertUserToDB(name, id, phone, email);
 				client.sendToClient(succes);// Send the role to client
+
 			} else if (message.startsWith("ADD_ORDER")) {
 				guiController.appendMessage("[" + roleConnected + "] Add new order");
 				String[] parts = message.split(" ");
@@ -247,6 +251,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				String succes = db.insertResToDB(orderDate, id, orderHour);
 
 				client.sendToClient(succes);// Send the role to client
+
 			} else if (message.startsWith("VIEW_DATABASE_ID")) {
 				guiController.appendMessage("[" + roleConnected + "] View user order");
 				// gather data from DB
@@ -255,12 +260,13 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				// Connection is already established in singleton
 				String data = db.getDatabaseByIDAsString(id);
 				client.sendToClient(data);
-			}else if (message.startsWith("AVAILABLE_SPOTS")) {
+
+			} else if (message.startsWith("AVAILABLE_SPOTS")) {
 				// gather data from DB
 				String[] parts = message.split(" ");
 				String date = parts[1];
 				// Connection is already established in singleton
-				String data =db.checkSpaceAvailability(date);
+				String data = db.checkSpaceAvailability(date);
 				client.sendToClient(data);
 			}
 			// CONNECTION host_name role
@@ -276,6 +282,7 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					System.out.println(
 							"Host: " + parts[1] + "\nIP: " + client + "\nRole: " + parts[2] + "\nStatus: Connected");
 				}
+
 			} else if (message.startsWith("#CheckEmailReset#")) {
 				guiController.appendMessage("[SERVER] Checking if email exists in DB..");
 				String email = message.replace("#CheckEmailReset#", "").trim();
@@ -290,12 +297,12 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-			else if (message.startsWith("CAR_INSERT")) {
+
+			} else if (message.startsWith("CAR_INSERT")) {
 				String[] parts = message.split(" ");
 				String ConfirmationCode = parts[1];
 				boolean inserted = db.CarInserted(ConfirmationCode);
-				
+
 				try {
 					if (inserted) {
 						client.sendToClient("CAR_INSERTED");
@@ -305,12 +312,12 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-			else if (message.startsWith("CAR_GET")) {
+
+			} else if (message.startsWith("CAR_GET")) {
 				String[] parts = message.split(" ");
 				String ConfirmationCode = parts[1];
 				boolean get = db.getCar(ConfirmationCode);
-				
+
 				try {
 					if (get) {
 						client.sendToClient("CAR_GET_SUCCES");
@@ -321,32 +328,30 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					e.printStackTrace();
 				}
 			}
-			
+
 			else if (message.startsWith("#GET_PARKING_TIMING_REPORT")) {
-			    String[] parts = message.split(" ");
-			    int month = Integer.parseInt(parts[1]);
-			    int year = Integer.parseInt(parts[2]);
+				String[] parts = message.split(" ");
+				int month = Integer.parseInt(parts[1]);
+				int year = Integer.parseInt(parts[2]);
 
-			    Map<Integer, ParkingTimingStats> reportData = db.getDailyParkingTimingReport(month, year);
-			    Map<String, Integer> lateUsers = db.getLateUsersByName(month, year);
+				Map<Integer, ParkingTimingStats> reportData = db.getDailyParkingTimingReport(month, year);
+				Map<String, Integer> lateUsers = db.getLateUsersByName(month, year);
 
-			    ParkingReportWrapper wrapper = new ParkingReportWrapper(reportData, lateUsers);
+				ParkingReportWrapper wrapper = new ParkingReportWrapper(reportData, lateUsers);
 
-			    client.sendToClient(wrapper);
+				client.sendToClient(wrapper);
 			}
-			
+
 			else if (msg instanceof String && ((String) msg).startsWith("GET_SUBSCRIBER_REPORT")) {
-			    String[] parts = ((String) msg).split(" ");
-			    int month = Integer.parseInt(parts[1]);
-			    int year = Integer.parseInt(parts[2]);
-			    
-			    Map<Integer, Integer> report = DBController.getInstance(null).getDailyParkingUsage(month, year);
-			    SubscriberReportWrapper wrapper = new SubscriberReportWrapper(report);
-			    
-			    client.sendToClient(wrapper);
+				String[] parts = ((String) msg).split(" ");
+				int month = Integer.parseInt(parts[1]);
+				int year = Integer.parseInt(parts[2]);
+
+				Map<Integer, Integer> report = DBController.getInstance(null).getDailyParkingUsage(month, year);
+				SubscriberReportWrapper wrapper = new SubscriberReportWrapper(report);
+
+				client.sendToClient(wrapper);
 			}
-
-
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -392,22 +397,5 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 	 * @param args[0] The port number to listen on. Defaults to 5555 if no argument
 	 *                is entered.
 	 */
-//	public static void main(String[] args) {
-//		int port = 0; // Port to listen on
-//
-//		try {
-//			port = Integer.parseInt(args[0]); // Get port from command line
-//		} catch (Throwable t) {
-//			port = DEFAULT_PORT; // Set port to 5555
-//		}
-//
-//		EchoServer sv = new EchoServer(port);
-//
-//		try {
-//			sv.listen(); // Start listening for connections
-//		} catch (Exception ex) {
-//			System.out.println("ERROR - Could not listen for clients!");
-//		}
-//	}
 }
 //End of EchoServer class

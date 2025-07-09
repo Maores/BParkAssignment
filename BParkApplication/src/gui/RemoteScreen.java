@@ -31,21 +31,22 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+
 /**
  * GUI screen for remote users to manage parking orders in the BPark system.
  * <p>
  * Provides features to:
  * <ul>
- *   <li>View order history</li>
- *   <li>Insert new orders within allowed date/time range</li>
- *   <li>Extend existing reservations</li>
- *   <li>Update user information</li>
- *   <li>Logout</li>
+ * <li>View order history</li>
+ * <li>Insert new orders within allowed date/time range</li>
+ * <li>Extend existing reservations</li>
+ * <li>Update user information</li>
+ * <li>Logout</li>
  * </ul>
  */
 public class RemoteScreen implements ChatIF {
@@ -66,9 +67,9 @@ public class RemoteScreen implements ChatIF {
 	private String id = MainApp.getUserId();
 	private String name = MainApp.getUserName();
 
-    /**
-     * Initializes UI components and connects the client to the server.
-     */
+	/**
+	 * Initializes UI components and connects the client to the server.
+	 */
 	public RemoteScreen() {
 		// Only initialize data fields here, not the scene or stage
 		orderField = new TextField();
@@ -84,18 +85,21 @@ public class RemoteScreen implements ChatIF {
 
 		client = sg.getInstance(this);
 	}
-    /**
-     * Sets the reference to the main application.
-     * 
-     * @param main the main application instance
-     */
+
+	/**
+	 * Sets the reference to the main application.
+	 * 
+	 * @param main the main application instance
+	 */
 	public void setMain(MainApp main) {
 		this.main = main;
 	}
-    /**
-     * Builds and returns the root layout for the remote screen UI.
-     * @return the root layout for this screen
-     */
+
+	/**
+	 * Builds and returns the root layout for the remote screen UI.
+	 * 
+	 * @return the root layout for this screen
+	 */
 	public StackPane buildRoot() {
 		StackPane root = new StackPane();
 
@@ -114,7 +118,8 @@ public class RemoteScreen implements ChatIF {
 		}
 
 		// Set value factory
-		SpinnerValueFactory<String> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(FXCollections.observableArrayList(timeOptions));
+		SpinnerValueFactory<String> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(
+				FXCollections.observableArrayList(timeOptions));
 		valueFactory.setValue(timeOptions.get(0)); // default to first time (09:00)
 		hourSpinner.setValueFactory(valueFactory);
 		Button viewBtn = new Button("View order History");
@@ -206,28 +211,34 @@ public class RemoteScreen implements ChatIF {
 		VBox interior = new VBox(10);
 		root.setPadding(new Insets(15));
 		root.setAlignment(Pos.TOP_CENTER);
-		HBox fields = new HBox(orderNumber,verticalSeparator, orderDate, orderHour,emptyBoxInsertBtn);
+		HBox fields = new HBox(orderNumber, verticalSeparator, orderDate, orderHour, emptyBoxInsertBtn);
 		fields.setSpacing(10);
-		
+
 		// ---------- header bar (fields + spacer + LogOut) ----------
 		Region spacer = new Region();
-		HBox.setHgrow(spacer, Priority.ALWAYS);   // spacer takes all extra width
+		HBox.setHgrow(spacer, Priority.ALWAYS); // spacer takes all extra width
 
 		HBox headerBar = new HBox(fields, spacer, logOutBtn);
-		headerBar.setAlignment(Pos.TOP_LEFT);     
-		headerBar.setSpacing(10);                 
+		headerBar.setAlignment(Pos.TOP_LEFT);
+		headerBar.setSpacing(10);
 
 		VBox inter = new VBox(10, headerBar, buttons);
-		dbDisplay.setText("Welcome to the BPark!\n---------------------\nTo extend reservation - enter order number.\nTo add new order - enter date and set time.\nGood Luck!");
+		dbDisplay.setText(
+				"Welcome to the BPark!\n"
+				+ "---------------------\n"
+				+ "To extend reservation - enter order number.\n"
+				+ "To add new order - enter date and set time.\n"
+				+ "Good Luck!");
 		interior.getChildren().addAll(inter, dbDisplay, table);
 		root.getChildren().add(interior);
 		return root;
 	}
-    /**
-     * Displays a server message in the text area or loads data into the table.
-     * 
-     * @param message the message received from the server
-     */
+
+	/**
+	 * Displays a server message in the text area or loads data into the table.
+	 * 
+	 * @param message the message received from the server
+	 */
 	@SuppressWarnings("unchecked")
 	public void displayMessage(String message) {
 		if (message.startsWith("order_number")) {
@@ -264,11 +275,13 @@ public class RemoteScreen implements ChatIF {
 
 		}
 	}
-    /**
-     * Receives messages from the server and displays them in the appropriate UI section.
-     * 
-     * @param message the message received from the server
-     */
+
+	/**
+	 * Receives messages from the server and displays them in the appropriate UI
+	 * section.
+	 * 
+	 * @param message the message received from the server
+	 */
 	@Override
 	public void handleMessageFromServer(String message) {
 		displayMessage(message);

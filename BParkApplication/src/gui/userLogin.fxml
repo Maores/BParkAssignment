@@ -14,113 +14,136 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="366.0" prefWidth="436.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginController">
-   <children>
-      <BorderPane prefHeight="350.0" prefWidth="560.0">
-         <center>
-            <VBox prefHeight="303.0" prefWidth="324.0" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="78.0" prefWidth="348.0">
-                     <children>
-                        <ImageView fitHeight="60.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@logo.png" />
-                           </image>
-                        </ImageView>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Login">
-                           <font>
-                              <Font name="Arial Rounded MT Bold" size="33.0" />
-                           </font>
-                           <padding>
-                              <Insets bottom="20.0" top="20.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="20.0" top="20.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <VBox alignment="CENTER" prefHeight="189.0" prefWidth="324.0">
-                     <children>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="0.0">
-                           <children>
-                              <Label text="Name:">
-                                 <padding>
-                                    <Insets right="5.0" />
-                                 </padding>
-                                 <font>
-                                    <Font name="Arial Rounded MT Bold" size="12.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="name" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets right="120.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="0.0">
-                           <children>
-                              <Label text="Password:">
-                                 <padding>
-                                    <Insets right="5.0" />
-                                 </padding>
-                                 <font>
-                                    <Font name="Arial Rounded MT Bold" size="12.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="password" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets right="120.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="274.0" spacing="10.0">
-                           <children>
-                              <Button fx:id="fgBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#forgotPass" prefHeight="25.0" prefWidth="122.0" text="forgot password" underline="true" />
-                              <Button fx:id="login" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="72.0" text="login" />
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Button fx:id="qrBtn" alignment="CENTER" maxHeight="25.0" mnemonicParsing="false" onAction="#showQR" prefHeight="25.0" prefWidth="206.0" text="login via QR">
-                           <VBox.margin>
-                              <Insets bottom="5.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Separator prefWidth="200.0">
-                           <VBox.margin>
-                              <Insets bottom="15.0" top="15.0" />
-                           </VBox.margin>
-                        </Separator>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
-                           <children>
-                              <Label text="Choose date:" />
-                              <DatePicker fx:id="date" maxHeight="21.0" prefHeight="21.0" prefWidth="125.0" />
-                           </children>
-                        </HBox>
-                        <Button fx:id="checkAvailBtn" alignment="CENTER" mnemonicParsing="false" onAction="#checkAvailability" prefHeight="22.0" prefWidth="201.0" text="Check Space Availability">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
-   </children>
-   <padding>
-      <Insets bottom="10.0" />
-   </padding>
+<StackPane alignment="TOP_CENTER" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	prefHeight="366.0" prefWidth="436.0"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="gui.loginController">
+	<children>
+		<BorderPane prefHeight="350.0" prefWidth="560.0">
+			<center>
+				<VBox prefHeight="303.0" prefWidth="324.0"
+					BorderPane.alignment="CENTER">
+					<children>
+						<HBox alignment="CENTER" prefHeight="78.0" prefWidth="348.0">
+							<children>
+								<ImageView fitHeight="60.0" fitWidth="73.0"
+									pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="@logo.png" />
+									</image>
+								</ImageView>
+								<Label alignment="CENTER" contentDisplay="CENTER"
+									text="Login">
+									<font>
+										<Font name="Arial Rounded MT Bold" size="33.0" />
+									</font>
+									<padding>
+										<Insets bottom="20.0" top="20.0" />
+									</padding>
+								</Label>
+							</children>
+							<VBox.margin>
+								<Insets bottom="20.0" top="20.0" />
+							</VBox.margin>
+						</HBox>
+						<VBox alignment="CENTER" prefHeight="189.0" prefWidth="324.0">
+							<children>
+								<HBox alignment="CENTER_RIGHT" prefHeight="25.0"
+									prefWidth="0.0">
+									<children>
+										<Label text="Name:">
+											<padding>
+												<Insets right="5.0" />
+											</padding>
+											<font>
+												<Font name="Arial Rounded MT Bold" size="12.0" />
+											</font>
+										</Label>
+										<TextField fx:id="name" />
+									</children>
+									<padding>
+										<Insets bottom="10.0" />
+									</padding>
+									<VBox.margin>
+										<Insets right="120.0" />
+									</VBox.margin>
+								</HBox>
+								<HBox alignment="CENTER_RIGHT" prefHeight="25.0"
+									prefWidth="0.0">
+									<children>
+										<Label text="Password:">
+											<padding>
+												<Insets right="5.0" />
+											</padding>
+											<font>
+												<Font name="Arial Rounded MT Bold" size="12.0" />
+											</font>
+										</Label>
+										<TextField fx:id="password" />
+									</children>
+									<padding>
+										<Insets bottom="10.0" />
+									</padding>
+									<VBox.margin>
+										<Insets right="120.0" />
+									</VBox.margin>
+								</HBox>
+								<HBox alignment="CENTER" prefHeight="33.0"
+									prefWidth="274.0" spacing="10.0">
+									<children>
+										<Button fx:id="fgBtn" alignment="CENTER"
+											contentDisplay="CENTER" mnemonicParsing="false"
+											onAction="#forgotPass" prefHeight="25.0" prefWidth="122.0"
+											text="forgot password" underline="true" />
+										<Button fx:id="login" alignment="CENTER"
+											contentDisplay="CENTER" mnemonicParsing="false"
+											onAction="#loginUser" prefHeight="25.0" prefWidth="72.0"
+											text="login" />
+									</children>
+									<opaqueInsets>
+										<Insets />
+									</opaqueInsets>
+									<VBox.margin>
+										<Insets bottom="10.0" />
+									</VBox.margin>
+								</HBox>
+								<Button fx:id="qrBtn" alignment="CENTER" maxHeight="25.0"
+									mnemonicParsing="false" onAction="#showQR" prefHeight="25.0"
+									prefWidth="206.0" text="login via QR">
+									<VBox.margin>
+										<Insets bottom="5.0" />
+									</VBox.margin>
+								</Button>
+								<Separator prefWidth="200.0">
+									<VBox.margin>
+										<Insets bottom="15.0" top="15.0" />
+									</VBox.margin>
+								</Separator>
+								<HBox alignment="CENTER" prefHeight="100.0"
+									prefWidth="200.0" spacing="5.0">
+									<children>
+										<Label text="Choose date:" />
+										<DatePicker fx:id="date" maxHeight="21.0"
+											prefHeight="21.0" prefWidth="125.0" />
+									</children>
+								</HBox>
+								<Button fx:id="checkAvailBtn" alignment="CENTER"
+									mnemonicParsing="false" onAction="#checkAvailability"
+									prefHeight="22.0" prefWidth="201.0"
+									text="Check Space Availability">
+									<VBox.margin>
+										<Insets top="10.0" />
+									</VBox.margin>
+								</Button>
+							</children>
+						</VBox>
+					</children>
+				</VBox>
+			</center>
+		</BorderPane>
+	</children>
+	<padding>
+		<Insets bottom="10.0" />
+	</padding>
 </StackPane>

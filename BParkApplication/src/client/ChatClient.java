@@ -4,9 +4,14 @@
 
 package client;
 
-import ocsf.client.*;
-import common.*;
-import java.io.*;
+import java.io.IOException;
+
+import common.ChatIF;
+import common.ParkingReportWrapper;
+import common.SubscriberReportWrapper;
+import gui.ParkingTimingReportController;
+import gui.ReportController;
+import ocsf.client.AbstractClient;
 
 /**
  * This class overrides some of the methods defined in the abstract superclass
@@ -55,28 +60,25 @@ public class ChatClient extends AbstractClient {
 
 	@Override
 	public void handleMessageFromServer(Object msg) {
-	    lastServerResponse = msg.toString();
+		lastServerResponse = msg.toString();
 
-	    if (msg instanceof ParkingReportWrapper) {
-	        ParkingReportWrapper wrapper = (ParkingReportWrapper) msg;
-	        if (clientUI instanceof gui.ParkingTimingReportController) {
-	            ((gui.ParkingTimingReportController) clientUI).loadReportFromServer(wrapper);
-	        }
-	        return;
-	    }
-	    
-	    if (msg instanceof SubscriberReportWrapper) {
-	        if (clientUI instanceof gui.ReportController) {
-	            ((gui.ReportController) clientUI).loadReportFromServer((SubscriberReportWrapper) msg);
-	            return;
-	        }
-	    }
+		if (msg instanceof ParkingReportWrapper) {
+			ParkingReportWrapper wrapper = (ParkingReportWrapper) msg;
+			if (clientUI instanceof ParkingTimingReportController) {
+				((ParkingTimingReportController) clientUI).loadReportFromServer(wrapper);
+			}
+			return;
+		}
 
+		if (msg instanceof SubscriberReportWrapper) {
+			if (clientUI instanceof ReportController) {
+				((ReportController) clientUI).loadReportFromServer((SubscriberReportWrapper) msg);
+				return;
+			}
+		}
 
-	    clientUI.handleMessageFromServer(lastServerResponse);
+		clientUI.handleMessageFromServer(lastServerResponse);
 	}
-
-
 
 	public String getLastServerResponse() {
 		return lastServerResponse;
@@ -96,16 +98,15 @@ public class ChatClient extends AbstractClient {
 			quit();
 		}
 	}
-	
-	public void requestParkingTimingReport(int month, int year) {
-	    String msg = "#GET_PARKING_TIMING_REPORT " + month + " " + year;
-	    try {
-	        sendToServer(msg);
-	    } catch (IOException e) {
-	        clientUI.handleMessageFromServer("Failed to request report.");
-	    }
-	}
 
+	public void requestParkingTimingReport(int month, int year) {
+		String msg = "#GET_PARKING_TIMING_REPORT " + month + " " + year;
+		try {
+			sendToServer(msg);
+		} catch (IOException e) {
+			clientUI.handleMessageFromServer("Failed to request report.");
+		}
+	}
 
 	/**
 	 * This method terminates the client.
@@ -113,7 +114,8 @@ public class ChatClient extends AbstractClient {
 	public void quit() {
 		try {
 			closeConnection();
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		}
 		System.exit(0);
 	}
 

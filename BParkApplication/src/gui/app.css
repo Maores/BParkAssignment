@@ -1,6 +1,6 @@
 .root {
     -fx-font-family: "Trebuchet MS", Tahoma, sans-serif;
-    -fx-font-size: 14px;
+    -fx-font-size: 14.0px;
     -fx-text-fill: #815854;
     -fx-background-color: #F9EBDE;
 }
@@ -9,60 +9,60 @@
     -fx-background-color: #815854;
     -fx-text-fill: #F9EBDE;
     -fx-cursor: hand;
-    -fx-background-radius: 2;
+    -fx-background-radius: 2.0;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-font-size: 12.0px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2.0, 0.0, 0.0, 1.0);
     -fx-transition: background-color 0.3s ease;
 }
 #logOutBtn,#cancelBtn{
 	-fx-background-color: #9e2f28;
     -fx-text-fill: #F9EBDE;
     -fx-cursor: hand;
-    -fx-background-radius: 2;
+    -fx-background-radius: 2.0;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-font-size: 12.0px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2.0, 0.0, 0.0, 1.0);
     -fx-transition: background-color 0.3s ease;
 }
 #login{
 	-fx-background-color: #3d8f44;
     -fx-text-fill: white;
     -fx-cursor: hand;
-    -fx-background-radius: 2;
+    -fx-background-radius: 2.0;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-font-size: 12.0px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2.0, 0.0, 0.0, 1.0);
     -fx-transition: background-color 0.3s ease;
 }
 #login:hover{
 	-fx-background-color: white;
     -fx-text-fill: #3d8f44;
     -fx-cursor: hand;
-    -fx-background-radius: 2;
+    -fx-background-radius: 2.0;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-font-size: 12.0px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2.0, 0.0, 0.0, 1.0);
     -fx-transition: background-color 0.3s ease;
 }
 #updateUserBtn,#generateBtn{
 	-fx-background-color: #3BA99C;
     -fx-text-fill: white;
     -fx-cursor: hand;
-    -fx-background-radius: 2;
+    -fx-background-radius: 2.0;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-font-size: 12.0px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2.0, 0.0, 0.0, 1.0);
     -fx-transition: background-color 0.3s ease;
 }
 #updateUserBtn:hover,#generateBtn:hover{
 	-fx-background-color: white;
     -fx-text-fill: #3BA99C;
     -fx-cursor: hand;
-    -fx-background-radius: 2;
+    -fx-background-radius: 2.0;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-font-size: 12.0px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2.0, 0.0, 0.0, 1.0);
     -fx-transition: background-color 0.3s ease;
 }
 #qrBtn{
@@ -77,19 +77,19 @@
 	-fx-background-color: white;
     -fx-text-fill: #9e2f28;
     -fx-cursor: hand;
-    -fx-background-radius: 2;
+    -fx-background-radius: 2.0;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-font-size: 12.0px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2.0, 0.0, 0.0, 1.0);
     -fx-transition: background-color 0.3s ease;
 }
 #fgBtn{
 	-fx-background-color: grey;
     -fx-text-fill: black;
     -fx-cursor: hand;
-    -fx-background-radius: 2;
+    -fx-background-radius: 2.0;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
+    -fx-font-size: 12.0px;
 }
 
 .button:hover {
@@ -98,37 +98,37 @@
 }
 #labelHead{
 	-fx-font-weight: bold;
-	-fx-font-size: 24px;
+	-fx-font-size: 24.0px;
 }
 
 .text-field, .text-area {
     -fx-background-color: #fafafa;
     -fx-text-fill: black;
     -fx-border-color: #333333;
-    -fx-border-width: 1;
-    -fx-border-radius: 3;
-    -fx-background-radius: 3;
-    -fx-font-size: 13px;
-    -fx-effect: dropshadow(gaussian,#0000001A, 1, 0, 0, 1);
+    -fx-border-width: 1.0;
+    -fx-border-radius: 3.0;
+    -fx-background-radius: 3.0;
+    -fx-font-size: 13.0px;
+    -fx-effect: dropshadow(gaussian,#0000001A, 1.0, 0.0, 0.0, 1.0);
 }
 .text-area{
-	-fx-font-size: 12px;
+	-fx-font-size: 12.0px;
 	-fx-font-family:"Courier New", monospace;
 }
 
 .text-field:focused {
     -fx-border-color: #b09896;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, #0000001A, 4, 0, 0, 0);
+    -fx-border-width: 2.0;
+    -fx-effect: dropshadow(gaussian, #0000001A, 4.0, 0.0, 0.0, 0.0);
 }
 
 .table-view {
     -fx-background-color: #F9EBDE;
 	-fx-border-color: #333333;
-    -fx-font-size: 13px;
-    -fx-border-radius: 3;
-    -fx-background-radius: 3;
-    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-font-size: 13.0px;
+    -fx-border-radius: 3.0;
+    -fx-background-radius: 3.0;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2.0, 0.0, 0.0, 1.0);
 }
 
 .table-cell {
@@ -155,7 +155,7 @@
 .table-column-header {
     -fx-background-color: #b5aba1;
     -fx-font-weight: normal; /* Changed from bold to match table-view text */
-    -fx-font-size: 12px;      /* Increased to match .table-view font-size */
+    -fx-font-size: 12.0px;      /* Increased to match .table-view font-size */
     -fx-text-fill: #000000;
    
 }

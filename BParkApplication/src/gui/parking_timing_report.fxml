@@ -12,33 +12,38 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600" prefWidth="800" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="gui.ParkingTimingReportController">
-    
-    <top>
-        <ToolBar>
-            <Label text="Select Month:" />
-            <ComboBox fx:id="monthComboBox" />
-            <Label text="Year:" />
-            <ComboBox fx:id="yearComboBox" />
-            <Button onAction="#onLoadReportClicked" text="Load Report" />
-            <Button onAction="#onExportCsvClicked" text="Export CSV" />
-         <Region prefHeight="25.0" prefWidth="332.0" />
-         <Button fx:id="backBtn" mnemonicParsing="false" onAction="#backToDialog" text="Back" />
-        </ToolBar>
-    </top>
+<BorderPane prefHeight="600" prefWidth="800"
+	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+	fx:controller="gui.ParkingTimingReportController">
 
-    <center>
-        <VBox alignment="CENTER" spacing="10">
-            <BarChart fx:id="barChart" prefHeight="300" prefWidth="700" title="Daily Extensions per Day">
-                <xAxis>
-                    <CategoryAxis label="Day of Month" />
-                </xAxis>
-                <yAxis>
-                    <NumberAxis label="Extensions" />
-                </yAxis>
-            </BarChart>
+	<top>
+		<ToolBar>
+			<Label text="Select Month:" />
+			<ComboBox fx:id="monthComboBox" />
+			<Label text="Year:" />
+			<ComboBox fx:id="yearComboBox" />
+			<Button onAction="#onLoadReportClicked" text="Load Report" />
+			<Button onAction="#onExportCsvClicked" text="Export CSV" />
+			<Region prefHeight="25.0" prefWidth="332.0" />
+			<Button fx:id="backBtn" mnemonicParsing="false"
+				onAction="#backToDialog" text="Back" />
+		</ToolBar>
+	</top>
 
-            <PieChart fx:id="latePieChart" prefHeight="250" prefWidth="700" title="Late Users (Names)" />
-        </VBox>
-    </center>
+	<center>
+		<VBox alignment="CENTER" spacing="10">
+			<BarChart fx:id="barChart" prefHeight="300" prefWidth="700"
+				title="Daily Extensions per Day">
+				<xAxis>
+					<CategoryAxis label="Day of Month" />
+				</xAxis>
+				<yAxis>
+					<NumberAxis label="Extensions" />
+				</yAxis>
+			</BarChart>
+
+			<PieChart fx:id="latePieChart" prefHeight="250"
+				prefWidth="700" title="Late Users (Names)" />
+		</VBox>
+	</center>
 </BorderPane>

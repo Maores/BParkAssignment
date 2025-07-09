@@ -6,13 +6,23 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.serverGuiController">
-   <children>
-      <TextArea fx:id="txtArea" layoutX="6.0" layoutY="78.0" prefHeight="312.0" prefWidth="588.0" />
-      <Label layoutX="14.0" layoutY="56.0" text="Server console:" />
-      <Label layoutX="14.0" layoutY="24.0" text="Port:" />
-      <TextField fx:id="txtPort" layoutX="46.0" layoutY="20.0" text="5555" />
-      <Button fx:id="btnLstn" layoutX="207.0" layoutY="20.0" mnemonicParsing="false" onAction="#listen" prefWidth="50.0" text="Listen" />
-      <Button fx:id="btnStop" layoutX="263.0" layoutY="20.0" mnemonicParsing="false" onAction="#closeServer" prefWidth="50.0" text="Stop" />
-   </children>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+	prefWidth="600.0" xmlns="http://javafx.com/javafx/21"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="gui.serverGuiController">
+	<children>
+		<TextArea fx:id="txtArea" layoutX="6.0" layoutY="78.0"
+			prefHeight="312.0" prefWidth="588.0" />
+		<Label layoutX="14.0" layoutY="56.0" text="Server console:" />
+		<Label layoutX="14.0" layoutY="24.0" text="Port:" />
+		<TextField fx:id="txtPort" layoutX="46.0" layoutY="20.0"
+			text="5555" />
+		<Button fx:id="btnLstn" layoutX="207.0" layoutY="20.0"
+			mnemonicParsing="false" onAction="#listen" prefWidth="50.0"
+			text="Listen" />
+		<Button fx:id="btnStop" layoutX="263.0" layoutY="20.0"
+			mnemonicParsing="false" onAction="#closeServer" prefWidth="50.0"
+			text="Stop" />
+	</children>
 </Pane>

@@ -29,11 +29,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
 /**
- * GUI controller for the User Management screen in the BPark system.
- * Enables searching users or orders, viewing tables, and generating reports,
- * by communicating with the server through the ChatClient interface.
+ * GUI controller for the User Management screen in the BPark system. Enables
+ * searching users or orders, viewing tables, and generating reports, by
+ * communicating with the server through the ChatClient interface.
  */
 public class UserManagementScreen implements ChatIF {
 
@@ -42,7 +41,7 @@ public class UserManagementScreen implements ChatIF {
 	private TextField userF;
 	@FXML
 	private TextArea logArea;
-	
+
 	private singletoneClient sg = new singletoneClient();
 	private ChatClient client;
 
@@ -50,24 +49,26 @@ public class UserManagementScreen implements ChatIF {
 	private Dialog<Void> dialog;
 	private MainApp main;
 
-	   /**
-     * Constructor initializes the ChatClient instance with this screen as listener.
-     */
+	/**
+	 * Constructor initializes the ChatClient instance with this screen as listener.
+	 */
 	public UserManagementScreen() {
 		client = sg.getInstance(this);
 	}
-    /**
-     * Sets the main application instance for scene management.
-     * @param main the MainApp instance
-     */
+
+	/**
+	 * Sets the main application instance for scene management.
+	 * 
+	 * @param main the MainApp instance
+	 */
 	public void setMain(MainApp main) {
 		this.main = main;
 	}
 
-    /**
-     * Sends a request to search for a specific order.
-     * Validates input and updates the UI log area.
-     */
+	/**
+	 * Sends a request to search for a specific order. Validates input and updates
+	 * the UI log area.
+	 */
 	void searchOrder() {
 		String order = orderF.getText();
 
@@ -80,10 +81,10 @@ public class UserManagementScreen implements ChatIF {
 		logArea.appendText("Searching for order: " + order + "\n");
 	}
 
-    /**
-     * Sends a request to search for a user by ID.
-     * Validates input and updates the UI log area.
-     */
+	/**
+	 * Sends a request to search for a user by ID. Validates input and updates the
+	 * UI log area.
+	 */
 	@FXML
 	void searchUser() {
 		String userId = userF.getText();
@@ -96,91 +97,96 @@ public class UserManagementScreen implements ChatIF {
 		client.handleMessageFromClientUI("SEARCH_USER " + userId);
 		logArea.appendText("Searching for user: " + userId + "\n");
 	}
-    /**
-     * Opens a new window to display the Subscriber Status Report.
-     */
+
+	/**
+	 * Opens a new window to display the Subscriber Status Report.
+	 */
 	private void openSubscriberStatusReport() {
-	    try {
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReportScreen.fxml"));
-	        Parent root = loader.load();
-	        ReportController controller = loader.getController();
-	        controller.setChatClient(client);
-	    	client.setClientUI(controller);
-	        controller.setDialog(dialog);
-	        Stage stage = new Stage();
-	        controller.setStage(stage);
-	        stage.setTitle("Subscriber Status Report");
-	        stage.setScene(new Scene(root));
-	        stage.setResizable(false);
-	        stage.show();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReportScreen.fxml"));
+			Parent root = loader.load();
+			ReportController controller = loader.getController();
+			controller.setChatClient(client);
+			client.setClientUI(controller);
+			controller.setDialog(dialog);
+			Stage stage = new Stage();
+			controller.setStage(stage);
+			stage.setTitle("Subscriber Status Report");
+			stage.setScene(new Scene(root));
+			stage.setResizable(false);
+			stage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-    /**
-     * Opens a new window to display the Parking Duration Report.
-     */
+	/**
+	 * Opens a new window to display the Parking Duration Report.
+	 */
 	private void openParkingDurationReport() {
-		  try {
-		        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/parking_timing_report.fxml"));
-		        Parent root = loader.load();
-		        ParkingTimingReportController controller = loader.getController();
-		        controller.setDialog(dialog);
-		        controller.setChatClient(client); 
-		        client.setClientUI(controller);
-		        Stage stage = new Stage();
-		        controller.setStage(stage);
-		        stage.setTitle("Subscriber Parking Duration Report");
-		        stage.setScene(new Scene(root));
-		        stage.setResizable(false);
-		        stage.show();
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/parking_timing_report.fxml"));
+			Parent root = loader.load();
+			ParkingTimingReportController controller = loader.getController();
+			controller.setDialog(dialog);
+			controller.setChatClient(client);
+			client.setClientUI(controller);
+			Stage stage = new Stage();
+			controller.setStage(stage);
+			stage.setTitle("Subscriber Parking Duration Report");
+			stage.setScene(new Scene(root));
+			stage.setResizable(false);
+			stage.show();
 
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	 /**
-     * Prompts the user with a dialog to select between different types of reports.
-     */
+
+	/**
+	 * Prompts the user with a dialog to select between different types of reports.
+	 */
 	@FXML
 	private void generateReport() {
-	    dialog = new Dialog<>();
-	    dialog.setTitle("Select Report Type");
-	    dialog.setHeaderText("Please choose a report to view:");
-	    ButtonType usageButtonType = new ButtonType("Parking Duration Report");
-	    ButtonType statusButtonType = new ButtonType("Subscriber Status Report");
-	    ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-	    
-	    dialog.getDialogPane().getButtonTypes().addAll(usageButtonType, statusButtonType, cancelButtonType);
-	    dialog.getDialogPane().getStylesheets().add(getClass().getResource("app.css").toExternalForm());
-	    dialog.setResultConverter(dialogButton -> {
-	        if (dialogButton == usageButtonType) {
-	            openParkingDurationReport(); 
-	        } else if (dialogButton == statusButtonType) {
-	            openSubscriberStatusReport();
-	        }
-	        return null;
-	    });
-	    Button button = (Button) dialog.getDialogPane().lookupButton(cancelButtonType);
-	    button.setId("cancelBtn");
-	    dialog.showAndWait();
+		dialog = new Dialog<>();
+		dialog.setTitle("Select Report Type");
+		dialog.setHeaderText("Please choose a report to view:");
+		ButtonType usageButtonType = new ButtonType("Parking Duration Report");
+		ButtonType statusButtonType = new ButtonType("Subscriber Status Report");
+		ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+		dialog.getDialogPane().getButtonTypes().addAll(usageButtonType, statusButtonType, cancelButtonType);
+		dialog.getDialogPane().getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == usageButtonType) {
+				openParkingDurationReport();
+			} else if (dialogButton == statusButtonType) {
+				openSubscriberStatusReport();
+			}
+			return null;
+		});
+		Button button = (Button) dialog.getDialogPane().lookupButton(cancelButtonType);
+		button.setId("cancelBtn");
+		dialog.showAndWait();
 	}
-	
-	
-    /**
-     * Handles messages received from the server.
-     * @param message the message received
-     */
+
+	/**
+	 * Handles messages received from the server.
+	 * 
+	 * @param message the message received
+	 */
 
 	@Override
 	public void handleMessageFromServer(String message) {
 		displayMessage(message);
 	}
-    /**
-     * Updates the UI based on the server message, populating tables or showing logs.
-     * @param message the server message
-     */
+
+	/**
+	 * Updates the UI based on the server message, populating tables or showing
+	 * logs.
+	 * 
+	 * @param message the server message
+	 */
 	private void displayMessage(String message) {
 		Platform.runLater(() -> {
 
@@ -216,8 +222,8 @@ public class UserManagementScreen implements ChatIF {
 					table.getColumns().addAll(a, b, c, d, e, f, g);
 					ObservableList<ParkingRow> items = FXCollections.observableArrayList();
 					for (int i = 7; i + 6 < str.length; i += 7) {
-						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5],
-								str[i + 6]);
+						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4],
+								str[i + 5], str[i + 6]);
 						items.add(row);
 					}
 					table.setItems(items);
@@ -243,7 +249,8 @@ public class UserManagementScreen implements ChatIF {
 					table.getColumns().addAll(a, b, c, d, e, f);
 					ObservableList<ParkingRow> items = FXCollections.observableArrayList();
 					for (int i = 6; i + 5 < str.length; i += 6) {
-						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4], str[i + 5]);
+						ParkingRow row = new ParkingRow(str[i], str[i + 1], str[i + 2], str[i + 3], str[i + 4],
+								str[i + 5]);
 						items.add(row);
 					}
 
@@ -256,10 +263,12 @@ public class UserManagementScreen implements ChatIF {
 		});
 
 	}
-    /**
-     * Constructs and returns the root layout of the user management screen.
-     * @return the root StackPane layout
-     */
+
+	/**
+	 * Constructs and returns the root layout of the user management screen.
+	 * 
+	 * @return the root StackPane layout
+	 */
 	public StackPane buildRoot() {
 		orderF = new TextField();
 		userF = new TextField();
@@ -299,14 +308,14 @@ public class UserManagementScreen implements ChatIF {
 				e1.printStackTrace();
 			}
 		});
-		Region spacer = new Region();                 // flexible blank area
-		HBox.setHgrow(spacer, Priority.ALWAYS);       // let it absorb all free width
+		Region spacer = new Region(); // flexible blank area
+		HBox.setHgrow(spacer, Priority.ALWAYS); // let it absorb all free width
 
 		HBox headerBar = new HBox(searchBox, spacer, logOutBtn);
-		headerBar.setAlignment(Pos.TOP_LEFT);         // keeps everything on one line
+		headerBar.setAlignment(Pos.TOP_LEFT); // keeps everything on one line
 		headerBar.setSpacing(10);
 
-		HBox btns = new HBox(viewOrderBtn,viewUserBtn, searchBtn, searchUserBtn, reportBtn);
+		HBox btns = new HBox(viewOrderBtn, viewUserBtn, searchBtn, searchUserBtn, reportBtn);
 		btns.setSpacing(10);
 		VBox Interior = new VBox(10, headerBar, btns, logArea, table);
 		root.setMargin(Interior, new Insets(15));
