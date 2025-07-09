@@ -9,7 +9,7 @@ import common.*;
 import java.io.*;
 
 /**
- * This class overrides some of the methods defined in the abstract superclass
+ * 1This class overrides some of the methods defined in the abstract superclass
  * in order to give more functionality to the client.
  *
  * @author Dr Timothy C. Lethbridge
