@@ -9,11 +9,14 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
 import common.DatabaseListener;
+import gui.ParkingTimingStats;
 
 public class DBController {
 	// Singleton instance
@@ -783,6 +786,104 @@ public class DBController {
 
 		return dailyData;
 	}
+	
+	
+	public Map<Integer, ParkingTimingStats> getDailyParkingTimingReport(int month, int year) {
+	    Map<Integer, ParkingTimingStats> result = new TreeMap<>();
+	    try {
+	        if (conn == null || conn.isClosed()) {
+	            connectToDB();
+	        }
+
+	        String sql = "SELECT " +
+	                     "  DAY(STR_TO_DATE(o.order_date, '%Y-%m-%d')) AS day, " +
+	                     "  COUNT(CASE WHEN o.was_extended = 1 THEN 1 ELSE NULL END) AS extensions, " +
+	                     "  COUNT(CASE WHEN u.was_late = 1 THEN 1 ELSE NULL END) AS late_users " +
+	                     "FROM table_order o " +
+	                     "JOIN users u ON o.subscriber_id = u.id " +
+	                     "WHERE MONTH(STR_TO_DATE(o.order_date, '%Y-%m-%d')) = ? " +
+	                     "  AND YEAR(STR_TO_DATE(o.order_date, '%Y-%m-%d')) = ? " +
+	                     "GROUP BY day " +
+	                     "ORDER BY day;";
+
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ps.setInt(1, month);
+	        ps.setInt(2, year);
+
+	        ResultSet rs = ps.executeQuery();
+	        while (rs.next()) {
+	            int day = rs.getInt("day");
+	            int extensions = rs.getInt("extensions");
+	            int lates = rs.getInt("late_users");
+
+	            result.put(day, new ParkingTimingStats(extensions, lates));
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return result;
+	}
+
+
+
+	public Map<String, Integer> getLateUsersByName(int month, int year) {
+	    Map<String, Integer> result = new HashMap<>();
+
+	    try {
+	        if (conn == null || conn.isClosed()) {
+	            connectToDB();
+	        }
+
+	        String sql = "SELECT u.name, u.was_late " +
+	                     "FROM users u " +
+	                     "WHERE u.role = 'user' AND u.was_late > 0";
+
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            String name = rs.getString("name");
+	            int count = rs.getInt("was_late");
+	            result.put(name, count);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return result;
+	}
+
+	public Map<String, Integer> getLateUsersForMonth(int month, int year) {
+	    Map<String, Integer> lateMap = new LinkedHashMap<>();
+	    try {
+	        if (conn == null || conn.isClosed()) {
+	            connectToDB();
+	        }
+
+	        String sql = "SELECT name, was_late " +
+	                     "FROM users " +
+	                     "WHERE role = 'user' AND was_late > 0";
+
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            String name = rs.getString("name");
+	            int lateCount = rs.getInt("was_late");
+	            lateMap.put(name, lateCount);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return lateMap;
+	}
+
+
 
 	/**
 	 * Close connection and reset singleton instance

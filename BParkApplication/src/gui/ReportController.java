@@ -24,6 +24,7 @@ public class ReportController {
 
     @FXML
     private BarChart<String, Number> barChart;
+    
 
     private DBController db;
     private Map<Integer, Integer> currentReportData = new TreeMap<>();
@@ -84,6 +85,7 @@ public class ReportController {
             showAlert("Error", "Could not load report.");
         }
     }
+    
 
 
     @FXML
