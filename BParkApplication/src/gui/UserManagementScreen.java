@@ -39,12 +39,12 @@ public class UserManagementScreen implements ChatIF {
 	private TextField userF;
 	@FXML
 	private TextArea logArea;
-
+	
 	private singletoneClient sg = new singletoneClient();
 	private ChatClient client;
 
 	private TableView<ParkingRow> table = new TableView<>();
-
+	private Dialog<Void> dialog;
 	private MainApp main;
 
 	public UserManagementScreen() {
@@ -91,9 +91,13 @@ public class UserManagementScreen implements ChatIF {
 	    try {
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReportScreen.fxml"));
 	        Parent root = loader.load();
+	        ReportController controller = loader.getController();
+	        controller.setDialog(dialog);
 	        Stage stage = new Stage();
+	        controller.setStage(stage);
 	        stage.setTitle("Subscriber Status Report");
 	        stage.setScene(new Scene(root));
+	        stage.setResizable(false);
 	        stage.show();
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -105,9 +109,13 @@ public class UserManagementScreen implements ChatIF {
 		  try {
 		        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/parking_timing_report.fxml"));
 		        Parent root = loader.load();
+		        ParkingTimingReportController controller = loader.getController();
+		        controller.setDialog(dialog);
 		        Stage stage = new Stage();
+		        controller.setStage(stage);
 		        stage.setTitle("Subscriber Parking Duration Report");
 		        stage.setScene(new Scene(root));
+		        stage.setResizable(false);
 		        stage.show();
 		    } catch (Exception e) {
 		        e.printStackTrace();
@@ -118,7 +126,7 @@ public class UserManagementScreen implements ChatIF {
 	 */
 	@FXML
 	private void generateReport() {
-	    Dialog<Void> dialog = new Dialog<>();
+	    dialog = new Dialog<>();
 	    dialog.setTitle("Select Report Type");
 	    dialog.setHeaderText("Please choose a report to view:");
 
@@ -139,9 +147,6 @@ public class UserManagementScreen implements ChatIF {
 
 	    dialog.showAndWait();
 	}
-	
-	
-
 	// Get message from the server
 	@Override
 	public void handleMessageFromServer(String message) {

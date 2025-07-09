@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -16,8 +14,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.Dialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -33,11 +32,24 @@ public class ParkingTimingReportController {
 	private BarChart<String, Number> barChart;
 
 	@FXML
+	private Button backBtn;
+	@FXML
 	private PieChart latePieChart;
 
+	//need to delete
 	private DBController db;
+	
+	private Dialog<Void> dialog;
+	private Stage reportStage;
+	
 	private Map<Integer, ParkingTimingStats> currentReportData = new TreeMap<>();
-
+	
+	public void setStage(Stage stage) {
+		reportStage = stage;
+	}
+	public void setDialog(Dialog<Void> dialog) {
+	 this.dialog = dialog;
+	}
 	@FXML
 	public void initialize() {
 		db = DBController.getInstance(null);
@@ -100,10 +112,11 @@ public class ParkingTimingReportController {
 	        showAlert("Error", "Could not load report.");
 	    }
 	}
-
-
-
-
+	@FXML
+	private void backToDialog() {
+		reportStage.close();
+		dialog.showAndWait();
+	}
 
 	@FXML
 	private void onExportCsvClicked() {

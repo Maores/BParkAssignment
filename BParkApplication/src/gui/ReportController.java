@@ -4,7 +4,9 @@ import db.DBController;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -24,11 +26,22 @@ public class ReportController {
 
     @FXML
     private BarChart<String, Number> barChart;
+    @FXML
+	private Button backBtn;
     
-
+    //need to delete
     private DBController db;
+    
+    private Dialog<Void> dialog;
     private Map<Integer, Integer> currentReportData = new TreeMap<>();
-
+    private Stage reportStage;
+    
+	public void setStage(Stage stage) {
+		reportStage = stage;
+	}
+    public void setDialog(Dialog<Void> dialog) {
+   	 this.dialog = dialog;
+   	}
     @FXML
     public void initialize() {
         db = DBController.getInstance(null);
@@ -85,8 +98,11 @@ public class ReportController {
             showAlert("Error", "Could not load report.");
         }
     }
-    
-
+    @FXML
+	private void backToDialog() {
+    	reportStage.close();
+		dialog.showAndWait();
+	}
 
     @FXML
     private void onExportCsvClicked() {
