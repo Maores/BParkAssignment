@@ -31,6 +31,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 public class RemoteScreen implements ChatIF {
@@ -171,7 +173,8 @@ public class RemoteScreen implements ChatIF {
 		VBox orderNumber = new VBox(new Label("Order Number:"), orderField);
 		VBox orderDate = new VBox(new Label("Order Date:"), datePick);
 		VBox orderHour = new VBox(new Label("Order Hour:"), hourSpinner);
-		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn, updateUserBtn, logOutBtn);
+
+		HBox buttons = new HBox(viewBtn, updateBtn, insertBtn, updateUserBtn);
 
 		buttons.setAlignment(Pos.CENTER_LEFT);
 		buttons.setPadding(new Insets(5));
@@ -181,7 +184,16 @@ public class RemoteScreen implements ChatIF {
 		root.setAlignment(Pos.TOP_CENTER);
 		HBox fields = new HBox(orderNumber, orderDate, orderHour);
 		fields.setSpacing(10);
-		VBox inter = new VBox(10, fields, buttons);
+		
+		// ---------- header bar (fields + spacer + LogOut) ----------
+		Region spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);   // spacer takes all extra width
+
+		HBox headerBar = new HBox(fields, spacer, logOutBtn);
+		headerBar.setAlignment(Pos.TOP_LEFT);     
+		headerBar.setSpacing(10);                 
+
+		VBox inter = new VBox(10, headerBar, buttons);
 		interior.getChildren().addAll(inter, dbDisplay, table);
 		root.getChildren().add(interior);
 		return root;

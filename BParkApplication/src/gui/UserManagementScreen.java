@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +23,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -279,9 +282,16 @@ public class UserManagementScreen implements ChatIF {
 //		viewOrderBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		searchBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
 //		reportBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-		HBox btns = new HBox(viewOrderBtn,viewUserBtn, searchBtn, searchUserBtn, reportBtn, logOutBtn);
+		Region spacer = new Region();                 // flexible blank area
+		HBox.setHgrow(spacer, Priority.ALWAYS);       // let it absorb all free width
+
+		HBox headerBar = new HBox(searchBox, spacer, logOutBtn);
+		headerBar.setAlignment(Pos.TOP_LEFT);         // keeps everything on one line
+		headerBar.setSpacing(10);
+
+		HBox btns = new HBox(viewOrderBtn,viewUserBtn, searchBtn, searchUserBtn, reportBtn);
 		btns.setSpacing(10);
-		VBox Interior = new VBox(10, searchBox, btns, logArea, table);
+		VBox Interior = new VBox(10, headerBar, btns, logArea, table);
 		root.setMargin(Interior, new Insets(15));
 		root.getChildren().add(Interior);
 		root.setPrefWidth(400);
