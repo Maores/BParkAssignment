@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 /**
  * GUI controller for retrieving a car by entering or scanning a confirmation code.
  * <p>
@@ -44,6 +45,10 @@ public class ShowCodeScreenGetCarController {
 	    	codeBtn.setOnAction(e -> {
 	    		if(code.getText().isEmpty()) {
 	    			Alert alert = new Alert(Alert.AlertType.ERROR,"Fill the field!");
+	    			Window window = alert.getDialogPane().getScene().getWindow();
+	    			if (window instanceof Stage stage) {
+	    	                stage.setAlwaysOnTop(true);
+	    	        }
 	    			alert.show();
 	    		}
 	    		else {
@@ -51,7 +56,7 @@ public class ShowCodeScreenGetCarController {
 	    			window.close();
 	    		}
 	    	});
-			VBox root = new VBox(new Label("Scan your tag or Enter confirmation code:"),code,codeBtn);
+			VBox root = new VBox(5,new Label("Scan your tag or Enter confirmation code:"),code,codeBtn);
 			root.setAlignment(Pos.CENTER);
 			return root;
 	}

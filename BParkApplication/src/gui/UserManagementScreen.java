@@ -151,9 +151,9 @@ public class UserManagementScreen implements ChatIF {
 	    ButtonType usageButtonType = new ButtonType("Parking Duration Report");
 	    ButtonType statusButtonType = new ButtonType("Subscriber Status Report");
 	    ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
+	    
 	    dialog.getDialogPane().getButtonTypes().addAll(usageButtonType, statusButtonType, cancelButtonType);
-
+	    dialog.getDialogPane().getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 	    dialog.setResultConverter(dialogButton -> {
 	        if (dialogButton == usageButtonType) {
 	            openParkingDurationReport(); 
@@ -162,7 +162,8 @@ public class UserManagementScreen implements ChatIF {
 	        }
 	        return null;
 	    });
-
+	    Button button = (Button) dialog.getDialogPane().lookupButton(cancelButtonType);
+	    button.setId("cancelBtn");
 	    dialog.showAndWait();
 	}
 	
@@ -286,6 +287,7 @@ public class UserManagementScreen implements ChatIF {
 			client.handleMessageFromClientUI("VIEW_USERDATABASE");
 		});
 		Button reportBtn = new Button("Generate Report");
+		reportBtn.setId("generateBtn");
 		reportBtn.setOnAction(e -> generateReport());
 		Button logOutBtn = new Button("LogOut");
 		logOutBtn.setId("logOutBtn");

@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  */
 public class UserUpdate implements ChatIF {
 	@FXML
-	private Button cancel;
+	private Button cancelBtn;
 	@FXML
 	private TextField email;
 	@FXML

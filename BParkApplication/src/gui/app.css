@@ -15,9 +15,49 @@
     -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
     -fx-transition: background-color 0.3s ease;
 }
-#logOutBtn{
+#logOutBtn,#cancelBtn{
 	-fx-background-color: #9e2f28;
     -fx-text-fill: #F9EBDE;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+#login{
+	-fx-background-color: #3d8f44;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+#login:hover{
+	-fx-background-color: white;
+    -fx-text-fill: #3d8f44;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+#updateUserBtn,#generateBtn{
+	-fx-background-color: #3BA99C;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, #0000001A, 2, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+#updateUserBtn:hover,#generateBtn:hover{
+	-fx-background-color: white;
+    -fx-text-fill: #3BA99C;
     -fx-cursor: hand;
     -fx-background-radius: 2;
     -fx-font-weight: bold;
@@ -33,7 +73,7 @@
 	-fx-background-color: white;
 	 -fx-text-fill: #4045a1;
 }
-#logOutBtn:hover{
+#logOutBtn:hover,#cancelBtn:hover{
 	-fx-background-color: white;
     -fx-text-fill: #9e2f28;
     -fx-cursor: hand;

@@ -88,7 +88,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Button fx:id="cancel" alignment="CENTER" mnemonicParsing="false" onAction="#cancelUser" prefHeight="26.0" prefWidth="79.0" text="Cancel" />
+                              <Button fx:id="cancelBtn" alignment="CENTER" mnemonicParsing="false" onAction="#cancelUser" prefHeight="26.0" prefWidth="79.0" text="Cancel" />
                               <Button fx:id="update" alignment="CENTER" mnemonicParsing="false" onAction="#updateUser" prefHeight="26.0" prefWidth="79.0" text="Update" />
                            </children>
                            <VBox.margin>

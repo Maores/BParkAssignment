@@ -38,7 +38,6 @@ public class OnSiteScreen implements ChatIF{
     private Stage primaryStage; //Primary stage of the application window
     private MainApp mainApp; //Reference to the main application instance
     private Stage checkCode; //Secondary stage used for entering codes
-
     private ChatClient client; //Chat client instance used for server communication
 	private singletoneClient sg = new singletoneClient(); //Singleton wrapper for managing the ChatClient instance
 
@@ -57,7 +56,9 @@ public class OnSiteScreen implements ChatIF{
     	checkCode = new Stage();
     	ShowCodeScreenDeliverController obj = new ShowCodeScreenDeliverController(checkCode,client);
     	Parent root = obj.buildRoot();
-		checkCode.setScene(new Scene(root,300, 100));
+    	Scene s = new Scene(root,300, 100);
+    	s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+		checkCode.setScene(s);
 		checkCode.setAlwaysOnTop(true);
 		checkCode.setResizable(false);
 		checkCode.setTitle("Enter Code");
@@ -75,7 +76,9 @@ public class OnSiteScreen implements ChatIF{
     	checkCode = new Stage();
     	ShowCodeScreenGetCarController obj = new ShowCodeScreenGetCarController(checkCode,client);
     	Parent root = obj.buildRoot();
-		checkCode.setScene(new Scene(root,300, 100));
+    	Scene s = new Scene(root,300, 100);
+    	s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+		checkCode.setScene(s);
 		checkCode.setAlwaysOnTop(true);
 		checkCode.setResizable(false);
 		checkCode.setTitle("Enter Code");
