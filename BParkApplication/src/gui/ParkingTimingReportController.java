@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import client.ChatClient;
+import client.singletoneClient;
 import common.ChatIF;
 import common.ParkingReportWrapper;
 import common.ParkingTimingStats;
@@ -44,7 +45,7 @@ public class ParkingTimingReportController implements ChatIF {
 	private Dialog<Void> dialog;
 	private Stage reportStage;
 
-	private ChatClient chatClient;
+	private ChatClient chatClient = (new singletoneClient()).getInstance(this);
 
 	private Map<Integer, ParkingTimingStats> currentReportData = new TreeMap<>();
 
@@ -71,9 +72,6 @@ public class ParkingTimingReportController implements ChatIF {
 		yearComboBox.setValue(currentYear);
 	}
 
-	public void setChatClient(ChatClient client) {
-		this.chatClient = client;
-	}
 
 	@FXML
 	private void onLoadReportClicked() {

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import client.ChatClient;
+import client.singletoneClient;
 import common.ChatIF;
 import common.SubscriberReportWrapper;
 import javafx.application.Platform;
@@ -46,7 +47,7 @@ public class ReportController implements ChatIF {
 
 	private Dialog<Void> dialog;
 
-	private ChatClient chatClient;
+	private ChatClient chatClient = (new singletoneClient()).getInstance(this);
 
 	// Stores the currently loaded report data (day → number of parkings)
 
@@ -62,9 +63,6 @@ public class ReportController implements ChatIF {
 		this.dialog = dialog;
 	}
 
-	public void setChatClient(ChatClient client) {
-		this.chatClient = client;
-	}
 
 	/**
 	 * Initializes the report screen with month/year dropdowns and default values.

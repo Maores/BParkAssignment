@@ -15,7 +15,7 @@ public class singletoneClient {
 	/** The default port number used to connect to the server. */
 	final public static int DEFAULT_PORT = 5555;
 	/** The default host address used to connect to the server. */
-	final public static String DEFAULT_HOST = "localhost";
+	final public static String DEFAULT_HOST = "100.105.64.103";
 	/** Singleton instance of {@link ChatClient}. */
 	private ChatClient instance;
 
