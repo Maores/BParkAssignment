@@ -62,12 +62,12 @@ public class DBController {
 			if (rs.next()) { // user found
 				String phone = rs.getString("phone");
 				String email = rs.getString("email");
-				// Avoid nulls so they won't break the split() בצד-הלקוח
+				// Avoid nulls so they won't break the split() 
 				if (phone == null)
 					phone = "";
 				if (email == null)
 					email = "";
-				return phone + " " + email; // same order the GUI מצפה
+				return phone + " " + email; // same order the GUI 
 			} else {
 				return ""; // user not found
 			}
@@ -359,23 +359,23 @@ public class DBController {
     
 	Returns either the number of free parking spots for the given date
 	or the string "No space available" when less than 40 % of the lot is free.*
-	@param orderDate date in format "yyyy-MM-dd" – must match the DB column format
-	@return String  – number of free spots, or "No space available"*/
+	@param orderDate date in format "yyyy-MM-dd" - must match the DB column format
+	@return String  - number of free spots, or "No space available"*/
 	public String checkSpaceAvailability(String orderDate) {// 1. How many spots are still free on this date?
 	    int freeSpots = AvailableSpaces(orderDate);      // existing helper
 
-	        // If DB error occurred – propagate a generic failure message
+	        // If DB error occurred - propagate a generic failure message
 	        if (freeSpots < 0) {
-	            return "Database error – please try again";
+	            return "Database error - please try again";
 	        }
 
 	        // 2. Decide according to 40 % rule
 	        float ratio = (float) freeSpots / maxSpace;      // maxSpace == 100
 	        if (ratio >= 0.40f) {
-	            // Enough space – tell the GUI exactly how many are free
+	            // Enough space - tell the GUI exactly how many are free
 	            return "Available spots: " + freeSpots;
 	        } else {
-	            // Less than 40 % free – tell the GUI there is no space
+	            // Less than 40 % free - tell the GUI there is no space
 	            return "No space available";
 	        }
 	    }
@@ -504,7 +504,7 @@ public class DBController {
 		Random rand = new Random();
 		int password, count = 0;
 		while (count < 10) {
-			password = rand.nextInt(9000) + 1000; // 0–8999 + 1000 = 1000–9999
+			password = rand.nextInt(9000) + 1000; // 0-8999 + 1000 = 1000-9999
 			String sql = "SELECT password FROM `users` WHERE password = ?";
 			try {
 				// puts the id inside the "?" that is at the end of the query above
@@ -545,7 +545,7 @@ public class DBController {
 			return "Not enough space at this date!";
 		}
 		Random rand = new Random();
-		int confirCode = rand.nextInt(9000) + 1000; // 0–8999 + 1000 = 1000–9999
+		int confirCode = rand.nextInt(9000) + 1000; // 0-8999 + 1000 = 1000-9999
 		LocalDate date = LocalDate.now();
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
