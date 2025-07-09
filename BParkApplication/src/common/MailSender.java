@@ -6,7 +6,20 @@ import java.util.Properties;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 
+/**
+ * Utility class for sending email messages using SMTP via Gmail.
+ * This class uses the Jakarta Mail API to send simple text-based emails
+ * from a predefined system address.
+ */
 public class MailSender {
+    /**
+     * Sends an email to the specified recipient with the given subject and message body.
+     *
+     * @param toEmail the recipient's email address
+     * @param subject the subject line of the email
+     * @param body    the content/body of the email
+     * @return a status message indicating success or failure
+     */
 
     public static String sendEmail(String toEmail, String subject, String body) {
         final String fromEmail = "systembpark@gmail.com";
@@ -18,6 +31,10 @@ public class MailSender {
         props.put("mail.smtp.starttls.enable", "true");
 
         Session session = Session.getInstance(props, new Authenticator() {
+            /**
+             * Provides authentication credentials for the SMTP session.
+             * @return password authentication for the sender email account
+             */
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(fromEmail, password);
             }
