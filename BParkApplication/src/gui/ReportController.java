@@ -1,6 +1,6 @@
 package gui;
 
-import db.DBController;
+
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.ComboBox;
@@ -10,13 +10,27 @@ import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ReportController {
+import client.ChatClient;
+import common.ChatIF;
+import common.SubscriberReportWrapper;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+public class ReportController implements ChatIF {
 
     @FXML
     private ComboBox<Integer> monthComboBox;
@@ -26,14 +40,17 @@ public class ReportController {
 
     @FXML
     private BarChart<String, Number> barChart;
+
     @FXML
 	private Button backBtn;
     
-    //need to delete
-    private DBController db;
     
     private Dialog<Void> dialog;
+
+    private ChatClient chatClient;
+
     private Map<Integer, Integer> currentReportData = new TreeMap<>();
+
     private Stage reportStage;
     
 	public void setStage(Stage stage) {
@@ -42,10 +59,14 @@ public class ReportController {
     public void setDialog(Dialog<Void> dialog) {
    	 this.dialog = dialog;
    	}
+
+
+    public void setChatClient(ChatClient client) {
+        this.chatClient = client;
+    }
+
     @FXML
     public void initialize() {
-        db = DBController.getInstance(null);
-
         for (int i = 1; i <= 12; i++) {
             monthComboBox.getItems().add(i);
         }
@@ -69,10 +90,15 @@ public class ReportController {
             return;
         }
 
-        try {
-            currentReportData = db.getDailyParkingUsage(month, year);
-            barChart.getData().clear();
+        String request = "GET_SUBSCRIBER_REPORT " + month + " " + year;
+        chatClient.handleMessageFromClientUI(request);
+    }
 
+    public void loadReportFromServer(SubscriberReportWrapper wrapper) {
+        Platform.runLater(() -> {
+            currentReportData = wrapper.getReportData();
+
+            barChart.getData().clear();
             CategoryAxis xAxis = (CategoryAxis) barChart.getXAxis();
             xAxis.getCategories().clear();
 
@@ -80,29 +106,23 @@ public class ReportController {
                 xAxis.getCategories().add(String.valueOf(day));
             }
 
-            xAxis.setTickLabelRotation(0);
-            xAxis.setTickLabelGap(10);
-            barChart.setAnimated(false); 
-            
             XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName("Parking Usage for " + month + "/" + year);
+            series.setName("Parking Usage");
 
             for (Map.Entry<Integer, Integer> entry : currentReportData.entrySet()) {
                 series.getData().add(new XYChart.Data<>(String.valueOf(entry.getKey()), entry.getValue()));
             }
 
             barChart.getData().add(series);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Could not load report.");
-        }
+        });
     }
+
     @FXML
 	private void backToDialog() {
     	reportStage.close();
 		dialog.showAndWait();
 	}
+
 
     @FXML
     private void onExportCsvClicked() {
@@ -142,12 +162,16 @@ public class ReportController {
         }
     }
 
-
-
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+	@Override
+	public void handleMessageFromServer(String message) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,6 +1,8 @@
-package gui;
+package common;
 
-public class ParkingTimingStats {
+import java.io.Serializable;
+
+public class ParkingTimingStats implements Serializable {
     public int extended;
     public int late;
 

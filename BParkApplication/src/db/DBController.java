@@ -18,7 +18,7 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import common.DatabaseListener;
-import gui.ParkingTimingStats;
+import common.ParkingTimingStats;
 
 public class DBController {
 	// Singleton instance

@@ -58,9 +58,28 @@ public class ChatClient extends AbstractClient {
 //  }
 	@Override
 	public void handleMessageFromServer(Object msg) {
-		lastServerResponse = msg.toString();
-		clientUI.handleMessageFromServer(lastServerResponse);
+	    lastServerResponse = msg.toString();
+
+	    if (msg instanceof ParkingReportWrapper) {
+	        ParkingReportWrapper wrapper = (ParkingReportWrapper) msg;
+	        if (clientUI instanceof gui.ParkingTimingReportController) {
+	            ((gui.ParkingTimingReportController) clientUI).loadReportFromServer(wrapper);
+	        }
+	        return;
+	    }
+	    
+	    if (msg instanceof SubscriberReportWrapper) {
+	        if (clientUI instanceof gui.ReportController) {
+	            ((gui.ReportController) clientUI).loadReportFromServer((SubscriberReportWrapper) msg);
+	            return;
+	        }
+	    }
+
+
+	    clientUI.handleMessageFromServer(lastServerResponse);
 	}
+
+
 
 	public String getLastServerResponse() {
 		return lastServerResponse;
@@ -80,6 +99,16 @@ public class ChatClient extends AbstractClient {
 			quit();
 		}
 	}
+	
+	public void requestParkingTimingReport(int month, int year) {
+	    String msg = "#GET_PARKING_TIMING_REPORT " + month + " " + year;
+	    try {
+	        sendToServer(msg);
+	    } catch (IOException e) {
+	        clientUI.handleMessageFromServer("Failed to request report.");
+	    }
+	}
+
 
 	/**
 	 * This method terminates the client.

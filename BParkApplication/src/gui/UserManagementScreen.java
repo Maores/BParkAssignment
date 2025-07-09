@@ -46,6 +46,8 @@ public class UserManagementScreen implements ChatIF {
 	private TableView<ParkingRow> table = new TableView<>();
 	private Dialog<Void> dialog;
 	private MainApp main;
+	
+
 
 	public UserManagementScreen() {
 		client = sg.getInstance(this);
@@ -92,6 +94,8 @@ public class UserManagementScreen implements ChatIF {
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReportScreen.fxml"));
 	        Parent root = loader.load();
 	        ReportController controller = loader.getController();
+	        controller.setChatClient(client);
+	    	client.setClientUI(controller);
 	        controller.setDialog(dialog);
 	        Stage stage = new Stage();
 	        controller.setStage(stage);
@@ -111,12 +115,16 @@ public class UserManagementScreen implements ChatIF {
 		        Parent root = loader.load();
 		        ParkingTimingReportController controller = loader.getController();
 		        controller.setDialog(dialog);
+		        controller.setChatClient(client); 
+		        client.setClientUI(controller);
 		        Stage stage = new Stage();
 		        controller.setStage(stage);
 		        stage.setTitle("Subscriber Parking Duration Report");
+
 		        stage.setScene(new Scene(root));
 		        stage.setResizable(false);
 		        stage.show();
+
 		    } catch (Exception e) {
 		        e.printStackTrace();
 		    }

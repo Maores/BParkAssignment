@@ -19,4 +19,5 @@ public interface ChatIF
    * a UI.
    */
   public abstract void handleMessageFromServer(String message);
+  default void handleMessageFromServer(Object msg) {}
 }
