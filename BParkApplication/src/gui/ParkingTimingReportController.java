@@ -99,9 +99,6 @@ public class ParkingTimingReportController implements ChatIF {
             XYChart.Series<String, Number> extendedSeries = new XYChart.Series<>();
             extendedSeries.setName("Extended");
             
-
-            XYChart.Series<String, Number> lateSeries = new XYChart.Series<>();
-            lateSeries.setName("Late");
             
             for (Map.Entry<Integer, ParkingTimingStats> entry : currentReportData.entrySet()) {
                 String day = String.valueOf(entry.getKey());
@@ -110,17 +107,37 @@ public class ParkingTimingReportController implements ChatIF {
                 xAxis.getCategories().add(day);
                 
                 extendedSeries.getData().add(new XYChart.Data<>(day, stats.extended));
-                lateSeries.getData().add(new XYChart.Data<>(day, stats.late));  
             }
             
-            barChart.getData().addAll(extendedSeries, lateSeries);
+            barChart.getData().addAll(extendedSeries);
 
             latePieChart.getData().clear();
+
             for (Map.Entry<String, Integer> entry : wrapper.lateUsers.entrySet()) {
-                PieChart.Data slice = new PieChart.Data(entry.getKey(), entry.getValue());
+                String userName = entry.getKey();
+                int count = entry.getValue();
+
+                // Create pie slice with the count as the visible label on the chart
+                PieChart.Data slice = new PieChart.Data(String.valueOf(count), count);
                 latePieChart.getData().add(slice);
+
+                // Update the legend label to show the user's name instead of the number
+                Platform.runLater(() -> {
+                    // Set the pie slice label to be just the number
+                    slice.nameProperty().set(String.valueOf(count));
+
+                    // Look for legend items and update their text to show the name
+                    latePieChart.lookupAll(".chart-legend-item").forEach(item -> {
+                        if (item instanceof javafx.scene.Node node) {
+                            if (node.lookup(".label") instanceof javafx.scene.control.Label label 
+                                    && label.getText().equals(String.valueOf(count))) {
+                                label.setText(userName); // Replace the number with the name in the legend
+                            }
+                        }
+                    });
+                });
             }});
-	}//5
+	}
 	@FXML
 	private void backToDialog() {
 		reportStage.close();
