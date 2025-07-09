@@ -41,9 +41,6 @@ public class OnSiteScreen implements ChatIF{
 	 
     @FXML
     void Delivery(ActionEvent event) {
-        	ShowCodeScreen();
-    }
-    void ShowCodeScreen() {
     	checkCode = new Stage();
     	ShowCodeScreenDeliverController obj = new ShowCodeScreenDeliverController(checkCode,client);
     	Parent root = obj.buildRoot();
@@ -93,10 +90,13 @@ public class OnSiteScreen implements ChatIF{
     @Override
 	public void handleMessageFromServer(String message) {
     	if(message.equals("CAR_INSERTED")) {
-    		Terminal.appendText("Car is being delivered, it may take up to 3 minutes..\n");
-    	}
-    	if(message.equals("CAR_NOT_INSERTED")) {
-    		Terminal.appendText("Car is being delivered, it may take up to 3 minutes..\n");
+    		Terminal.setText("Please place the car on the carrier. Have a great day!\n");
+    	}else if(message.equals("CAR_NOT_INSERTED")) {
+    		Terminal.appendText("Oops! It looks like the code is incorrect, or the order isn’t scheduled for this time.\n");
+    	}else if(message.equals("CAR_GET_FAIELD")) {
+    		Terminal.appendText("Oops! That code doesn’t seem to work. Please reach out to our staff for help.\n");
+    	}else if(message.equals("CAR_GET_SUCCES")) {
+    		Terminal.setText("Your car is on its way — this should take no more than 3 minutes.\n");
     	}
     	
 	}

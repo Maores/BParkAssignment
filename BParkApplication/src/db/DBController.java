@@ -777,7 +777,43 @@ public class DBController {
 	        return false;
 	    }
 	}
+	//Car inserted, change boolean car_inserted for specific code order
+		public boolean getCar(String Code) {
+		    String selectSQL = "SELECT car_inserted FROM table_order WHERE confirmation_code = ? ";
+		    String updateSQL = "UPDATE table_order SET car_inserted = 0 WHERE confirmation_code = ? ";
 
+		    try {
+		        int codeInt = Integer.parseInt(Code); // convert string to int
+		        PreparedStatement selectStmt = conn.prepareStatement(selectSQL);
+		        selectStmt.setInt(1, codeInt);
+		        ResultSet rs = selectStmt.executeQuery();
+		        if (rs.next()) {
+		            int carInserted = rs.getInt("car_inserted");
+		            if (carInserted == 1) {
+		                // Set car_inserted to 1
+		                try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
+		                    updateStmt.setInt(1, codeInt);
+		                    int g = updateStmt.executeUpdate();
+		                    if(g==0)
+		                    	return false;
+		                    return true;
+		                } catch(Exception e) {
+		                    e.printStackTrace();
+		                    return false;
+		                }
+		            } else {
+		                // Not inserted
+		                return false;
+		            }
+		        } else {
+		            // No such confirmation_code found
+		            return false;
+		        }
+		    } catch(Exception e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
 
 	
 	

@@ -168,7 +168,7 @@ public class StaffGui implements ChatIF {
         
         
         outputDisplay = new TextArea();
-        outputDisplay.setPrefHeight(350);
+        outputDisplay.setPrefHeight(300);
         outputDisplay.setEditable(false);
 
         Button addUserBtn = new Button("Add New User");
@@ -197,16 +197,8 @@ public class StaffGui implements ChatIF {
         HBox viewlogBox = new HBox(viewDBBtn,viewUserBtn,logOutBtn);
         phoneEmailAddBox.setSpacing(10);
         viewlogBox.setSpacing(10);
-        //Btn styles
-//        addUserBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-//        viewDBBtn.setStyle("-fx-background-color: #0b132b; -fx-text-fill: white; -fx-cursor: hand;");
-        VBox Interior = new VBox(10,
-        		nameIdBox ,
-        		phoneEmailAddBox,
-        		viewlogBox,
-            outputDisplay,
-            table
-        );
+
+        VBox Interior = new VBox(10,nameIdBox ,phoneEmailAddBox,viewlogBox,outputDisplay,table);
         root.setMargin(Interior, new Insets(15));
         root.getChildren().add(Interior);
         root.setPrefWidth(400);

@@ -2,7 +2,6 @@ package gui;
 
 import java.io.IOException;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,9 +12,6 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class UserLoginAccess  {
-	
-	
-
 
 	@FXML
 	private Button onsite;
@@ -26,9 +22,7 @@ public class UserLoginAccess  {
 	private Stage primaryStage;
 
 	private MainApp mainApp;
-	
-
-	
+		
 	@FXML
 	void loadOnSiteScreen(ActionEvent event) throws IOException {
 	   	FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/OnSiteScreen.fxml")); 	 
@@ -36,7 +30,7 @@ public class UserLoginAccess  {
 	   	OnSiteScreen controller = loader.getController();
 	    controller.setPrimaryStage(primaryStage);
 	    controller.setMainApp(mainApp);
-	    Scene s = new Scene(root, 500, 300);
+	    Scene s = new Scene(root, 550, 300);
         s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 	    Platform.runLater(() -> {
 	        primaryStage.setScene(s);
@@ -46,7 +40,6 @@ public class UserLoginAccess  {
     
 	}
 	
-
 	public void setPrimaryStage(Stage primaryStage) {
 		this.primaryStage = primaryStage;;
 	}

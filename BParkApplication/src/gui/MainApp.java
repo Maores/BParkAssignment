@@ -87,7 +87,7 @@ public class MainApp extends Application {
 			StaffGui Staff = new StaffGui();
 			Staff.setMain(this);
 			Parent root = Staff.buildRoot();
-			Scene s = new Scene(root, 800, 400);
+			Scene s = new Scene(root, 800, 500);
 			s.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
 			Staff.start();
 			Platform.runLater(() -> {

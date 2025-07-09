@@ -302,6 +302,21 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					e.printStackTrace();
 				}
 			}
+			else if (message.startsWith("CAR_GET")) {
+				String[] parts = message.split(" ");
+				String ConfirmationCode = parts[1];
+				boolean get = db.getCar(ConfirmationCode);
+				
+				try {
+					if (get) {
+						client.sendToClient("CAR_GET_SUCCES");
+					} else {
+						client.sendToClient("CAR_GET_FAIELD");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
