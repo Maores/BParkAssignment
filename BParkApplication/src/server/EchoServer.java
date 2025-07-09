@@ -6,9 +6,12 @@ package server;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 import common.DatabaseListener;
 import common.MailSender;
+import common.ParkingReportWrapper;
+import common.ParkingTimingStats;
 import db.DBController;
 import gui.serverGuiController;
 import ocsf.server.AbstractServer;
@@ -302,6 +305,20 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 					e.printStackTrace();
 				}
 			}
+			
+			else if (message.startsWith("#GET_PARKING_TIMING_REPORT")) {
+			    String[] parts = message.split(" ");
+			    int month = Integer.parseInt(parts[1]);
+			    int year = Integer.parseInt(parts[2]);
+
+			    Map<Integer, ParkingTimingStats> reportData = db.getDailyParkingTimingReport(month, year);
+			    Map<String, Integer> lateUsers = db.getLateUsersByName(month, year);
+
+			    ParkingReportWrapper wrapper = new ParkingReportWrapper(reportData, lateUsers);
+
+			    client.sendToClient(wrapper);
+			}
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
