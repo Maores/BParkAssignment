@@ -10,8 +10,7 @@ public class MailSender {
 
     public static String sendEmail(String toEmail, String subject, String body) {
         final String fromEmail = "systembpark@gmail.com";
-        final String password = "exui mhqz xvax psdq"; // לא סיסמה רגילה – צריך סיסמת אפליקציה
-
+        final String password = "exui mhqz xvax psdq"; 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
