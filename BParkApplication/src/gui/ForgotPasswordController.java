@@ -5,8 +5,6 @@ import java.io.IOException;
 import client.ChatClient;
 import client.singletoneClient;
 import common.ChatIF;
-import common.MailSender;
-import db.DBController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
