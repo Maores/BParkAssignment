@@ -14,7 +14,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import server.EchoServer;
-
+/**
+ * JavaFX GUI controller for starting and stopping the BPark server.
+ * <p>
+ * Provides buttons to listen on a user-specified port and shut down the server,
+ * as well as a text area to display server messages and status.
+ * </p>
+ */
 public class serverGuiController extends Application {
 
 	@FXML
@@ -26,9 +32,16 @@ public class serverGuiController extends Application {
 
 	@FXML
 	private TextArea txtArea;
-
+	
+	 /** The server instance being managed through the GUI. */
 	private EchoServer sv;
 
+    /**
+     * Called when the "Listen" button is pressed.
+     * Starts the server if a valid port is provided.
+     *
+     * @param event the action event from the button
+     */
 	@FXML
 	void listen(ActionEvent event) {
 		String p;
@@ -41,7 +54,11 @@ public class serverGuiController extends Application {
 			runServer(p);
 		}
 	}
-
+    /**
+     * Initializes and starts the EchoServer on the given port.
+     *
+     * @param p the port number as a string
+     */
 	public void runServer(String p) {
 		int port = 0; // Port to listen on
 
@@ -64,11 +81,18 @@ public class serverGuiController extends Application {
 		}
 
 	}
-
+    /**
+     * Retrieves the port entered in the GUI text field.
+     *
+     * @return the port string entered by the user
+     */
 	private String getport() {
 		return txtPort.getText();
 	}
-
+    /**
+     * Called when the "Stop" button is pressed or window is closed.
+     * Shuts down the server safely.
+     */
 	@FXML
 	public void closeServer() {
 		if (sv != null) {
@@ -83,7 +107,11 @@ public class serverGuiController extends Application {
 			txtArea.appendText("Server is not running.\n");
 		}
 	}
-
+    /**
+     * JavaFX entry point to launch the server GUI.
+     * @param primaryStage the main window stage
+     * @throws IOException if the FXML loading fails
+     */
 	public void start(Stage primaryStage) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/serverGui.fxml"));
 		Parent root = loader.load();
@@ -96,11 +124,19 @@ public class serverGuiController extends Application {
 			controller.closeServer();
 		});
 	}
-
+    /**
+     * Launches the JavaFX application.
+     * @param args command-line arguments (not used)
+     * @throws Exception if launch fails
+     */
 	public static void main(String args[]) throws Exception {
 		launch(args);
 	}
 
+    /**
+     * Appends a message to the GUI text area from the server.
+     * @param msg the message to display
+     */
 	public void appendMessage(String msg) {
 		javafx.application.Platform.runLater(() -> {
 			txtArea.appendText(msg + "\n");

@@ -13,7 +13,15 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.TreeMap;
-
+/**
+ * Controller for the monthly parking usage report view.
+ * <p>
+ * This class provides functionality to:
+ * <ul>
+ *   <li>Load and visualize daily parking usage data in a bar chart</li>
+ *   <li>Export the data to a CSV file</li>
+ * </ul>
+ */
 public class ReportController {
 
     @FXML
@@ -25,10 +33,14 @@ public class ReportController {
     @FXML
     private BarChart<String, Number> barChart;
     
-
+    /** Reference to the database controller. */
     private DBController db;
+    /** Stores the currently loaded report data (day → number of parkings). */
     private Map<Integer, Integer> currentReportData = new TreeMap<>();
-
+    /**
+     * Initializes the report screen with month/year dropdowns and default values.
+     * Called automatically by JavaFX after FXML loading.
+     */
     @FXML
     public void initialize() {
         db = DBController.getInstance(null);
@@ -45,7 +57,9 @@ public class ReportController {
         monthComboBox.setValue(LocalDate.now().getMonthValue());
         yearComboBox.setValue(currentYear);
     }
-
+    /**
+     * Loads parking usage data from the database and displays it in a bar chart.
+     */
     @FXML
     private void onLoadReportClicked() {
         Integer month = monthComboBox.getValue();
@@ -87,7 +101,9 @@ public class ReportController {
     }
     
 
-
+    /**
+     * Exports the currently loaded report data to a CSV file.
+     */
     @FXML
     private void onExportCsvClicked() {
         if (currentReportData.isEmpty()) {
@@ -127,7 +143,12 @@ public class ReportController {
     }
 
 
-
+    /**
+     * Utility method to show informational alerts.
+     *
+     * @param title   the title of the alert dialog
+     * @param message the message to be shown
+     */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

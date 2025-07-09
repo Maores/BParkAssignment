@@ -7,36 +7,60 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-
+/**
+ * The main entry point for the BPark application.
+ * <p>
+ * This class is responsible for initializing the primary stage, loading the initial login screen,
+ * and navigating to different GUI scenes based on the user's role.
+ * </p>
+ */
 public class MainApp extends Application {
-	private Stage primaryStage;
-	private static String userId;
-	private static String userName;
+	private Stage primaryStage;/** Primary application stage. */
+	private static String userId; /** Currently logged-in user's ID. */
+	private static String userName;/** Currently logged-in user's name. */
 
-	// getter and setter for userName
+	/**
+     * Returns the currently logged-in user's name.
+     * @return the username
+     */
 	public static String getUserName() {
 		return userName;
 	}
-
+    /**
+     * Sets the logged-in user's name.
+     * @param userName the username to set
+     */
 	public static void setUserName(String userName) {
 		MainApp.userName = userName;
 	}
-
-	// getter and setter for ID
+    /**
+     * Sets the logged-in user's ID.
+     * @param userId the user ID to set
+     */
 	public static void setUserId(String userId) {
 		MainApp.userId = userId;
 	}
-
+    /**
+     * Returns the currently logged-in user's ID.
+     * @return the user ID
+     */
 	public static String getUserId() {
 		return userId;
 	}
-
+    /**
+     * Initializes the application by launching the login screen.
+     * @param primaryStage the primary stage for this application
+     * @throws Exception if an error occurs during FXML loading
+     */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
 		showLoginScreen();
 	}
-
+    /**
+     * Loads and displays the login screen (userLogin.fxml).
+     * @throws Exception if the FXML file fails to load
+     */
 	public void showLoginScreen() throws Exception {
 		this.userId = null;
 		this.userName = null;
@@ -52,7 +76,10 @@ public class MainApp extends Application {
 		primaryStage.show();
 
 	}
-
+    /**
+     * Displays the main parking system screen for users with general access.
+     * @throws Exception if there is a failure building the UI
+     */
 	public void showMainScreen() throws Exception {
 		RemoteScreen parkingSystemGUI = new RemoteScreen();
 		Parent root = parkingSystemGUI.buildRoot();
@@ -61,7 +88,13 @@ public class MainApp extends Application {
 		primaryStage.setTitle("BPark - Smart Parking System");
 		primaryStage.show();
 	}
-
+    /**
+     * Displays the appropriate screen based on the user's role.
+     * @param role the role of the logged-in user (e.g., user, staff, manager)
+     * @param userId the user's ID
+     * @param userName the user's name
+     * @throws Exception if the appropriate screen cannot be loaded
+     */
 	public void showRoleScreen(String role, String userId, String userName) throws Exception {
 		String roleLower = role.toLowerCase();
 		this.userId = userId;
@@ -112,7 +145,10 @@ public class MainApp extends Application {
 		}
 		primaryStage.show();
 	}
-
+    /**
+     * Main method to launch the application.
+     * @param args command-line arguments (not used)
+     */
 	public static void main(String[] args) {
 		launch(args);
 	}

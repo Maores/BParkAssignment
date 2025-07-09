@@ -20,24 +20,35 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+/**
+ * Controller for generating and exporting monthly parking timing reports.
+ * <p>
+ * Displays daily statistics for parking extensions in a bar chart,
+ * and shows a pie chart of users who returned their cars late.
+ * Users can also export the current report to a CSV file.
+ * </p>
+ */
 public class ParkingTimingReportController {
 
 	@FXML
-	private ComboBox<Integer> monthComboBox;
+	private ComboBox<Integer> monthComboBox; //ComboBox for selecting the report month
 
 	@FXML
-	private ComboBox<Integer> yearComboBox;
+	private ComboBox<Integer> yearComboBox; //ComboBox for selecting the report year.
 
 	@FXML
-	private BarChart<String, Number> barChart;
+	private BarChart<String, Number> barChart; //Bar chart for displaying daily parking extension data
 
 	@FXML
-	private PieChart latePieChart;
+	private PieChart latePieChart; //Pie chart for displaying late users' statistics
 
-	private DBController db;
+	private DBController db; //Reference to the database controller for fetching report data
+	/** Holds the currently loaded report data mapped by day of month. */
 	private Map<Integer, ParkingTimingStats> currentReportData = new TreeMap<>();
 
+    /**
+     * Initializes the report screen with default values and populates year/month combo boxes.
+     */
 	@FXML
 	public void initialize() {
 		db = DBController.getInstance(null);
@@ -53,7 +64,10 @@ public class ParkingTimingReportController {
 		monthComboBox.setValue(LocalDate.now().getMonthValue());
 		yearComboBox.setValue(currentYear);
 	}
-
+    /**
+     * Loads and displays the report data for the selected month and year.
+     * Populates the bar chart with daily extension data and pie chart with late user stats.
+     */
 	@FXML
 	private void onLoadReportClicked() {
 	    Integer month = monthComboBox.getValue();
@@ -102,9 +116,10 @@ public class ParkingTimingReportController {
 	}
 
 
-
-
-
+    /**
+     * Exports the currently displayed report to a CSV file.
+     * Includes both the daily extension data and the monthly late user stats.
+     */
 	@FXML
 	private void onExportCsvClicked() {
 	    if (currentReportData == null || currentReportData.isEmpty()) {
@@ -151,8 +166,12 @@ public class ParkingTimingReportController {
 	    }
 	}
 
-
-
+    /**
+     * Displays an informational alert dialog to the user.
+     *
+     * @param title   the title of the alert window
+     * @param message the content message shown in the dialog
+     */
 	private void showAlert(String title, String message) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setTitle(title);

@@ -28,9 +28,9 @@ import javafx.stage.Stage;
 
 
 /**
- * Example screen showing how to access the database after the GUI/DB
- * separation. This screen doesn't need to receive database notifications, so it
- * passes null as listener.
+ * GUI controller for the User Management screen in the BPark system.
+ * Enables searching users or orders, viewing tables, and generating reports,
+ * by communicating with the server through the ChatClient interface.
  */
 public class UserManagementScreen implements ChatIF {
 
@@ -46,19 +46,24 @@ public class UserManagementScreen implements ChatIF {
 	private TableView<ParkingRow> table = new TableView<>();
 
 	private MainApp main;
-
+	   /**
+     * Constructor initializes the ChatClient instance with this screen as listener.
+     */
 	public UserManagementScreen() {
 		client = sg.getInstance(this);
 	}
-
+    /**
+     * Sets the main application instance for scene management.
+     * @param main the MainApp instance
+     */
 	public void setMain(MainApp main) {
 		this.main = main;
 	}
 
-	/**
-	 * Search for a order accessing DB without being a listener
-	 */
-	@FXML
+    /**
+     * Sends a request to search for a specific order.
+     * Validates input and updates the UI log area.
+     */
 	void searchOrder() {
 		String order = orderF.getText();
 
@@ -71,9 +76,10 @@ public class UserManagementScreen implements ChatIF {
 		logArea.appendText("Searching for order: " + order + "\n");
 	}
 
-	/**
-	 * Search for a user by ID Demonstrates accessing DB without being a listener
-	 */
+    /**
+     * Sends a request to search for a user by ID.
+     * Validates input and updates the UI log area.
+     */
 	@FXML
 	void searchUser() {
 		String userId = userF.getText();
@@ -86,7 +92,9 @@ public class UserManagementScreen implements ChatIF {
 		client.handleMessageFromClientUI("SEARCH_USER " + userId);
 		logArea.appendText("Searching for user: " + userId + "\n");
 	}
-	
+    /**
+     * Opens a new window to display the Subscriber Status Report.
+     */
 	private void openSubscriberStatusReport() {
 	    try {
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReportScreen.fxml"));
@@ -100,7 +108,9 @@ public class UserManagementScreen implements ChatIF {
 	    }
 	}
 
-	
+    /**
+     * Opens a new window to display the Parking Duration Report.
+     */
 	private void openParkingDurationReport() {
 		  try {
 		        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/parking_timing_report.fxml"));
@@ -113,9 +123,9 @@ public class UserManagementScreen implements ChatIF {
 		        e.printStackTrace();
 		    }
 	}
-	/**
-	 * Example of a more complex operation
-	 */
+	 /**
+     * Prompts the user with a dialog to select between different types of reports.
+     */
 	@FXML
 	private void generateReport() {
 	    Dialog<Void> dialog = new Dialog<>();
@@ -141,13 +151,18 @@ public class UserManagementScreen implements ChatIF {
 	}
 	
 	
-
-	// Get message from the server
+    /**
+     * Handles messages received from the server.
+     * @param message the message received
+     */
 	@Override
 	public void handleMessageFromServer(String message) {
 		displayMessage(message);
 	}
-
+    /**
+     * Updates the UI based on the server message, populating tables or showing logs.
+     * @param message the server message
+     */
 	private void displayMessage(String message) {
 		Platform.runLater(() -> {
 
@@ -223,7 +238,10 @@ public class UserManagementScreen implements ChatIF {
 		});
 
 	}
-
+    /**
+     * Constructs and returns the root layout of the user management screen.
+     * @return the root StackPane layout
+     */
 	public StackPane buildRoot() {
 		orderF = new TextField();
 		userF = new TextField();

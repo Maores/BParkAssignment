@@ -10,7 +10,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
+/**
+ * Controller for the user information update screen.
+ * <p>
+ * Allows users to update their phone number and/or email address.
+ * Retrieves current user information and communicates changes to the server.
+ * </p>
+ */
 public class UserUpdate implements ChatIF {
 	@FXML
 	private Button cancel;
@@ -27,22 +33,34 @@ public class UserUpdate implements ChatIF {
 	private ChatClient client = (new singletoneClient()).getInstance(this);
 	private Stage popWindow;
 
-	// Constructor
+    /**
+     * Default constructor. Requests current user information from the server.
+     */
 	public UserUpdate() {
 		client.handleMessageFromClientUI("GET_USER_INFO " + id);
 	}
-
+    /**
+     * Sets the reference to the pop-up window used to display this form.
+     * @param popWindow the Stage instance representing the pop-up window
+     */
 	public void setPopWindow(Stage popWindow) {
 		this.popWindow = popWindow;
 	}
-
+    /**
+     * Closes the update form pop-up when the cancel button is clicked.
+     * @param event the action event triggered by the cancel button
+     */
 	@FXML
 	void cancelUser(ActionEvent event) {
 		if (popWindow != null) {
 			popWindow.close();
 		}
 	}
-
+    /**
+     * Sends an update request to the server with the new email and/or phone number.
+     * If both fields are empty, shows a warning alert.
+     * @param event the action event triggered by the update button
+     */
 	@FXML
 	void updateUser(ActionEvent event) {
 		if (email.getText().isEmpty() && phone.getText().isEmpty()) {
@@ -52,7 +70,11 @@ public class UserUpdate implements ChatIF {
 			client.handleMessageFromClientUI("UPDATE_USER_INFO " + phone.getText() + " " + email.getText() + " " + id);
 		}
 	}
-
+    /**
+     * Handles messages received from the server.
+     * Populates fields with current user data or shows alerts based on the response.
+     * @param message the message received from the server
+     */
 	@Override
 	public void handleMessageFromServer(String message) {
 		Platform.runLater(() -> {

@@ -8,17 +8,29 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+/**
+ * GUI controller for entering a confirmation code
+ * to deliver a car on-site in the BPark system.
+ */
 
 public class ShowCodeScreenDeliverController {
 	
-	private ChatClient client;
-	private Stage window;
-	
+	private ChatClient client; //The client used to communicate with the server
+	private Stage window; //The popup window (stage) for the code input
+    /**
+     * Constructs the controller for the code entry window.
+     * @param window the stage to display
+     * @param client the ChatClient instance used for communication
+     */
 	public ShowCodeScreenDeliverController(Stage window,ChatClient client) {
 		this.client = client;
 		this.window = window;
 	}
-
+    /**
+     * Builds the root layout for the confirmation code input screen.
+     * Includes a label, input field, and a button to submit the code.
+     * @return a VBox layout containing the UI components
+     */
 	public VBox buildRoot() {
 	    	TextField code = new TextField();
 	    	Button codeBtn = new Button("check");
