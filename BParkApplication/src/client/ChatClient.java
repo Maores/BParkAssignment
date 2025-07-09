@@ -67,6 +67,14 @@ public class ChatClient extends AbstractClient {
 	        }
 	        return;
 	    }
+	    
+	    if (msg instanceof SubscriberReportWrapper) {
+	        if (clientUI instanceof gui.ReportController) {
+	            ((gui.ReportController) clientUI).loadReportFromServer((SubscriberReportWrapper) msg);
+	            return;
+	        }
+	    }
+
 
 	    clientUI.handleMessageFromServer(lastServerResponse);
 	}

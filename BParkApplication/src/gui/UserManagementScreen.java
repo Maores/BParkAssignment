@@ -91,10 +91,12 @@ public class UserManagementScreen implements ChatIF {
 	
 	private void openSubscriberStatusReport() {
 	    try {
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReportScreen.fxml"));
-	        Parent root = loader.load();
-	        Stage stage = new Stage();
-	        stage.setTitle("Subscriber Status Report");
+	    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ReportScreen.fxml"));
+	    	Parent root = loader.load();
+	    	ReportController controller = loader.getController();
+	    	controller.setChatClient(client);
+	    	client.setClientUI(controller);
+	    	Stage stage = new Stage();
 	        stage.setScene(new Scene(root));
 	        stage.show();
 	    } catch (Exception e) {
@@ -105,13 +107,6 @@ public class UserManagementScreen implements ChatIF {
 	
 	private void openParkingDurationReport() {
 		  try {
-				/*
-				 * FXMLLoader loader = new
-				 * FXMLLoader(getClass().getResource("/gui/parking_timing_report.fxml")); Parent
-				 * root = loader.load(); Stage stage = new Stage();
-				 * stage.setTitle("Subscriber Parking Duration Report"); stage.setScene(new
-				 * Scene(root)); stage.show();
-				 */
 		        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/parking_timing_report.fxml"));
 		        Parent root = loader.load();
 		        ParkingTimingReportController controller = loader.getController();

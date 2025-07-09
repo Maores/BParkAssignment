@@ -12,6 +12,7 @@ import common.DatabaseListener;
 import common.MailSender;
 import common.ParkingReportWrapper;
 import common.ParkingTimingStats;
+import common.SubscriberReportWrapper;
 import db.DBController;
 import gui.serverGuiController;
 import ocsf.server.AbstractServer;
@@ -318,6 +319,18 @@ public class EchoServer extends AbstractServer implements DatabaseListener {
 
 			    client.sendToClient(wrapper);
 			}
+			
+			else if (msg instanceof String && ((String) msg).startsWith("GET_SUBSCRIBER_REPORT")) {
+			    String[] parts = ((String) msg).split(" ");
+			    int month = Integer.parseInt(parts[1]);
+			    int year = Integer.parseInt(parts[2]);
+			    
+			    Map<Integer, Integer> report = DBController.getInstance(null).getDailyParkingUsage(month, year);
+			    SubscriberReportWrapper wrapper = new SubscriberReportWrapper(report);
+			    
+			    client.sendToClient(wrapper);
+			}
+
 
 
 		} catch (Exception e) {
